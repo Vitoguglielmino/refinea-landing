@@ -10,7 +10,7 @@ const FOUNDERS = [
   {
     id: "vito",
     initials: "VG",
-    photo: "/vito.jpeg",
+    photo: "/logos/Vito.jpeg",
     linkedin: "https://www.linkedin.com/in/vitoguglielmino/",
     name: "Vito Guglielmino",
     role: "Co-Founder & CEO",
@@ -22,7 +22,7 @@ const FOUNDERS = [
   {
     id: "giorgio",
     initials: "GM",
-    photo: "/giorgio.jpeg",
+    photo: "/logos/giorgio.jpeg",
     linkedin: "https://www.linkedin.com/in/giorgio-monaco/",
     name: "Giorgio Monaco",
     role: "Co-Founder & CTO",
