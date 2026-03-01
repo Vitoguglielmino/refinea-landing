@@ -71,7 +71,15 @@ const structuredData = {
         "AEO",
       ],
       vatID: "06241080875",
-      sameAs: ["https://www.linkedin.com/company/refinea"],
+      sameAs: [
+        "https://www.linkedin.com/company/refinea",
+        "https://www.youtube.com/@OfficialRefinea",
+      ],
+      alumni: {
+        "@type": "Organization",
+        name: "B4i - Bocconi for innovation",
+        url: "https://www.b4i.unibocconi.it/pre-acceleration/",
+      },
       contactPoint: {
         "@type": "ContactPoint",
         contactType: "sales",
