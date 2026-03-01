@@ -1,26 +1,120 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f5f6f7;
+  --foreground: #000000;
+  --accent: #6c47ff;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-accent: var(--accent);
+  --font-sans: var(--font-inter);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: rgba(108, 71, 255, 0.12);
+}
+
+/* Hero demo cycling progress bar */
+@keyframes cycle-progress {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+/* Paradigm section - card shake on category switch */
+@keyframes card-shake {
+  0%, 100% { transform: translateX(0) rotate(0deg); }
+  20%       { transform: translateX(-5px) rotate(-0.4deg); }
+  40%       { transform: translateX(5px) rotate(0.4deg); }
+  60%       { transform: translateX(-3px) rotate(-0.2deg); }
+  80%       { transform: translateX(3px) rotate(0.2deg); }
+}
+
+/* Skeleton loading pulse */
+@keyframes skeleton-pulse {
+  0%, 100% { opacity: 0.4; }
+  50%       { opacity: 0.9; }
+}
+
+/* Subtle square grid with gradient mask - applied only to the background layer */
+.section-lines {
+  position: relative;
+}
+
+.section-lines::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    linear-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.04) 1px, transparent 1px);
+  background-size: 40px 40px, 40px 40px;
+  -webkit-mask-image: radial-gradient(ellipse 120% 80% at 50% 0%, black 30%, transparent 80%);
+  mask-image: radial-gradient(ellipse 120% 80% at 50% 0%, black 30%, transparent 80%);
+}
+
+.section-lines > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Pricing page scan line ── */
+@keyframes scan-line {
+  0%   { top: -2px; opacity: 0; }
+  3%   { opacity: 1; }
+  97%  { opacity: 1; }
+  100% { top: 100vh; opacity: 0; }
+}
+
+/* ── Hide scrollbar for horizontal scroll tabs ── */
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+/* ── On mobile, disable scroll-driven sticky and collapse to auto height ── */
+@media (max-width: 1023px) {
+  .scroll-section {
+    height: auto !important;
+  }
+  .scroll-section > .lg\:sticky {
+    position: relative !important;
+    height: auto !important;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+}
+
+/* ── Data highlight - use in WordPress via <span class="data-highlight">stat</span>
+   or wrap in a Custom HTML block ── */
+.data-highlight {
+  font-size: 1.05em;
+  font-weight: 700;
+  color: #1A1A1A;
+  background: rgba(108, 71, 255, 0.06);
+  border-radius: 4px;
+  padding: 0.05em 0.35em;
+  letter-spacing: -0.01em;
 }

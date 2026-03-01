@@ -1,0 +1,56 @@
+# Refinea - Generative Engine Optimization (GEO) Infrastructure
+
+> Refinea is the GEO infrastructure platform that measures and optimizes how AI engines recommend brands. It tracks brand visibility inside ChatGPT, Gemini, and Perplexity by buyer persona, purchase intent, and geographic context.
+
+## About Refinea
+
+Refinea is a SaaS platform purpose-built for Generative Engine Optimization (GEO). It is the only platform that tracks, analyzes, and optimizes brand visibility inside AI-generated responses from large language models (LLMs).
+
+Unlike traditional SEO tools that focus on search engine result page rankings, Refinea operates at the decision layer - where AI models synthesize information and select which brands to recommend. In the post-search era, discovery happens inside AI-generated answers, not in lists of blue links.
+
+## What is Generative Engine Optimization (GEO)?
+
+Generative Engine Optimization (GEO) is the practice of increasing the probability that a brand is selected and recommended inside AI-generated responses. GEO optimizes for inclusion inside synthesized answers where AI models interpret sources, compare options, and generate recommendations.
+
+GEO is different from traditional SEO. In SEO, users choose from a list of links. In GEO, AI models pre-select and recommend options on behalf of users. This shift moves marketing from keyword competition to decision-layer influence.
+
+## Core Capabilities
+
+- **AI Visibility Tracking**: Measures how ChatGPT, Gemini, and Perplexity recommend a brand across different buyer personas and purchase intents.
+- **Dynamic Buyer Persona Modeling**: Maps how AI responses change based on who is asking - industry, experience level, geography, and goals.
+- **Intent-Mapped GEO Queries**: Runs persona-matched prompts across LLM engines to measure brand visibility with query fan out.
+- **AI-Optimized Content Publishing**: Generates and publishes content optimized to be synthesized by AI engines, directly to WordPress Headless via REST API.
+- **Cross-Persona Visibility Analysis**: Identifies where a brand is recommended for one persona type but excluded for another.
+- **Strategic Pulse**: Automatic AI visibility refresh every 48 hours.
+- **GSC and GA4 Integration**: Cross-references traditional search data with AI recommendation data.
+
+## Pricing
+
+- **Growth Plan**: $149/month - 5 dynamic buyer personas, 50 GEO queries/month, 3 AI-optimized articles/month, ChatGPT + Gemini + Perplexity coverage.
+- **Pro Plan**: $349/month - 15 dynamic buyer personas, 150 GEO queries/month, 10 AI-optimized articles/month, full LLM engine coverage, cross-persona insights, dedicated Slack Connect.
+
+## Key Concepts
+
+### AI Visibility
+AI visibility refers to how frequently and positively a brand is mentioned, recommended, or selected by AI engines when users ask questions relevant to that brand's category. As AI agents increasingly mediate purchasing decisions, brands that are invisible to AI systems lose revenue opportunities.
+
+### Persona-Based Optimization
+AI-generated responses adapt based on who is asking. Large language models infer user characteristics and adjust recommendations accordingly. A brand might be recommended for one type of user but excluded for another. The unit of optimization in the AI-native era is the persona, not the keyword.
+
+### Decision-Layer Influence
+In the generative era, marketing shifts from competing for rankings to competing for selection. Refinea provides the infrastructure to influence how AI agents select and recommend brands at scale.
+
+## Company Information
+
+- **Website**: https://refinea.io
+- **Platform**: https://try.refinea.io
+- **Founded by**: Vito Guglielmino (CEO) and Giorgio Monaco (CTO)
+- **Legal Entity**: Refinea S.r.l. - VAT 06241080875
+- **LinkedIn**: https://www.linkedin.com/company/refinea
+
+## Documentation Links
+
+- Homepage: https://refinea.io
+- Pricing: https://refinea.io/pricing
+- Blog: https://refinea.io/blog
+- Team: https://refinea.io/team
