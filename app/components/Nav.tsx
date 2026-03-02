@@ -37,7 +37,7 @@ export default function Nav() {
           <img
             src="/logos/refinea%20grigio.svg"
             alt=""
-            style={{ height: 36, width: 36, objectFit: "contain", filter: "brightness(0)", marginRight: -5 }}
+            style={{ height: 36, width: 36, objectFit: "contain", marginRight: -5 }}
           />
           <span className="text-base font-bold tracking-tight text-black">
             Refinea
