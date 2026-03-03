@@ -26,6 +26,7 @@ export async function POST(req: Request) {
     const doc = {
       event: trunc(body.event, 64) ?? "unknown",
       bot_name: trunc(body.botName ?? body.bot_name, 64) ?? "unknown",
+      category: trunc(body.category, 32) ?? "unknown",
       path: trunc(body.path, 256) ?? "/",
       ua: trunc(body.ua ?? body.user_agent, 512),
       referer: trunc(body.referer, 512),
