@@ -143,15 +143,14 @@ function slugify(text: string): string {
 // ─── Heading extraction ────────────────────────────────────────────────────────
 
 export function extractHeadings(html: string): Heading[] {
-  const regex = /<(h[23])[^>]*id="([^"]*)"[^>]*>(.*?)<\/h[23]>/gi;
+  const regex = /<(h2)[^>]*id="([^"]*)"[^>]*>(.*?)<\/h2>/gi;
   const headings: Heading[] = [];
   let match;
   while ((match = regex.exec(html)) !== null) {
-    const level = parseInt(match[1].slice(1)) as 2 | 3;
     const id = match[2];
     const text = match[3].replace(/<[^>]+>/g, "").trim();
     if (!text) continue;
-    headings.push({ id, text, level });
+    headings.push({ id, text, level: 2 });
   }
   return headings;
 }

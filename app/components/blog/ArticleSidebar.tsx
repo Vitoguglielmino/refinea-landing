@@ -34,20 +34,17 @@ function TableOfContents({
       <ul className="space-y-0.5">
         {headings.map((h) => {
           const isActive = activeId === h.id;
-          const isH3 = h.level === 3;
           return (
             <li key={h.id}>
               <a
                 href={`#${h.id}`}
-                className={`block leading-snug py-[3px] border-l-2 transition-all duration-200 ${
-                  isH3 ? "pl-5 text-[12px]" : "pl-3 text-[13px]"
-                } ${
+                className={`block leading-snug py-[3px] pl-3 text-[13px] border-l-2 transition-all duration-200 ${
                   isActive
                     ? "border-accent font-medium"
                     : "border-transparent hover:border-black/15"
                 }`}
                 style={{
-                  color: isActive ? "#6c47ff" : isH3 ? "#999" : "#666",
+                  color: isActive ? "#6c47ff" : "#666",
                 }}
               >
                 {h.text}
@@ -97,7 +94,7 @@ export function MobileTOC({ headings }: { headings: Heading[] }) {
                   href={`#${h.id}`}
                   onClick={() => setOpen(false)}
                   className={`block py-1 hover:text-black transition-colors ${
-                    h.level === 3
+                    false && h.level === 3
                       ? "pl-4 text-[12px] text-black/35"
                       : "text-[13px] text-black/55"
                   }`}
