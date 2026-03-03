@@ -36,7 +36,7 @@ export default function Nav() {
         <Link href="/" className="flex items-center shrink-0">
           <img
             src="/logos/refinea%20grigio.svg"
-            alt=""
+            alt="Refinea logo"
             style={{ height: 36, width: 36, objectFit: "contain", marginRight: -5 }}
           />
           <span className="text-base font-bold tracking-tight text-black">

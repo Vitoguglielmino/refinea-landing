@@ -166,7 +166,7 @@ export default function Home() {
           <div className="flex items-center">
             <img
               src="/logos/refinea%20grigio.svg"
-              alt=""
+              alt="Refinea logo"
               style={{ height: 30, width: 30, objectFit: "contain", filter: "brightness(0) invert(1)", opacity: 0.4, marginRight: -4 }}
             />
             <span className="text-sm font-bold text-white/35">Refinea</span>
