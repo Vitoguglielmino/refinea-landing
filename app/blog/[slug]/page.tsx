@@ -3,24 +3,20 @@ import {
   getAllSlugs,
   formatDate,
   formatShortDate,
-  getCoverUrl,
   extractHeadings,
-  addHeadingIds,
-} from "@/lib/wordpress";
+} from "@/lib/mdx";
 import Nav from "../../components/Nav";
 import ArticleSidebar, { MobileTOC } from "../../components/blog/ArticleSidebar";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 
-export const revalidate = 60;
-
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://refinea.io";
 
 // ─── Static params (SSG) ───────────────────────────────────────────────────────
 
-export async function generateStaticParams() {
-  const slugs = await getAllSlugs();
+export function generateStaticParams() {
+  const slugs = getAllSlugs();
   return slugs.map((slug) => ({ slug }));
 }
 
@@ -32,19 +28,17 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const post = await getPostBySlug(slug);
+  const post = getPostBySlug(slug);
   if (!post) return { title: "Not found - Refinea" };
-  const description =
-    post.acf?.meta_description ||
-    post.excerpt.rendered.replace(/<[^>]+>/g, "").trim().slice(0, 160);
-  const cover = getCoverUrl(post);
+  const description = post.description.slice(0, 160);
+  const cover = post.cover;
   const canonicalUrl = `${SITE_URL}/blog/${slug}`;
   return {
-    title: `${post.title.rendered} - Refinea Blog`,
+    title: `${post.title} - Refinea Blog`,
     description,
     alternates: { canonical: canonicalUrl },
     openGraph: {
-      title: post.title.rendered,
+      title: post.title,
       description,
       url: canonicalUrl,
       type: "article",
@@ -55,7 +49,7 @@ export async function generateMetadata({
     },
     twitter: {
       card: "summary_large_image",
-      title: post.title.rendered,
+      title: post.title,
       description,
       ...(cover ? { images: [cover] } : {}),
     },
@@ -70,17 +64,17 @@ export default async function ArticlePage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const post = await getPostBySlug(slug);
+  const post = getPostBySlug(slug);
   if (!post) notFound();
 
-  const cover        = getCoverUrl(post);
-  const persona      = post.acf?.target_persona;
-  const entity       = post.acf?.primary_entity;
-  const jsonLd       = post.acf?.json_ld_script;
-  const headings     = extractHeadings(post.content.rendered);
-  const contentHtml  = addHeadingIds(post.content.rendered);
-  const articleUrl   = `${SITE_URL}/blog/${post.slug}`;
-  const wasUpdated   = post.modified && post.modified !== post.date;
+  const cover       = post.cover;
+  const persona     = post.persona;
+  const entity      = post.entity;
+  const jsonLd      = post.jsonLd;
+  const headings    = extractHeadings(post.contentHtml);
+  const contentHtml = post.contentHtml;
+  const articleUrl  = `${SITE_URL}/blog/${post.slug}`;
+  const wasUpdated  = post.modified && post.modified !== post.date;
 
   return (
     <>
@@ -100,7 +94,7 @@ export default async function ArticlePage({
           <div className="relative w-full h-[280px] md:h-[380px] overflow-hidden bg-[#0d0d0d]">
             <img
               src={cover}
-              alt={post.title.rendered}
+              alt={post.title}
               className="w-full h-full object-cover"
               style={{ filter: "grayscale(90%) contrast(1.05)" }}
             />
@@ -146,7 +140,7 @@ export default async function ArticlePage({
                 style={{ borderLeft: "2px solid #6c47ff" }}
               >
                 {wasUpdated ? (
-                  <span>Updated {formatShortDate(post.modified)}</span>
+                  <span>Updated {formatShortDate(post.modified!)}</span>
                 ) : (
                   <time>{formatDate(post.date)}</time>
                 )}
@@ -157,8 +151,9 @@ export default async function ArticlePage({
             <h1
               className="text-3xl md:text-[40px] font-bold leading-[1.1] tracking-[-0.025em]"
               style={{ color: "#1A1A1A" }}
-              dangerouslySetInnerHTML={{ __html: post.title.rendered }}
-            />
+            >
+              {post.title}
+            </h1>
           </header>
 
           {/* Split layout: sidebar + content */}
@@ -213,7 +208,8 @@ export default async function ArticlePage({
                   prose-code:font-mono prose-code:text-[0.85em] prose-code:bg-black/[0.04] prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:before:content-none prose-code:after:content-none
                   prose-pre:bg-[#0d0d0d] prose-pre:text-white/80 prose-pre:rounded-xl
                   prose-blockquote:border-l-2 prose-blockquote:border-accent/50 prose-blockquote:not-italic prose-blockquote:text-black/55
-                  prose-img:rounded-xl"
+                  prose-img:rounded-xl
+                  prose-table:text-sm prose-th:text-left prose-th:font-semibold prose-th:border-b prose-th:border-black/10 prose-th:pb-2 prose-td:border-b prose-td:border-black/[0.05] prose-td:py-2"
                 style={{
                   fontSize: "18px",
                   color: "#1A1A1A",

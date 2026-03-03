@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import type { Heading } from "@/lib/wordpress";
+import type { Heading } from "@/lib/mdx";
 
 // ─── AI Deep Links ─────────────────────────────────────────────────────────────
 

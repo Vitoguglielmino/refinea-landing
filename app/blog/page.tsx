@@ -1,8 +1,6 @@
-import { getPosts, formatDate, getCoverUrl, type WPPost } from "@/lib/wordpress";
+import { getAllPostMetas, formatDate, type PostMeta } from "@/lib/mdx";
 import Nav from "../components/Nav";
 import Link from "next/link";
-
-export const revalidate = 60;
 
 export const metadata = {
   title: "Blog - Refinea | GEO & AI Visibility Insights",
@@ -32,10 +30,10 @@ function PersonaBadge({ persona }: { persona: string }) {
 
 // ─── Article card ──────────────────────────────────────────────────────────────
 
-function ArticleCard({ post }: { post: WPPost }) {
-  const cover = getCoverUrl(post);
-  const persona = post.acf?.target_persona;
-  const entity = post.acf?.primary_entity;
+function ArticleCard({ post }: { post: PostMeta }) {
+  const cover = post.cover;
+  const persona = post.persona;
+  const entity = post.entity;
 
   return (
     <Link
@@ -47,7 +45,7 @@ function ArticleCard({ post }: { post: WPPost }) {
         {cover ? (
           <img
             src={cover}
-            alt={post.title.rendered}
+            alt={post.title}
             className="w-full h-full object-cover"
             style={{ filter: "grayscale(90%) contrast(1.05)" }}
           />
@@ -88,14 +86,14 @@ function ArticleCard({ post }: { post: WPPost }) {
         {/* Title */}
         <h2
           className="text-[16px] font-bold text-black leading-snug tracking-[-0.015em] group-hover:text-accent transition-colors duration-200"
-          dangerouslySetInnerHTML={{ __html: post.title.rendered }}
-        />
+        >
+          {post.title}
+        </h2>
 
         {/* Excerpt */}
-        <p
-          className="text-[13px] text-black/50 leading-relaxed line-clamp-2 flex-1"
-          dangerouslySetInnerHTML={{ __html: post.excerpt.rendered }}
-        />
+        <p className="text-[13px] text-black/50 leading-relaxed line-clamp-2 flex-1">
+          {post.description}
+        </p>
 
         {/* GEO metadata footer */}
         {(entity || persona) && (
@@ -118,10 +116,10 @@ function EmptyState() {
   return (
     <div className="col-span-full py-24 text-center">
       <p className="text-[13px] font-mono text-black/25 mb-2">
-        {">"} no_posts_found - connect WordPress to start publishing
+        {">"}  no_posts_found
       </p>
       <p className="text-sm text-black/30">
-        Set <code className="font-mono text-xs bg-black/[0.04] px-1.5 py-0.5 rounded">WORDPRESS_API_URL</code> in your environment variables.
+        Add <code className="font-mono text-xs bg-black/[0.04] px-1.5 py-0.5 rounded">.mdx</code> files to <code className="font-mono text-xs bg-black/[0.04] px-1.5 py-0.5 rounded">content/posts/</code> to start publishing.
       </p>
     </div>
   );
@@ -129,8 +127,8 @@ function EmptyState() {
 
 // ─── Page ──────────────────────────────────────────────────────────────────────
 
-export default async function BlogPage() {
-  const posts = await getPosts();
+export default function BlogPage() {
+  const posts = getAllPostMetas();
 
   return (
     <>
@@ -168,7 +166,7 @@ export default async function BlogPage() {
               {posts.length === 0 ? (
                 <EmptyState />
               ) : (
-                posts.map((post) => <ArticleCard key={post.id} post={post} />)
+                posts.map((post) => <ArticleCard key={post.slug} post={post} />)
               )}
             </div>
           </div>

@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
-import { getPosts } from "@/lib/wordpress";
+import { getAllPostMetas } from "@/lib/mdx";
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = "https://refinea.io";
 
   // Static pages with strategic priority assignments
@@ -32,19 +32,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ];
 
-  // Dynamic blog posts
-  let blogPages: MetadataRoute.Sitemap = [];
-  try {
-    const posts = await getPosts();
-    blogPages = posts.map((post) => ({
-      url: `${baseUrl}/blog/${post.slug}`,
-      lastModified: new Date(post.modified || post.date),
-      changeFrequency: "weekly" as const,
-      priority: 0.7,
-    }));
-  } catch {
-    // WordPress might not be configured yet
-  }
+  // Dynamic blog posts from MDX files
+  const posts = getAllPostMetas();
+  const blogPages: MetadataRoute.Sitemap = posts.map((post) => ({
+    url: `${baseUrl}/blog/${post.slug}`,
+    lastModified: new Date(post.modified || post.date),
+    changeFrequency: "weekly" as const,
+    priority: 0.7,
+  }));
 
   return [...staticPages, ...blogPages];
 }
