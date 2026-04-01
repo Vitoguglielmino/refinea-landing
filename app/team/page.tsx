@@ -253,9 +253,9 @@ export default function TeamPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-end">
               <div>
                 <h1 className="text-[36px] sm:text-5xl md:text-[56px] font-bold leading-[1.02] tracking-[-0.03em] text-black">
-                  Engineering<br />
-                  the invisible<br />
-                  <span style={{ color: "rgba(0,0,0,0.18)" }}>layer.</span>
+                  Meet the<br />
+                  Refinea<br />
+                  <span style={{ color: "rgba(0,0,0,0.18)" }}>Team.</span>
                 </h1>
               </div>
               <div className="space-y-4">

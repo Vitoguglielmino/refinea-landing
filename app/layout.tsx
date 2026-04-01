@@ -82,6 +82,10 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: "https://refinea.io",
+    languages: {
+      "en": "https://refinea.io",
+      "x-default": "https://refinea.io",
+    },
   },
   robots: {
     index: true,

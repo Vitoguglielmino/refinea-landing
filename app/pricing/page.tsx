@@ -332,8 +332,8 @@ export default function PricingPage() {
               </div>
 
               <h1 className="text-[36px] sm:text-5xl md:text-[60px] font-bold leading-[1.01] tracking-[-0.03em] text-black mb-5 max-w-[680px]">
-                Deploy your<br />
-                <span style={{ color: "rgba(0,0,0,0.18)" }}>Persona Strategy.</span>
+                GEO Platform<br />
+                <span style={{ color: "rgba(0,0,0,0.18)" }}>Pricing Plans.</span>
               </h1>
               <p className="text-base md:text-lg lg:text-xl text-black/50 leading-relaxed max-w-[560px]">
                 Stop optimizing for algorithms. Start influencing the entities that drive AI decisions.{" "}

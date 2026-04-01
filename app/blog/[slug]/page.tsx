@@ -6,12 +6,79 @@ import {
   extractHeadings,
 } from "@/lib/mdx";
 import Nav from "../../components/Nav";
+import Footer from "../../components/Footer";
+import Breadcrumb from "../../components/Breadcrumb";
 import ArticleSidebar, { MobileTOC } from "../../components/blog/ArticleSidebar";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://refinea.io";
+
+// ─── BlogPosting JSON-LD builder ────────────────────────────────────────────────
+
+function buildBlogPostingJsonLd(post: {
+  title: string;
+  slug: string;
+  description: string;
+  date: string;
+  modified?: string;
+  cover?: string;
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "@id": `${SITE_URL}/blog/${post.slug}#article`,
+    headline: post.title,
+    description: post.description,
+    url: `${SITE_URL}/blog/${post.slug}`,
+    datePublished: post.date,
+    dateModified: post.modified ?? post.date,
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `${SITE_URL}/blog/${post.slug}`,
+    },
+    author: [
+      {
+        "@type": "Person",
+        "@id": "https://refinea.io/#vito",
+        name: "Vito Guglielmino",
+        jobTitle: "Co-Founder & CEO",
+        url: "https://www.linkedin.com/in/vitoguglielmino/",
+      },
+      {
+        "@type": "Person",
+        "@id": "https://refinea.io/#giorgio",
+        name: "Giorgio Monaco",
+        jobTitle: "Co-Founder & CTO",
+        url: "https://www.linkedin.com/in/giorgio-monaco/",
+      },
+    ],
+    publisher: {
+      "@type": "Organization",
+      "@id": "https://refinea.io/#organization",
+      name: "Refinea",
+      logo: {
+        "@type": "ImageObject",
+        url: "https://refinea.io/logos/refinea%20viola.svg",
+        width: 512,
+        height: 512,
+      },
+    },
+    ...(post.cover
+      ? {
+          image: {
+            "@type": "ImageObject",
+            url: post.cover.startsWith("http")
+              ? post.cover
+              : `${SITE_URL}${post.cover}`,
+          },
+        }
+      : {}),
+    isPartOf: { "@id": "https://refinea.io/#website" },
+    inLanguage: post.slug.match(/^[a-z]{2}-/) || post.slug.includes("servizi") ? "it-IT" : "en-US",
+  };
+}
 
 // ─── Static params (SSG) ───────────────────────────────────────────────────────
 
@@ -33,10 +100,18 @@ export async function generateMetadata({
   const description = post.description.slice(0, 160);
   const cover = post.cover;
   const canonicalUrl = `${SITE_URL}/blog/${slug}`;
+  const isItalian = slug.startsWith("servizi-");
+  const lang = isItalian ? "it" : "en";
   return {
     title: `${post.title} - Refinea Blog`,
     description,
-    alternates: { canonical: canonicalUrl },
+    alternates: {
+      canonical: canonicalUrl,
+      languages: {
+        [lang]: canonicalUrl,
+        "x-default": canonicalUrl,
+      },
+    },
     openGraph: {
       title: post.title,
       description,
@@ -76,9 +151,16 @@ export default async function ArticlePage({
   const articleUrl  = `${SITE_URL}/blog/${post.slug}`;
   const wasUpdated  = post.modified && post.modified !== post.date;
 
+  const blogPostingJsonLd = buildBlogPostingJsonLd(post);
+
   return (
     <>
-      {/* JSON-LD - critical for LLM scrapers */}
+      {/* BlogPosting JSON-LD - author, dates, publisher for rich results */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(blogPostingJsonLd) }}
+      />
+      {/* Additional JSON-LD from frontmatter (HowTo, etc.) */}
       {jsonLd && (
         <script
           type="application/ld+json"
@@ -113,16 +195,11 @@ export default async function ArticlePage({
         {/* Content area */}
         <div className="mx-auto max-w-[1100px] px-6 py-12">
 
-          {/* Back */}
-          <Link
-            href="/blog"
-            className="inline-flex items-center gap-2 text-[12px] font-mono text-black/30 hover:text-black transition-colors mb-10"
-          >
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-              <path d="M12 7H2M6 3L2 7l4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-            /blog
-          </Link>
+          {/* Breadcrumb */}
+          <Breadcrumb items={[
+            { name: "Blog", href: "/blog" },
+            { name: post.title, href: `/blog/${post.slug}` },
+          ]} />
 
           {/* Article header */}
           <header className="max-w-[720px] mb-10">
@@ -247,6 +324,7 @@ export default async function ArticlePage({
           </div>
         </div>
       </main>
+      <Footer />
     </>
   );
 }

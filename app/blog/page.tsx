@@ -1,5 +1,7 @@
 import { getAllPostMetas, formatDate, type PostMeta } from "@/lib/mdx";
 import Nav from "../components/Nav";
+import Footer from "../components/Footer";
+import Breadcrumb from "../components/Breadcrumb";
 import Link from "next/link";
 
 export const metadata = {
@@ -138,6 +140,7 @@ export default function BlogPage() {
         {/* Hero */}
         <section className="section-lines pt-24 pb-16">
           <div className="mx-auto max-w-[1100px] px-6">
+            <Breadcrumb items={[{ name: "Blog", href: "/blog" }]} />
             <div className="inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.12em] text-accent bg-accent/[0.08] border border-accent/[0.15] px-3.5 py-1.5 rounded-full mb-8">
               <span className="w-1 h-1 rounded-full bg-accent shrink-0" />
               The Lab
@@ -146,8 +149,8 @@ export default function BlogPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-end">
               <div>
                 <h1 className="text-5xl md:text-[52px] font-bold leading-[1.02] tracking-[-0.03em] text-black">
-                  Intelligence,<br />
-                  <span style={{ color: "rgba(0,0,0,0.2)" }}>documented.</span>
+                  GEO &amp; AI Visibility<br />
+                  <span style={{ color: "rgba(0,0,0,0.2)" }}>Insights.</span>
                 </h1>
               </div>
               <div>
@@ -173,6 +176,7 @@ export default function BlogPage() {
         </section>
 
       </main>
+      <Footer />
     </>
   );
 }

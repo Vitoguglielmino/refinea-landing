@@ -7,6 +7,7 @@ import GapSection from "./components/GapSection";
 import AgentPipelineSection from "./components/AgentPipelineSection";
 import IntelligencePipelineSection from "./components/IntelligencePipelineSection";
 import FAQSection from "./components/FAQSection";
+import Footer from "./components/Footer";
 
 // ─── Shared layout helpers ────────────────────────────────────────────────────
 
@@ -40,11 +41,11 @@ export default function Home() {
 
               {/* H1 */}
               <h1 className="text-[32px] sm:text-[43px] md:text-[56px] lg:text-[64px] font-bold leading-[1.06] tracking-[-0.025em] text-black mb-7">
-                AI visibility is no{" "}
+                Generative Engine{" "}
                 <br className="hidden sm:block" />
-                longer static.{" "}
+                Optimization{" "}
                 <br className="hidden sm:block" />
-                <span className="text-black/40">It&apos;s conditional.</span>
+                <span className="text-black/40">Infrastructure.</span>
               </h1>
 
               {/* Sub-headline */}
@@ -161,27 +162,7 @@ export default function Home() {
       </section>
 
       {/* ── Footer ── */}
-      <footer className="py-10 bg-black border-t border-white/[0.06]">
-        <C className="flex flex-col sm:flex-row items-center justify-between gap-3">
-          <div className="flex items-center">
-            <img
-              src="/logos/refinea%20grigio.svg"
-              alt="Refinea logo"
-              style={{ height: 30, width: 30, objectFit: "contain", filter: "brightness(0) invert(1)", opacity: 0.4, marginRight: -4 }}
-            />
-            <span className="text-sm font-bold text-white/35">Refinea</span>
-          </div>
-          <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-5">
-            <span className="text-xs text-white/20">
-              © {new Date().getFullYear()} Refinea. All rights reserved.
-            </span>
-            <span className="hidden sm:block text-white/10 text-xs">·</span>
-            <span className="text-xs text-white/15 font-mono">
-              VAT 06241080875 · Cap. Soc. €10.000
-            </span>
-          </div>
-        </C>
-      </footer>
+      <Footer />
 
     </div>
   );
