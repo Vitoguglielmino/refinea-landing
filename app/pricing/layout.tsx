@@ -4,11 +4,11 @@ import Footer from "../components/Footer";
 export const metadata: Metadata = {
   title: "Pricing - Refinea | GEO Infrastructure Plans",
   description:
-    "Choose the right Generative Engine Optimization plan. Growth ($149/mo) or Pro ($349/mo). Track AI visibility across ChatGPT, Gemini, and Perplexity by buyer persona.",
+    "Choose the right Generative Engine Optimization plan. Growth (€129/mo) or Pro (€299/mo) + VAT. Track AI visibility across ChatGPT, Gemini, and Perplexity by buyer persona.",
   openGraph: {
     title: "Pricing - Refinea | GEO Infrastructure Plans",
     description:
-      "Choose the right Generative Engine Optimization plan. Growth ($149/mo) or Pro ($349/mo). Track AI visibility across ChatGPT, Gemini, and Perplexity.",
+      "Choose the right Generative Engine Optimization plan. Growth (€129/mo) or Pro (€299/mo) + VAT. Track AI visibility across ChatGPT, Gemini, and Perplexity.",
     url: "https://refinea.io/pricing",
   },
   alternates: {

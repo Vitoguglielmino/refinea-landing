@@ -140,24 +140,24 @@ const structuredData = {
         {
           "@type": "Offer",
           name: "Growth Plan",
-          price: "149",
-          priceCurrency: "USD",
+          price: "129",
+          priceCurrency: "EUR",
           priceValidUntil: "2026-12-31",
           availability: "https://schema.org/InStock",
           url: "https://refinea.io/pricing",
           description:
-            "5 dynamic buyer personas, 50 GEO queries per month with intent-mapped query fan out, 3 AI-optimized articles per month published to WordPress Headless, ChatGPT + Gemini + Perplexity coverage, GSC and GA4 integration, Strategic Pulse every 48h.",
+            "Up to 3 dynamic buyer personas, up to 30 prompts per month with intent-mapped query fan out, 3 AI-optimized articles per month published to WordPress Headless, ChatGPT + Gemini + Perplexity coverage, GSC and GA4 integration, Strategic Pulse every 48h. Price excludes VAT.",
         },
         {
           "@type": "Offer",
           name: "Pro Plan",
-          price: "349",
-          priceCurrency: "USD",
+          price: "299",
+          priceCurrency: "EUR",
           priceValidUntil: "2026-12-31",
           availability: "https://schema.org/InStock",
           url: "https://refinea.io/pricing",
           description:
-            "15 dynamic buyer personas, 150 GEO queries per month with intent-mapped query fan out, 10 AI-optimized articles per month, full LLM engine coverage, cross-persona insights, dedicated Slack Connect, GSC and GA4 integration.",
+            "Up to 15 dynamic buyer personas, up to 100 prompts per month with intent-mapped query fan out, 10 AI-optimized articles per month, full LLM engine coverage, cross-persona insights, dedicated Slack Connect, GSC and GA4 integration. Price excludes VAT.",
         },
       ],
       featureList: [
@@ -192,7 +192,7 @@ const structuredData = {
             itemOffered: {
               "@type": "Service",
               name: "Growth Plan",
-              description: "5 personas, 50 GEO queries/month, 3 AI articles/month",
+              description: "Up to 3 personas, up to 30 prompts/month, 3 AI articles/month",
             },
           },
           {
@@ -200,7 +200,7 @@ const structuredData = {
             itemOffered: {
               "@type": "Service",
               name: "Pro Plan",
-              description: "15 personas, 150 GEO queries/month, 10 AI articles/month, cross-persona insights",
+              description: "Up to 15 personas, up to 100 prompts/month, 10 AI articles/month, cross-persona insights",
             },
           },
         ],

@@ -6,20 +6,22 @@ import Nav from "../components/Nav";
 // ─── Data ─────────────────────────────────────────────────────────────────────
 
 const GROWTH_FEATURES = [
-  { mono: "5", label: "Dynamic Personas", sub: "The Decision Makers" },
+  { mono: "3", label: "Dynamic Personas", sub: "Up to 3 buyer personas" },
+  { mono: "30", label: "Prompts / mo", sub: "Intent-mapped + query fan out" },
+  { mono: "1,350", label: "AI Answers Analyzed / mo", sub: "Up to 1,350 answers across engines & personas" },
   { mono: "48h", label: "Strategic Pulse", sub: "Automatic refresh" },
-  { mono: "50", label: "GEO Queries / mo", sub: "Intent-mapped + query fan out" },
-  { mono: "3×", label: "AI-Optimized Articles / mo", sub: "Direct to WP Headless" },
+  { mono: "2×", label: "AI-Optimized Articles / mo", sub: "Direct to WP Headless" },
   { mono: "3", label: "LLM Engines", sub: "ChatGPT · Gemini · Perplexity" },
   { mono: "✓", label: "GSC + GA4 Integration", sub: "Search & Analytics data" },
 ];
 
 const PRO_FEATURES = [
-  { mono: "15", label: "Dynamic Personas", sub: "Full Funnel Coverage" },
+  { mono: "15", label: "Dynamic Personas", sub: "Up to 15 buyer personas" },
+  { mono: "100", label: "Prompts / mo", sub: "Intent-mapped + query fan out" },
+  { mono: "6,000", label: "AI Answers Analyzed / mo", sub: "Up to 6,000 answers across engines & personas" },
   { mono: "48h", label: "Strategic Pulse", sub: "Automatic refresh" },
-  { mono: "150", label: "GEO Queries / mo", sub: "Intent-mapped + query fan out" },
-  { mono: "10×", label: "AI-Optimized Articles / mo", sub: "Direct to WP Headless" },
-  { mono: "All", label: "LLM Engines", sub: "ChatGPT · Gemini · Perplexity" },
+  { mono: "6×", label: "AI-Optimized Articles / mo", sub: "Direct to WP Headless" },
+  { mono: "4", label: "LLM Engines", sub: "ChatGPT · Gemini · Perplexity · Claude" },
   { mono: "✓", label: "GSC + GA4 Integration", sub: "Search & Analytics data" },
   { mono: "⊕", label: "Cross-Persona Insights", sub: "Multi-profile impact analysis" },
   { mono: "#", label: "Dedicated Slack Connect", sub: "Direct access channel" },
@@ -250,7 +252,7 @@ function PricingCard({
           <span className="text-[40px] font-bold tracking-[-0.03em] text-black leading-none">
             {price}
           </span>
-          <span className="text-[13px] font-mono" style={{ color: "#aaa" }}>/mo</span>
+          <span className="text-[13px] font-mono" style={{ color: "#aaa" }}>/mo <span className="text-[10px]">+ VAT</span></span>
         </div>
       </div>
 
@@ -348,9 +350,9 @@ export default function PricingPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5 max-w-[820px]">
                 <PricingCard
                   plan="GROWTH"
-                  price="$149"
+                  price="€129"
                   tagline="Validation for scaling brands."
-                  personaCount={5}
+                  personaCount={3}
                   features={GROWTH_FEATURES}
                   ctaLabel="Start 14-day Free Trial"
                   ctaStyle="outline"
@@ -358,7 +360,7 @@ export default function PricingPage() {
                 />
                 <PricingCard
                   plan="PRO"
-                  price="$349"
+                  price="€299"
                   tagline="Market Orchestration at scale."
                   badge="Enterprise Ready"
                   personaCount={15}
