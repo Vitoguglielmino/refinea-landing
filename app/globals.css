@@ -1,10 +1,33 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
+@import "vanilla-cookieconsent/dist/cookieconsent.css";
 
 :root {
   --background: #f5f6f7;
   --foreground: #000000;
   --accent: #6c47ff;
+
+  /* Data viz — used in mockups */
+  --data-green: #16a34a;
+  --data-red: #dc2626;
+  --data-amber: #d97706;
+
+  /* Competitor colors (mockup charts) */
+  --comp-1: #0891b2;
+  --comp-2: #ea580c;
+  --comp-3: #db2777;
+  --comp-4: #ca8a04;
+  --comp-5: #7c3aed;
+
+  /* Mockup chrome */
+  --mockup-bg: #ffffff;
+  --mockup-border: rgba(0, 0, 0, 0.09);
+  --mockup-shadow: 0 2px 16px rgba(0, 0, 0, 0.07);
+  --mockup-header-bg: #fafafa;
+
+  /* Landing rhythm */
+  --section-gap: 120px;
+  --max-text: 640px;
 }
 
 @theme inline {
@@ -12,6 +35,25 @@
   --color-foreground: var(--foreground);
   --color-accent: var(--accent);
   --font-sans: var(--font-inter);
+  --font-mono: var(--font-jetbrains-mono);
+}
+
+/* ── Landing typography scale (does not affect blog) ── */
+.landing h1 {
+  font-size: 3.5rem;
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+  font-weight: 700;
+}
+.landing h2 {
+  font-size: 2.5rem;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  font-weight: 700;
+}
+@media (max-width: 768px) {
+  .landing h1 { font-size: 2.25rem; }
+  .landing h2 { font-size: 1.75rem; }
 }
 
 *,
@@ -20,12 +62,27 @@
   box-sizing: border-box;
 }
 
+html, body {
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI",
     sans-serif;
   -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* iOS safe-area helpers (notch / dynamic island / home indicator) */
+.safe-pt { padding-top: env(safe-area-inset-top); }
+.safe-pb { padding-bottom: env(safe-area-inset-bottom); }
+.safe-px {
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
 }
 
 ::selection {
@@ -36,6 +93,20 @@ body {
 @keyframes cycle-progress {
   from { transform: scaleX(0); }
   to   { transform: scaleX(1); }
+}
+
+/* Social proof logo marquee — translates the doubled list by exactly
+   half its width, so the second copy slides into the first's position
+   and the loop is seamless. */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.animate-marquee {
+  animation: marquee 40s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee { animation: none; }
 }
 
 /* Paradigm section - card shake on category switch */
@@ -56,6 +127,7 @@ body {
 /* Subtle square grid with gradient mask - applied only to the background layer */
 .section-lines {
   position: relative;
+  overflow: hidden;
 }
 
 .section-lines::before {
@@ -65,11 +137,16 @@ body {
   pointer-events: none;
   z-index: 0;
   background-image:
-    linear-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 0, 0, 0.04) 1px, transparent 1px);
-  background-size: 40px 40px, 40px 40px;
-  -webkit-mask-image: radial-gradient(ellipse 120% 80% at 50% 0%, black 30%, transparent 80%);
-  mask-image: radial-gradient(ellipse 120% 80% at 50% 0%, black 30%, transparent 80%);
+    /* White glow halo (slightly thicker, blurred via wider line) */
+    linear-gradient(rgba(255, 255, 255, 0.9) 2px, transparent 2px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.9) 2px, transparent 2px),
+    /* Dark line core (sharp 1px) */
+    linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+  background-size: 10px 10px, 10px 10px, 10px 10px, 10px 10px;
+  filter: blur(0.4px);
+  -webkit-mask-image: radial-gradient(ellipse 90% 90% at 50% 100%, black 30%, transparent 85%);
+  mask-image: radial-gradient(ellipse 90% 90% at 50% 100%, black 30%, transparent 85%);
 }
 
 .section-lines > * {
@@ -104,6 +181,469 @@ body {
     height: auto !important;
     padding-top: 2rem;
     padding-bottom: 2rem;
+  }
+}
+
+/* ───────────────────────────────────────────────────────────────────────────
+   Cookie banner — vanilla-cookieconsent v3 styled to the landing design
+   system. We do NOT import the library default CSS; everything is
+   declared here so the banner inherits accent #6c47ff, radius 8/16,
+   1px black/9 borders, and the same typography rhythm as Pricing/Nav.
+   ─────────────────────────────────────────────────────────────────────── */
+
+#cc-main {
+  --cc-font-family: var(--font-inter), -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+  --cc-bg: #ffffff;
+  --cc-primary-color: rgba(0, 0, 0, 0.85);
+  --cc-secondary-color: rgba(0, 0, 0, 0.6);
+  --cc-border-radius: 16px;
+  --cc-btn-border-radius: 8px;
+  --cc-z-index: 99999;
+
+  font-family: var(--cc-font-family);
+  color: var(--cc-primary-color);
+  letter-spacing: -0.005em;
+}
+
+/* Force banner above the Footer (Footer is z-index:auto with stacking
+   context); the library's --cc-z-index gets overridden by Next's app
+   layers, so we set it explicitly here. */
+#cc-main {
+  z-index: 2147483647 !important;
+}
+
+/* Force the banner to bottom-right of the viewport — library's
+   .cm--bottom .cm--right are sometimes overridden by other CSS. */
+#cc-main .cm.cm--box {
+  position: fixed !important;
+  bottom: 20px !important;
+  right: 20px !important;
+  left: auto !important;
+  top: auto !important;
+  margin: 0 !important;
+  transform: none !important;
+  z-index: 2147483647 !important;
+}
+
+@keyframes ccFadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── Consent banner (bottom-right card) ───────────────────────────────── */
+#cc-main .cm {
+  max-width: 460px !important;
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.09) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.07),
+              0 12px 32px rgba(0, 0, 0, 0.08) !important;
+  color: rgba(0, 0, 0, 0.85) !important;
+}
+
+/* Container body / texts: remove default padding so we control it ourselves */
+#cc-main .cm__body {
+  padding: 0 !important;
+}
+#cc-main .cm__texts {
+  padding: 24px 24px 0 !important;
+}
+#cc-main .cm__title {
+  padding: 0 !important;
+}
+#cc-main .cm__desc {
+  padding: 0 !important;
+  margin-top: 10px !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+/* Buttons row: force the WHOLE cm__btns to be a single flex row with
+   ALL buttons (across multiple cm__btn-group wrappers) equal width.
+   The library renders Accept+Reject in one group and Customize in
+   another, so we flatten with display:contents on the inner groups. */
+#cc-main .cm__btns {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  gap: 8px !important;
+  padding: 18px 24px 18px !important;
+  border-top: none !important;
+}
+#cc-main .cm__btn-group {
+  display: contents !important;
+}
+#cc-main .cm__btns .cm__btn {
+  flex: 1 1 0 !important;
+  width: auto !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+}
+
+/* Footer links: own padding aligned with body */
+#cc-main .cm__footer {
+  padding: 14px 24px 18px !important;
+  border-top: 1px solid rgba(0, 0, 0, 0.06) !important;
+  background: transparent !important;
+}
+#cc-main .cm__links {
+  padding: 0 !important;
+}
+#cc-main .cm__link-group {
+  font-size: 13px !important;
+}
+#cc-main .cm__link-group > * + * {
+  margin-left: 12px !important;
+}
+
+/* Hide top-right close X on the banner (we already have Reject) */
+#cc-main .cm__btn--close {
+  display: none !important;
+}
+
+/* On mobile, stack the 3 buttons */
+@media (max-width: 480px) {
+  #cc-main .cm__btn-group {
+    flex-direction: column !important;
+  }
+  #cc-main .cm__btns {
+    flex-direction: column !important;
+  }
+}
+
+#cc-main .cm__title,
+#cc-main .pm__title {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+  color: #000;
+  margin: 0 0 10px 0;
+  padding: 0;
+}
+
+#cc-main .cm__desc,
+#cc-main .pm__section-desc {
+  font-size: 14px;
+  line-height: 1.6;
+  color: rgba(0, 0, 0, 0.65);
+  margin: 0 0 18px 0;
+}
+
+#cc-main .cm__btns {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 8px;
+  margin-top: 4px;
+  padding: 0;
+  border: none;
+}
+
+#cc-main .cm__btn,
+#cc-main .pm__btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 44px !important;
+  padding: 0 18px !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  line-height: 1 !important;
+  border-radius: 8px !important;
+  border: 1px solid transparent !important;
+  cursor: pointer;
+  transition: all 160ms ease;
+  white-space: nowrap;
+  letter-spacing: -0.005em;
+  flex: 1 1 auto;
+  min-width: 0;
+  box-sizing: border-box !important;
+  font-family: var(--cc-font-family) !important;
+}
+
+#cc-main .cm__btn[data-role="all"],
+#cc-main .pm__btn[data-role="all"] {
+  background: var(--accent) !important;
+  color: #fff !important;
+  border-color: transparent !important;
+}
+
+#cc-main .cm__btn[data-role="necessary"],
+#cc-main .pm__btn[data-role="necessary"],
+#cc-main .cm__btn[data-role="show"],
+#cc-main .pm__btn[data-role="accept"] {
+  background: #ffffff !important;
+  color: rgba(0, 0, 0, 0.75) !important;
+  border: 1px solid rgba(0, 0, 0, 0.09) !important;
+}
+
+/* Primary = accent fill (Accept all) */
+#cc-main .cm__btn[data-role="all"],
+#cc-main .pm__btn[data-role="all"] {
+  background: var(--accent);
+  color: #fff;
+  border-color: transparent;
+}
+#cc-main .cm__btn[data-role="all"]:hover,
+#cc-main .pm__btn[data-role="all"]:hover {
+  background: rgba(108, 71, 255, 0.92);
+}
+#cc-main .cm__btn[data-role="all"]:active,
+#cc-main .pm__btn[data-role="all"]:active {
+  transform: scale(0.98);
+}
+
+/* Reject = outlined (same visual weight, equalWeightButtons=true) */
+#cc-main .cm__btn[data-role="necessary"],
+#cc-main .pm__btn[data-role="necessary"] {
+  background: #ffffff;
+  color: rgba(0, 0, 0, 0.75);
+  border: 1px solid rgba(0, 0, 0, 0.09);
+}
+#cc-main .cm__btn[data-role="necessary"]:hover,
+#cc-main .pm__btn[data-role="necessary"]:hover {
+  border-color: rgba(0, 0, 0, 0.18);
+}
+
+/* Customize (banner) / Save preferences (modal) — same outlined style */
+#cc-main .cm__btn[data-role="show"],
+#cc-main .pm__btn[data-role="accept"] {
+  background: #ffffff;
+  color: rgba(0, 0, 0, 0.75);
+  border: 1px solid rgba(0, 0, 0, 0.09);
+}
+#cc-main .cm__btn[data-role="show"]:hover,
+#cc-main .pm__btn[data-role="accept"]:hover {
+  border-color: rgba(0, 0, 0, 0.18);
+}
+
+/* 3 buttons in the banner: equal width on one row (≥480px) */
+#cc-main .cm__btns .cm__btn {
+  flex: 1 1 0;
+}
+
+/* Below 480px: stack vertically */
+@media (max-width: 479px) {
+  #cc-main .cm__btns .cm__btn {
+    flex: 1 1 100%;
+  }
+}
+
+#cc-main .cm__footer {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.5);
+  text-align: left;
+}
+#cc-main .cm__footer a,
+#cc-main .pm__section a {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 500;
+}
+#cc-main .cm__footer a:hover,
+#cc-main .pm__section a:hover {
+  text-decoration: underline;
+}
+
+/* ─── Preferences modal ────────────────────────────────────────────────── */
+#cc-main .pm {
+  max-width: 540px;
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.09);
+  border-radius: 16px;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.07),
+              0 24px 48px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+}
+
+#cc-main .pm__header {
+  padding: 24px 28px 18px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  background: var(--background);
+  position: relative;
+}
+#cc-main .pm__title {
+  margin: 0;
+}
+#cc-main .pm__close-btn {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  background: #ffffff;
+  color: rgba(0, 0, 0, 0.6);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 160ms ease;
+}
+#cc-main .pm__close-btn:hover {
+  border-color: rgba(0, 0, 0, 0.18);
+  color: #000;
+}
+#cc-main .pm__close-btn svg {
+  width: 14px;
+  height: 14px;
+}
+
+#cc-main .pm__body {
+  padding: 8px 28px 4px;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+#cc-main .pm__section {
+  padding: 18px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+#cc-main .pm__section:last-of-type {
+  border-bottom: none;
+}
+
+#cc-main .pm__section-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #000;
+  margin: 0 0 6px 0;
+  letter-spacing: -0.01em;
+}
+#cc-main .pm__section-desc {
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: rgba(0, 0, 0, 0.62);
+  margin: 0;
+}
+
+#cc-main .pm__section--toggle .pm__section-title-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  cursor: pointer;
+  padding: 4px 0;
+}
+
+#cc-main .pm__section-arrow {
+  display: none;
+}
+#cc-main .section__toggle-wrapper {
+  position: relative;
+  flex-shrink: 0;
+}
+#cc-main .section__toggle {
+  appearance: none;
+  width: 38px;
+  height: 22px;
+  background: rgba(0, 0, 0, 0.12);
+  border-radius: 999px;
+  position: relative;
+  cursor: pointer;
+  transition: background 200ms ease;
+  margin: 0;
+  border: none;
+  outline: none;
+}
+#cc-main .section__toggle::before {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 16px;
+  height: 16px;
+  background: #ffffff;
+  border-radius: 50%;
+  transition: transform 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+#cc-main .section__toggle:checked {
+  background: var(--accent);
+}
+#cc-main .section__toggle:checked::before {
+  transform: translateX(16px);
+}
+#cc-main .section__toggle:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+#cc-main .toggle__icon {
+  display: none;
+}
+
+/* Cookie table */
+#cc-main .pm__section-table-caption {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.55);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 14px 0 8px;
+}
+#cc-main .pm__section-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+  margin-top: 4px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 8px;
+  overflow: hidden;
+}
+#cc-main .pm__section-table th {
+  background: var(--background);
+  color: rgba(0, 0, 0, 0.65);
+  font-weight: 600;
+  text-align: left;
+  padding: 8px 10px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+#cc-main .pm__section-table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  color: rgba(0, 0, 0, 0.7);
+  vertical-align: top;
+}
+#cc-main .pm__section-table tr:last-child td {
+  border-bottom: none;
+}
+
+#cc-main .pm__footer {
+  padding: 18px 28px;
+  background: var(--background);
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+#cc-main .pm__btn-group {
+  display: flex;
+  gap: 8px;
+  flex: 1 1 auto;
+}
+#cc-main .pm__btn-group .pm__btn {
+  flex: 1 1 auto;
+  margin-top: 0;
+}
+
+@media (max-width: 640px) {
+  #cc-main .cm {
+    padding: 22px;
+  }
+  #cc-main .pm__header,
+  #cc-main .pm__footer {
+    padding-left: 22px;
+    padding-right: 22px;
+  }
+  #cc-main .pm__body {
+    padding-left: 22px;
+    padding-right: 22px;
   }
 }
 

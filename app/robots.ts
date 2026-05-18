@@ -43,6 +43,9 @@ export default function robots(): MetadataRoute.Robots {
         allow: "/",
       },
     ],
-    sitemap: "https://refinea.io/sitemap.xml",
+    sitemap: [
+      "https://refinea.io/sitemap.xml",
+      "https://refinea.io/news-sitemap.xml",
+    ],
   };
 }

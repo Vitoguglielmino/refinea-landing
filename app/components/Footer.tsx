@@ -1,93 +1,135 @@
-import Link from "next/link";
+import { getTranslations } from "next-intl/server";
+import { Link } from "@/i18n/routing";
+import CookiePrefsButton from "./CookiePrefsButton";
 
-const SOLUTIONS = [
-  { label: "For E-commerce", href: "/solutions/ecommerce" },
-  { label: "For SaaS", href: "/solutions/saas" },
-  { label: "For Agencies", href: "/solutions/agencies" },
-  { label: "For Enterprise", href: "/solutions/enterprise" },
+type PlatformKey = "visibility" | "personas" | "citations" | "content" | "workflows" | "brandMemory";
+type ResourcesKey = "blog" | "docs" | "analysis";
+type CompanyKey = "team" | "pricing" | "privacy" | "terms" | "cookies" | "cookiePrefs" | "linkedin" | "youtube";
+
+const PLATFORM: { key: PlatformKey; href: string }[] = [
+  { key: "visibility",  href: "/#monitoring" },
+  { key: "personas",    href: "/#intelligence" },
+  { key: "citations",   href: "/#sources" },
+  { key: "content",     href: "/#content" },
+  { key: "workflows",   href: "/#workflows" },
+  { key: "brandMemory", href: "/#brand-memory" },
 ];
 
-const RESOURCES = [
-  { label: "Blog", href: "/blog" },
-  { label: "Documentation", href: "#", soon: true },
-  { label: "Glossary", href: "#", soon: true },
-  { label: "Case Studies", href: "#", soon: true },
+const RESOURCES: { key: ResourcesKey; href: string; soon?: boolean }[] = [
+  { key: "blog",     href: "/blog" },
+  { key: "docs",     href: "/docs" },
+  { key: "analysis", href: "/refinea-analysis" },
 ];
 
-const COMPANY = [
-  { label: "Team", href: "/team" },
-  { label: "Pricing", href: "/pricing" },
-  { label: "LinkedIn", href: "https://www.linkedin.com/company/refinea", external: true },
-  { label: "YouTube", href: "https://www.youtube.com/@OfficialRefinea", external: true },
-];
-
-const LEGAL = [
-  { label: "Privacy Policy", href: "/privacy", soon: true },
-  { label: "Terms of Service", href: "/terms", soon: true },
-  { label: "Cookie Policy", href: "/cookie", soon: true },
+const COMPANY: { key: CompanyKey; href: string; external?: boolean; action?: "openCookiePrefs" }[] = [
+  { key: "team",        href: "/team" },
+  { key: "pricing",     href: "/pricing" },
+  { key: "linkedin",    href: "https://www.linkedin.com/company/refinea", external: true },
+  { key: "youtube",     href: "https://www.youtube.com/@OfficialRefinea", external: true },
+  { key: "privacy",     href: "/privacy" },
+  { key: "terms",       href: "/terms" },
+  { key: "cookies",     href: "/cookie-policy" },
+  { key: "cookiePrefs", href: "#", action: "openCookiePrefs" },
 ];
 
 function FooterColumn({
   title,
   links,
+  soonLabel,
 }: {
   title: string;
-  links: { label: string; href: string; external?: boolean; soon?: boolean }[];
+  links: { key: string; label: string; href: string; external?: boolean; soon?: boolean; action?: "openCookiePrefs" }[];
+  soonLabel: string;
 }) {
   return (
     <div>
-      <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-white/30 mb-4">
+      <p className="text-xs font-semibold uppercase tracking-[0.12em] text-white/40 mb-4">
         {title}
       </p>
-      <ul className="space-y-2.5">
-        {links.map((link) => (
-          <li key={link.label}>
-            {link.soon ? (
-              <span className="text-sm text-white/20 flex items-center gap-2">
-                {link.label}
-                <span className="text-[9px] font-semibold uppercase tracking-wide text-white/15 bg-white/[0.05] px-1.5 py-0.5 rounded-full">
-                  Soon
+      <ul className="space-y-1">
+        {links.map((link) => {
+          if (link.soon) {
+            return (
+              <li key={link.key}>
+                <span className="text-sm text-white/30 inline-flex items-center gap-2 cursor-default py-1.5">
+                  {link.label}
+                  <span
+                    style={{
+                      fontSize: 9,
+                      fontWeight: 700,
+                      padding: "1px 6px",
+                      borderRadius: 3,
+                      background: "rgba(255,255,255,0.06)",
+                      color: "rgba(255,255,255,0.4)",
+                      letterSpacing: "0.04em",
+                      textTransform: "uppercase",
+                    }}
+                  >
+                    {soonLabel}
+                  </span>
                 </span>
-              </span>
-            ) : link.external ? (
-              <a
-                href={link.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-sm text-white/40 hover:text-white/70 transition-colors"
-              >
-                {link.label}
-              </a>
-            ) : (
+              </li>
+            );
+          }
+          if (link.external) {
+            return (
+              <li key={link.key}>
+                <a
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block text-sm text-white/60 hover:text-white transition-colors py-1.5 -my-1.5"
+                >
+                  {link.label}
+                </a>
+              </li>
+            );
+          }
+          if (link.action === "openCookiePrefs") {
+            return (
+              <li key={link.key}>
+                <CookiePrefsButton label={link.label} />
+              </li>
+            );
+          }
+          return (
+            <li key={link.key}>
               <Link
                 href={link.href}
-                className="text-sm text-white/40 hover:text-white/70 transition-colors"
+                className="block text-sm text-white/60 hover:text-white transition-colors py-1.5 -my-1.5"
               >
                 {link.label}
               </Link>
-            )}
-          </li>
-        ))}
+            </li>
+          );
+        })}
       </ul>
     </div>
   );
 }
 
-export default function Footer() {
+export default async function Footer() {
+  const t = await getTranslations("footer");
+  const soonLabel = t("soonBadge");
+
+  const platformLinks = PLATFORM.map((l) => ({ ...l, label: t(`platform.${l.key}`) }));
+  const resourcesLinks = RESOURCES.map((l) => ({ ...l, label: t(`resources.${l.key}`) }));
+  const companyLinks = COMPANY.map((l) => ({ ...l, label: t(`company.${l.key}`) }));
+
   return (
     <footer className="bg-black border-t border-white/[0.06]">
-      <div className="mx-auto max-w-[1100px] px-4 sm:px-6 pt-14 pb-10">
+      <div className="mx-auto max-w-[1100px] px-4 sm:px-6 pt-12 sm:pt-14 pb-10 safe-px">
         {/* Columns */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-10 mb-14">
-          <FooterColumn title="Solutions" links={SOLUTIONS} />
-          <FooterColumn title="Resources" links={RESOURCES} />
-          <FooterColumn title="Company" links={COMPANY} />
-          <FooterColumn title="Legal" links={LEGAL} />
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-x-6 sm:gap-x-10 gap-y-10 mb-12 sm:mb-14">
+          <FooterColumn title={t("platformLabel")}  links={platformLinks}  soonLabel={soonLabel} />
+          <FooterColumn title={t("resourcesLabel")} links={resourcesLinks} soonLabel={soonLabel} />
+          <FooterColumn title={t("companyLabel")}   links={companyLinks}   soonLabel={soonLabel} />
         </div>
 
         {/* Bottom bar */}
         <div className="border-t border-white/[0.06] pt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
           <div className="flex items-center">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/logos/refinea%20grigio.svg"
               alt="Refinea logo"
@@ -104,11 +146,11 @@ export default function Footer() {
           </div>
           <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-5">
             <span className="text-xs text-white/20">
-              &copy; {new Date().getFullYear()} Refinea. All rights reserved.
+              {t("copyright", { year: new Date().getFullYear() })}
             </span>
             <span className="hidden sm:block text-white/10 text-xs">&middot;</span>
             <span className="text-xs text-white/15 font-mono">
-              VAT 06241080875 &middot; Cap. Soc. &euro;10.000
+              {t("vat")}
             </span>
           </div>
         </div>

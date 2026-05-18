@@ -1,0 +1,640 @@
+{
+  "nav": {
+    "platform": "Piattaforma",
+    "pricing": "Prezzi",
+    "resources": "Risorse",
+    "team": "Team",
+    "logIn": "Log in",
+    "signUp": "Sign up",
+    "toggleMenu": "Apri menu",
+    "platformItems": {
+      "personas": {
+        "title": "Buyer Persona Intelligence",
+        "desc": "Scopri chi sono i tuoi clienti e cosa chiedono all'AI"
+      },
+      "visibility": {
+        "title": "Monitoraggio Visibilità AI",
+        "desc": "Monitora la visibilità AI su tutti i motori generativi"
+      },
+      "citations": {
+        "title": "Citazioni e Fonti",
+        "desc": "Scopri quali fonti l'AI predilige nella tua categoria"
+      },
+      "content": {
+        "title": "Creazione e Ottimizzazione Contenuti",
+        "desc": "Crea e ottimizza contenuti per le risposte dell'AI"
+      },
+      "workflows": {
+        "title": "Workflow Agentici",
+        "desc": "Audit automatici per crawlability e dati strutturati"
+      },
+      "brandMemory": {
+        "title": "Brand Memory",
+        "desc": "Insegna all'AI i fatti unici del tuo brand"
+      }
+    },
+    "resourcesItems": {
+      "blog": "Blog",
+      "docs": "Documentazione per Refined Marketers",
+      "analysis": "Refinea Analysis",
+      "soonBadge": "Presto"
+    }
+  },
+  "hero": {
+    "analysisPill": "Vedi l'AI Visibility Index del tuo settore",
+    "title": "Visibilità AI, costruita a partire dai tuoi clienti reali.",
+    "subtitle": "Refinea parte dai tuoi clienti reali per scoprire cosa chiedono ai motori generativi, perché l'AI raccomanda qualcun altro, e ti dà gli strumenti per cambiare la risposta.",
+    "ctaPrimary": "Inizia la Prova Gratuita",
+    "ctaSecondary": "Prenota una Demo",
+    "footnote": "14 giorni gratis sul piano Pro · Attivo in 10 minuti"
+  },
+  "socialProof": {
+    "overline": "Chi lavora con Refinea"
+  },
+  "section1": {
+    "overline": "Intelligence",
+    "title": "I tuoi clienti reali, non ipotesi",
+    "body": "Se non sai chi sono i tuoi clienti reali, finisci per ottimizzare prompt che nessuno cerca davvero. Refinea analizza chi sta già cercando quello che vendi - per intento di ricerca, lingua e area geografica - e costruisce buyer personas dalla domanda reale. Per ogni persona, generiamo i prompt specifici che chiederebbe a ChatGPT, Gemini e Perplexity, validati su un database di oltre un milione di ricerche reali.",
+    "caption": "Buyer personas costruite dalla domanda reale, non da ipotesi."
+  },
+  "section2": {
+    "overline": "Monitoring",
+    "title": "Scopri chi l'AI raccomanda e chi ignora.",
+    "body": "Puoi essere primo su Google ed essere completamente invisibile su ChatGPT o Perplexity, le metriche SEO tradizionali non coprono quello che succede sui motori generativi. Refinea è una piattaforma di monitoraggio della visibilità AI su ChatGPT, Gemini, Perplexity, Claude e Google AI Overviews. AI Visibility Index, Share of Voice, posizione nelle citazioni, sentiment, tutto misurato sui prompt che i tuoi clienti reali chiedono, non su benchmark generici di settore. Vedi dove vinci, dove un competitor prende il tuo posto, e come cambia nel tempo."
+  },
+  "section3": {
+    "overline": "Sources",
+    "title": "Scopri esattamente quali fonti l'AI considera autorevoli nel tuo mercato.",
+    "body": "L'AI non inventa le risposte, trova fonti che considera autorevoli e le cita. Se non sei tra quelle fonti, non esisti in quella risposta. Refinea ti mostra quali domini vengono citati nella tua categoria, come le citazioni si distribuiscono tra le tue proprietà, le pubblicazioni di settore e i competitor, e il fan-out queries che ogni modello esegue dietro le quinte per costruire la risposta. Sai esattamente dove devi essere presente e perché."
+  },
+  "section4": {
+    "overline": "Action",
+    "titleLine1": "Non limitarti a monitorare.",
+    "titleLine2": "Cambia la risposta.",
+    "body": "Vedere dove sei invisibile è utile. Poterlo risolvere è quello che conta davvero. Refinea colma il divario tra diagnosi e azione: hai i contenuti, gli audit e il livello di evidenza del brand per cambiare concretamente come l'AI risponde su di te.",
+    "cards": {
+      "content": {
+        "title": "Contenuti Ottimizzati per l'AI",
+        "body": "Crea nuovi contenuti calibrati sulle tue buyer personas e ottimizzati per essere citati dall'AI, oppure ricevi raccomandazioni specifiche per le pagine esistenti. Pubblica su WordPress in un click."
+      },
+      "workflows": {
+        "title": "Workflow Agentici",
+        "body": "Workflow automatizzati che analizzano il tuo sito per problemi di visibilità AI - dalla qualità dei contenuti alla crawlability ai dati strutturati. Usa quelli che abbiamo costruito, o creane di tuoi. Ogni workflow ti dice cosa sistemare, in ordine di priorità."
+      },
+      "brandMemory": {
+        "title": "Brand Memory",
+        "body": "L'AI cita quello che può verificare. Carica i tuoi proof point, citazioni di esperti, premi e statistiche, Refinea li inserisce in ogni contenuto che crei, così l'AI ha le tue prove, non quelle di qualcun altro."
+      }
+    }
+  },
+  "section5": {
+    "overline": "Insights",
+    "title": "Ogni giorno, Refinea ti dice cosa fare.",
+    "body": "La visibilità AI cambia ogni giorno: nuovi contenuti, mosse dei competitor, aggiornamenti dei modelli. Refinea monitora continuamente e genera insight prioritizzati: opportunità da cogliere, minacce da affrontare, gap di contenuto da colmare. Ogni insight ha un livello di confidenza, gravità e un'azione raccomandata chiara."
+  },
+  "pricing": {
+    "overline": "Prezzi",
+    "title": "Inizia gratis, passa al piano completo quando vuoi.",
+    "subtitle": "Ogni piano include membri del team illimitati. Paghi solo per la capacità che ti serve.",
+    "toggleMonthly": "Fatturato mensilmente",
+    "toggleYearly": "Fatturato annualmente",
+    "yearlyBadge": "3 mesi gratis",
+    "billedAnnually": "Fatturato €{total} all'anno",
+    "perMonth": "/mese",
+    "aiOverviewsLabel": "AI Overviews",
+    "lite": {
+      "name": "Lite",
+      "tagline": "Per operatori solo e piccoli team che iniziano con la Generative Engine Optimization.",
+      "cta": "Inizia Ora",
+      "feature1": "40 prompt monitorati",
+      "feature3": "Monitoraggio ogni 2 giorni",
+      "feature4": "2 articoli ottimizzati per l'AI / mese",
+      "feature5": "20 crediti workflow",
+      "feature6": "Supporto via email",
+      "feature7": "Membri del team illimitati"
+    },
+    "pro": {
+      "name": "Pro",
+      "trialBadge": "14 giorni gratis",
+      "tagline": "Per i brand che ottimizzano attivamente la propria visibilità AI su tutti i principali motori generativi.",
+      "cta": "Inizia la Prova Gratuita",
+      "feature1": "110 prompt monitorati",
+      "feature3": "Monitoraggio ogni 2 giorni",
+      "feature4": "6 articoli ottimizzati per l'AI / mese",
+      "feature5": "100 crediti workflow",
+      "feature6": "Accesso API + MCP",
+      "feature7": "Supporto Slack dedicato",
+      "feature8": "Membri del team illimitati"
+    },
+    "footnotePrefix": "Ti serve di più?",
+    "footnoteLink": "Parla con il Team",
+    "footnoteSuffix": "per piani custom."
+  },
+  "finalCta": {
+    "title": "Scopri cosa chiedono i tuoi clienti all'AI e prendi il controllo della risposta.",
+    "body": "Attivo in 10 minuti. Ottieni buyer personas costruite dal tuo traffico reale, un'analisi completa della visibilità AI su tutti i modelli principali, e i primi insight azionabili su dove stai perdendo e cosa fare.",
+    "ctaPrimary": "Inizia la Prova Gratuita",
+    "ctaSecondary": "Parla con il Team",
+    "footnote": "14 giorni gratis sul piano Pro · Nessun vincolo · Cancella quando vuoi"
+  },
+  "footer": {
+    "platformLabel": "Piattaforma",
+    "resourcesLabel": "Risorse",
+    "companyLabel": "Azienda",
+    "platform": {
+      "visibility": "Visibilità AI",
+      "personas": "Buyer Personas",
+      "citations": "Citazioni",
+      "content": "Contenuti",
+      "workflows": "Workflow",
+      "brandMemory": "Brand Memory"
+    },
+    "resources": {
+      "blog": "Blog",
+      "docs": "Documentazione per Refined Marketers",
+      "analysis": "Refinea Analysis"
+    },
+    "company": {
+      "team": "Team",
+      "pricing": "Prezzi",
+      "privacy": "Privacy",
+      "terms": "Termini",
+      "cookies": "Cookie policy",
+      "cookiePrefs": "Preferenze cookie",
+      "linkedin": "LinkedIn",
+      "youtube": "YouTube"
+    },
+    "soonBadge": "Presto",
+    "copyright": "© {year} Refinea S.r.l. Tutti i diritti riservati.",
+    "vat": "P.IVA 06241080875"
+  },
+  "cookies": {
+    "banner": {
+      "title": "Usiamo cookie per migliorare Refinea",
+      "description": "Misuriamo come viene usato il sito per renderlo migliore. I dati di analytics restano in UE, gli indirizzi IP non vengono memorizzati. Puoi accettare, rifiutare o scegliere cosa attivare. La tua scelta viene salvata per 6 mesi.",
+      "acceptAll": "Accetta tutti",
+      "rejectAll": "Rifiuta tutti",
+      "preferences": "Personalizza",
+      "privacyLink": "Informativa privacy",
+      "cookieLink": "Cookie policy"
+    },
+    "prefs": {
+      "title": "Preferenze cookie",
+      "save": "Salva preferenze",
+      "close": "Chiudi",
+      "intro": {
+        "title": "La tua privacy è importante",
+        "body": "Usiamo un set minimo di cookie per capire come i visitatori usano Refinea e migliorarlo. Qui sotto puoi scegliere quali categorie attivare. Puoi cambiare la tua scelta in qualsiasi momento dal Footer."
+      },
+      "necessary": {
+        "title": "Cookie strettamente necessari",
+        "body": "Questi cookie sono indispensabili al funzionamento del sito: selezione lingua, sicurezza, registrazione della tua scelta di consenso. Non ti identificano e non possono essere disattivati."
+      },
+      "analytics": {
+        "title": "Cookie di analytics",
+        "body": "Ci aiutano a capire come i visitatori usano Refinea così da migliorare il prodotto. Usiamo Google Analytics 4 con anonimizzazione IP e hosting dati UE dove disponibile. I dati comportamentali sono conservati per 14 mesi.",
+        "tableCaption": "Cookie di analytics utilizzati"
+      },
+      "more": {
+        "title": "Maggiori informazioni",
+        "body": "Per il dettaglio su quali dati raccogliamo, per quanto tempo li conserviamo e come esercitare i tuoi diritti GDPR, leggi la nostra __PRIVACY_LINK__.",
+        "privacyText": "informativa privacy"
+      },
+      "table": {
+        "name": "Nome",
+        "domain": "Dominio",
+        "duration": "Durata",
+        "purpose": "Finalità"
+      },
+      "duration": {
+        "2years": "2 anni",
+        "6months": "6 mesi"
+      },
+      "cookies": {
+        "ga": "Google Analytics — distingue i visitatori unici in modo anonimo.",
+        "gaProperty": "Google Analytics — memorizza lo stato della sessione per la proprietà Refinea.",
+        "cc": "Memorizza la tua scelta sui cookie così non te la chiediamo di nuovo."
+      }
+    }
+  },
+  "team": {
+    "overline": "Chi siamo",
+    "title": "Chi siamo",
+    "subtitle": "Due fondatori italiani, un'ossessione: i brand perdono clienti perché l'AI continua a raccomandare i competitor. Refinea è lo strumento per cambiare le cose.",
+    "linkedinLabel": "LinkedIn",
+    "vito": {
+      "name": "Vito Guglielmino",
+      "role": "Co-Founder & CEO",
+      "bio": "Co-fondatore di Refinea. Guida prodotto, go-to-market e le partnership con agenzie e brand. Specializzato in SEO e strategia di Generative Engine Optimization."
+    },
+    "giorgio": {
+      "name": "Giorgio Monaco",
+      "role": "Co-Founder & CTO",
+      "bio": "Co-fondatore di Refinea. Ha progettato e costruito l'intera piattaforma dal pipeline di analisi AI al sistema di generazione contenuti."
+    },
+    "validation": {
+      "overline": "Validation",
+      "headline": "Selezionati tra le principali startup AI early-stage in Europa.",
+      "b4i": "B4i",
+      "techEurope": "Tech Europe Foundation",
+      "startcup": "StartCup"
+    }
+  },
+  "blogCta": {
+    "title": "Scopri come l'AI raccomanda i brand nel tuo mercato",
+    "body": "Inizia una prova gratuita di 14 giorni sul piano Pro e ottieni i tuoi primi insight sulla visibilità AI in 10 minuti.",
+    "cta": "Inizia la Prova Gratuita"
+  },
+  "pricingPage": {
+    "title": "Prezzi semplici, piattaforma potente.",
+    "subtitle": "Che tu sia un brand che gestisce la propria visibilità AI o un'agenzia di Generative Engine Optimization che lo fa per i clienti, c'è un piano adatto.",
+    "tabsLabel": "Audience dei prezzi",
+    "tabBrands": "Per Brand",
+    "tabAgencies": "Per Agenzie",
+    "brands": {
+      "lite": {
+        "name": "Lite",
+        "tagline": "Per operatori solo e piccoli team che iniziano con la Generative Engine Optimization.",
+        "price": "€129",
+        "perMonth": "/mese",
+        "cta": "Inizia Ora",
+        "feature1": "40 prompt monitorati",
+        "feature3": "Monitoraggio ogni 2 giorni",
+        "feature4": "2 articoli ottimizzati per l'AI / mese",
+        "feature5": "20 crediti workflow",
+        "feature6": "Supporto via email",
+        "feature7": "Membri del team illimitati"
+      },
+      "pro": {
+        "name": "Pro",
+        "trialBadge": "14 giorni gratis",
+        "tagline": "Per i brand che ottimizzano attivamente la propria visibilità AI su tutti i principali motori generativi.",
+        "price": "€299",
+        "perMonth": "/mese",
+        "cta": "Inizia la Prova Gratuita",
+        "feature1": "110 prompt monitorati",
+        "feature3": "Monitoraggio ogni 2 giorni",
+        "feature4": "6 articoli ottimizzati per l'AI / mese",
+        "feature5": "100 crediti workflow",
+        "feature6": "Accesso API + MCP",
+        "feature7": "Supporto Slack dedicato",
+        "feature8": "Membri del team illimitati"
+      },
+      "footnotePrefix": "Ti serve qualcosa di custom?",
+      "footnoteLink": "Parla con il Team",
+      "footnoteSuffix": "."
+    },
+    "agencies": {
+      "title": "Una piattaforma per tutti i tuoi clienti.",
+      "subtitle": "Tutto quello che serve a un'agenzia di Generative Engine Optimization per offrire visibilità AI ai clienti, con prezzi costruiti su come lavori.",
+      "tableHeaderFeature": "Feature",
+      "tableHeaderPlan": "Piano",
+      "tableHeaderDetails": "Dettagli",
+      "customBadge": "Custom",
+      "modelsLabel": {
+        "chatgpt": "ChatGPT",
+        "perplexity": "Perplexity",
+        "gemini": "Gemini",
+        "aiOverviews": "AI Overviews",
+        "claude": "Claude",
+        "deepseek": "DeepSeek",
+        "copilot": "Copilot",
+        "grok": "Grok"
+      },
+      "rows": {
+        "unlimitedPrompts": {
+          "title": "Prompt illimitati",
+          "desc": "Monitora tutti i prompt che ti servono, su tutti i tuoi clienti."
+        },
+        "customFrequency": {
+          "title": "Frequenza di monitoraggio personalizzata",
+          "desc": "Scegli la frequenza di refresh adatta al tuo ciclo di reporting: giornaliera, ogni 2 giorni o settimanale."
+        },
+        "allModels": {
+          "title": "Tutti i modelli AI",
+          "desc": "Scegli i modelli che contano per ogni cliente."
+        },
+        "apiMcp": {
+          "title": "API + MCP",
+          "desc": "Accesso API completo e integrazione MCP per collegare Refinea al tuo stack e ai tuoi workflow esistenti."
+        },
+        "clientManagement": {
+          "title": "Gestione clienti unificata",
+          "desc": "Una sola piattaforma per gestire la visibilità AI, le buyer personas e i contenuti di ogni cliente da un'unica dashboard."
+        },
+        "salesPitch": {
+          "title": "Modalità sales pitch",
+          "desc": "Usa Refinea per analisi di visibilità AI sui prospect, trasforma la piattaforma nel tuo miglior strumento di vendita."
+        },
+        "customWorkflows": {
+          "title": "Workflow custom",
+          "desc": "Workflow agentici su misura, costruiti sui bisogni e i processi specifici della tua agenzia."
+        },
+        "dedicatedSupport": {
+          "title": "Supporto Slack dedicato",
+          "desc": "Un canale Slack diretto con il nostro team per un supporto rapido e prioritario."
+        },
+        "partnerCommunity": {
+          "title": "Community partner",
+          "desc": "Entra nel network partner di Refinea: condivisione di best practice, co-marketing, accesso anticipato alle nuove feature."
+        }
+      },
+      "ctaTitleLine1": "I prezzi sono custom.",
+      "ctaTitleLine2": "Parliamo di cosa ti serve.",
+      "ctaBody": "Costruiremo un piano sul tuo portfolio clienti e sul tuo workflow.",
+      "ctaButton": "Parla con il Team",
+      "ctaFootnote": "Nessun vincolo · Onboarding custom · Supporto dedicato"
+    },
+    "faq": {
+      "title": "Domande frequenti",
+      "items": {
+        "switchPlans": {
+          "q": "Posso passare tra Lite e Pro?",
+          "a": "Sì, puoi fare upgrade o downgrade in qualsiasi momento."
+        },
+        "afterTrial": {
+          "q": "Cosa succede dopo i 14 giorni di prova?",
+          "a": "Ti verrà addebitato il piano Pro. Puoi fare downgrade a Lite o cancellare prima che finisca la prova."
+        },
+        "annualBilling": {
+          "q": "Offrite la fatturazione annuale?",
+          "a": "La fatturazione annuale con sconto sta per arrivare."
+        },
+        "agencyPlan": {
+          "q": "Cosa è incluso nel piano per agenzie?",
+          "a": "Tutto è custom. Prenota una demo e costruiremo un piano sulle tue esigenze."
+        }
+      }
+    }
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "lastUpdatedLabel": "Ultimo aggiornamento",
+    "lastUpdatedDate": "15 maggio 2026",
+    "contactEmail": "privacy@refinea.io"
+  },
+  "terms": {
+    "title": "Termini di Servizio",
+    "lastUpdatedLabel": "Ultimo aggiornamento",
+    "lastUpdatedDate": "15 maggio 2026",
+    "contactEmail": "support@refinea.io"
+  },
+  "refineaAnalysis": {
+    "hero": {
+      "eyebrow": "Refinea Analysis",
+      "title": "The AI Visibility Index, industry by industry",
+      "subtitle": "We continuously measure how often AI models cite the vendors of each sector. An independent observatory, updated daily, on the new discovery channel reshaping how marketing reaches customers.",
+      "contactPrefix": "Want your industry tracked?",
+      "contactLink": "Contact us"
+    },
+    "toggle": {
+      "label": "Select an industry",
+      "ariaLabel": "Tracked industries",
+      "comingSoon": "Coming soon",
+      "soonBadge": "Soon"
+    },
+    "industries": {
+      "saasGestionaliItalia": "SaaS Gestionali Italia",
+      "fintechItalia": "Fintech & Neobank Italia"
+    },
+    "industry": {
+      "kicker": "Italy · Business Software · AVI Index",
+      "title": "The Italian B2B business software market",
+      "subtitle": "How AI models recommend TeamSystem, Zucchetti, Aruba and the other vendors in the category.",
+      "metaAriaLabel": "Dataset metadata",
+      "lastUpdate": "Last update",
+      "panel": "Panel: {n} prompts",
+      "refresh": "Refresh: nightly at 03:00 UTC"
+    },
+    "chart": {
+      "title": "AI Visibility Index",
+      "subtitle": "Mapping the {industry} market's influence on AI-Decision Makers"
+    },
+    "table": {
+      "title": "Full ranking",
+      "microcopy": "Vendors with the \"Tracked\" badge are part of this industry's reference panel. The others surface organically from AI responses.",
+      "trackedBadge": "Tracked",
+      "col": {
+        "brand": "Brand",
+        "avi": "AVI",
+        "delta": "Δ vs prev",
+        "mentions": "Mentions",
+        "tracked": "Tracked"
+      }
+    },
+    "prompts": {
+      "title": "Example of prompt we analyze for {industry}"
+    },
+    "methodology": {
+      "kicker": "Methodology",
+      "title": "How we measure the AI Visibility Index",
+      "intro": "A four-stage protocol applied identically to every industry we track.",
+      "step1": {
+        "label": "01 — Prompt intelligence",
+        "title": "Grounded in what people actually search for",
+        "body": "We continuously aggregate real-world search demand from premium data providers — the queries users actually type when looking for products in a given industry. Machine learning, semantic embeddings, and clustering then refine this signal into a curated panel of high-intent prompts."
+      },
+      "step2": {
+        "label": "02 — Multi-run sampling",
+        "title": "Statistical robustness through repeated sampling",
+        "body": "Every prompt is submitted to the target AI model ten times per day, in independent runs. The result: thousands of responses weekly, with a precision level publishable in peer-reviewed research."
+      },
+      "step3": {
+        "label": "03 — Brand extraction",
+        "title": "Canonicalized entity recognition",
+        "body": "A two-stage system combining deterministic matching and machine learning. Alias graphs collapse sub-brands into single canonical entities, while a curated blocklist eliminates false positives at the source."
+      },
+      "step4": {
+        "label": "04 — Aggregation",
+        "title": "AVI as a binomial estimator",
+        "body": "A brand's AVI is the share of AI responses in which it is cited. A standard statistical estimator — comparable across time, independent of panel composition."
+      }
+    },
+    "faq": {
+      "title": "Common questions",
+      "items": {
+        "whatIs": {
+          "q": "What is Refinea Analysis?",
+          "a": "Refinea Analysis is the first European AI ranking — an independent, daily-updated observatory that measures how often AI models cite the vendors of each industry we track. For every industry, we build a curated panel of high-intent prompts from real search demand, run them ten times a day against the target AI models, extract brand citations from each response, and aggregate the results into the AI Visibility Index (AVI). Built by Refinea, it gives marketers and brand teams a public benchmark for visibility on the new discovery channel reshaping modern marketing."
+        },
+        "updateFrequency": {
+          "q": "How often is the data updated?",
+          "a": "Every 24 hours. A nightly job runs the full prompt panel against the target AI models at 03:00 UTC; the leaderboard you see is always the most recent run. The \"Last run\" date next to each chart tells you exactly when the snapshot was generated."
+        },
+        "missingBrand": {
+          "q": "Why is my brand missing from the leaderboard — or showing a lower AVI than expected?",
+          "a": "Two possible reasons. First, brands surface organically: if the AI doesn't cite you for any of the prompts in the panel, you simply don't appear. Second, we use a curated blocklist to filter out non-brand entities (institutions, common nouns, infrastructure) which can also cap certain matches. If you believe your brand should be tracked, contact us at hello@refinea.io — we add new vendors to the reference panel on request."
+        },
+        "newIndustry": {
+          "q": "Can my industry be added to Refinea Analysis?",
+          "a": "Yes. We add new industries based on demand and feasibility (sufficient query volume + a viable prompt panel). The \"Coming soon\" pills in the toggle are placeholders for industries already in our roadmap; reach out at hello@refinea.io to propose yours."
+        },
+        "freeAccess": {
+          "q": "Is Refinea Analysis free? Do I need an account?",
+          "a": "Yes, it's completely free and public — no signup, no paywall. The methodology, prompt panels, and extraction pipelines that power it are proprietary, but the leaderboards themselves are open data. If you want to track your own brand in real time across all major AI engines (not just the public industries we publish), that's what the Refinea platform is for."
+        }
+      }
+    }
+  },
+  "docs": {
+    "hero": {
+      "overline": "Documentazione",
+      "title": "Tutto quello che puoi fare in Refinea",
+      "subtitle": "Leggi i tuoi numeri, capisci i workflow, addestra Refinea sul tuo brand e collega l'API pubblica. Pensata per i marketer — nessun tecnicismo di pipeline."
+    },
+    "tocGetStarted": "Inizia",
+    "tocMetrics": "Metriche",
+    "tocSov": "Share of Voice",
+    "tocCitations": "Citazioni",
+    "tocPersonas": "Personas",
+    "tocInsights": "Insights",
+    "tocWorkflows": "Workflow",
+    "tocBrandMemory": "Brand Memory",
+    "tocApi": "API pubblica",
+    "getStarted": {
+      "overline": "Inizia",
+      "title": "Dall'URL ai primi risultati in dieci minuti",
+      "body": "L'onboarding ti guida in cinque passaggi brevi. Refinea pensa al resto in background — la prima analisi arriva entro 30 minuti, poi Refinea rilancia ogni prompt su ogni modello ogni 48 ore.",
+      "steps": {
+        "s1": { "title": "Aggiungi il tuo URL", "body": "Incolla il sito. Refinea lo legge e tira fuori cosa fai, a chi vendi e dove." },
+        "s2": { "title": "Conferma il profilo aziendale", "body": "Verifica i prodotti, i settori e le aree geografiche che Refinea ha rilevato. Modifica quello che non torna." },
+        "s3": { "title": "Conferma le buyer personas", "body": "Refinea propone da tre a cinque personas. Tienile, modificale o sostituiscile — guidano le domande che facciamo all'AI." },
+        "s4": { "title": "Conferma i prompt", "body": "Le domande che Refinea farà a ChatGPT, Gemini, Claude e Perplexity. Riscrivile o rimuovile a piacere." },
+        "s5": { "title": "Guarda la prima run", "body": "Refinea interroga ogni modello con ogni prompt. La prima analisi completa arriva entro 30 minuti — la pagina Overview si popola in tempo reale man mano che i risultati arrivano. Da quel momento, ogni prompt viene rilanciato ogni 48 ore." }
+      }
+    },
+    "metrics": {
+      "overline": "Metriche",
+      "title": "I quattro numeri della tua Overview",
+      "body": "Sono le metriche principali. Ognuna ti dice una cosa diversa — insieme rispondono a: sono visibile, sto guidando la conversazione, e il tono mi sta aiutando?",
+      "defs": {
+        "avi": { "term": "AI Visibility Index", "body": "Percentuale di risposte AI che menzionano il tuo brand. Il numero principale. Ti dice se compari nella conversazione." },
+        "sov": { "term": "Share of Voice", "body": "La tua quota sul totale delle menzioni dei brand monitorati. Ti dice se stai guidando la conversazione quando l'AI parla del tuo mercato." },
+        "rank": { "term": "Rank", "body": "La tua posizione nella classifica dei brand più menzionati nel tuo mercato. Si aggiorna dopo ogni run." },
+        "sentiment": { "term": "Sentiment", "body": "Come l'AI ti descrive quando ti cita, su una scala da −1 (sempre negativo) a +1 (sempre positivo). Zero è neutro." }
+      }
+    },
+    "sov": {
+      "overline": "Share of Voice",
+      "title": "Come leggere SOV insieme ad AVI",
+      "body": "L'AVI ti dice quanto spesso compari. La Share of Voice ti dice quanta parte della conversazione è su di te. Leggerle insieme è dove nasce la diagnosi.",
+      "interpret": {
+        "up": { "term": "AVI su, SOV stabile", "body": "Ti menzionano di più, e lo stesso vale per i competitor. Tutto il mercato sta crescendo." },
+        "flat": { "term": "AVI stabile, SOV su", "body": "I competitor stanno perdendo terreno. Spingi il vantaggio." },
+        "down": { "term": "AVI stabile, SOV giù", "body": "Un competitor sta crescendo. Apri Citazioni e scopri chi." }
+      }
+    },
+    "citations": {
+      "overline": "Citazioni",
+      "title": "Ogni URL che l'AI cita",
+      "body": "Ogni volta che un'AI cita un URL parlando del tuo mercato, Refinea lo registra. I domini vengono auto-classificati in otto categorie, così leggi il mix delle fonti a colpo d'occhio.",
+      "catsTitle": "Categorie di fonti",
+      "cats": {
+        "owner": { "term": "Owner", "body": "Domini che controlli. Li imposti dalla pagina Sources." },
+        "magazine": { "term": "Magazine", "body": "Testate giornalistiche e pubblicazioni di settore. Il segnale earned più forte." },
+        "reference": { "term": "Reference", "body": "Wikipedia, Treccani, Statista. Le citazioni fondazionali più affidabili." },
+        "company": { "term": "Company", "body": "Altre aziende — di solito competitor." },
+        "blog": { "term": "Blog", "body": "Blog personali e piattaforme multi-autore." },
+        "forum": { "term": "Forum", "body": "Reddit, Quora, Stack Overflow. Discussione generata dagli utenti." },
+        "government": { "term": "Government", "body": "Portali .gov e statistiche ufficiali. Riferimenti regolatori ad alta fiducia." },
+        "other": { "term": "Other", "body": "Tutto quello che non rientra altrove, o che non siamo riusciti a classificare con sicurezza." }
+      }
+    },
+    "personas": {
+      "overline": "Personas",
+      "title": "Chi interroga l'AI al posto tuo",
+      "body": "Una persona è il profilo che Refinea usa quando fa una domanda all'AI. Ognuna ha un ruolo, un settore, una geografia e i job-to-be-done che vuole risolvere. Personas diverse generano risposte diverse — il mix conta.",
+      "methodsTitle": "Come vengono create",
+      "methods": {
+        "ai": { "term": "Generate dall'AI", "body": "Refinea le scrive a partire dai tuoi prodotti, settori e geografie." },
+        "data": { "term": "Data-driven", "body": "Se hai collegato Google Search Console, Refinea raggruppa le query reali in archetipi di persona." },
+        "hybrid": { "term": "Hybrid", "body": "Entrambi i metodi, deduplicati." },
+        "you": { "term": "Definite da te", "body": "Scrivi tu la persona, Refinea la struttura." }
+      }
+    },
+    "insights": {
+      "overline": "Insights",
+      "title": "Fino a sei cose che vale la pena fare questa settimana",
+      "body": "Refinea legge l'ultima run e propone fino a sei insight — ognuno è un cambiamento concreto nei tuoi dati con un'azione consigliata. Puoi prenderli in carico, lavorarci o ignorarli.",
+      "lifecycleTitle": "Ciclo di vita",
+      "lifecycle": {
+        "open": { "term": "Open", "body": "Nuovo. Vale uno sguardo." },
+        "progress": { "term": "In progress", "body": "L'hai preso in carico e ci stai lavorando." },
+        "resolved": { "term": "Resolved", "body": "La metrica è migliorata, o l'hai chiuso. Gli insight risolti hanno 30 giorni di cooldown prima di poter tornare." }
+      }
+    },
+    "workflows": {
+      "overline": "Workflow",
+      "title": "Tre audit, un URL alla volta",
+      "body": "I workflow valutano una pagina come la leggerebbe un assistente AI. Incolli l'URL, il workflow gira, ottieni uno score e una lista di fix. I workflow non modificano mai il tuo sito — ti dicono cosa cambiare.",
+      "cards": {
+        "crawl": {
+          "title": "Crawlability",
+          "body": "I crawler AI riescono davvero a leggere le tue pagine? L'audit verifica il livello tecnico tra te e i bot che alimentano l'AI search.",
+          "c1": "Robots.txt e llms.txt",
+          "c2": "Velocità del server verso i bot AI",
+          "c3": "Rendering JavaScript",
+          "c4": "Canonical, sitemap, hreflang"
+        },
+        "schema": {
+          "title": "Structured Data",
+          "body": "Il tuo schema dice all'AI chi sei? L'audit legge il JSON-LD, dice cosa manca e genera la correzione da incollare nello head.",
+          "c1": "Presenza di JSON-LD",
+          "c2": "Validità dei campi obbligatori",
+          "c3": "Tipi di schema mancanti",
+          "c4": "sameAs verso fonti affidabili"
+        },
+        "quality": {
+          "title": "Content Quality",
+          "body": "Quanto è facile per l'AI citare il tuo testo? L'audit valuta quanto è citabile ogni sezione della pagina — e dove zoppica.",
+          "c1": "BLUF — risposta diretta nelle prime 40 parole",
+          "c2": "Struttura a blocchi e gerarchia degli heading",
+          "c3": "Densità di entità e segnali di autorità",
+          "c4": "Freshness e attribuzione autoriale"
+        }
+      }
+    },
+    "brandMemory": {
+      "overline": "Brand Memory",
+      "title": "Addestra Refinea sul tuo brand",
+      "body": "La Brand Memory è la parte di Refinea che conosce te. Una libreria di fatti verificati sul tuo brand — proof point, expert voice, statistiche, la tua voce editoriale — che Refinea usa ogni volta che scrive contenuto al posto tuo.",
+      "assetsTitle": "Asset",
+      "assetsBody": "Tre tipi di evidenza che l'AI può usare quando scrive di te. Refinea li trova, tu approvi o rifiuti.",
+      "assets": {
+        "proof": { "term": "Proof Point", "body": "Affermazioni specifiche e verificabili su risultati clienti, certificazioni, partnership o milestone." },
+        "expert": { "term": "Expert Voice", "body": "Persone citabili — founder, CEO, esperti di dominio — con dichiarazioni che hanno davvero fatto." },
+        "facts": { "term": "Fatti e statistiche", "body": "Dati standalone: i tuoi numeri o ricerche referenziate." }
+      },
+      "kitTitle": "Brand Kit",
+      "kitBody": "La tua voce editoriale in un posto solo. Dice a Refinea come devi suonare quando scrive per te.",
+      "kit": {
+        "k1": "Brand overview — chi sei in due paragrafi",
+        "k2": "Competitive landscape — come imposti il confronto",
+        "k3": "Posizione editoriale — le opinioni che prendi",
+        "k4": "Profilo del narratore — chi scrive",
+        "k5": "Voice signature — parole che ami, parole che eviti",
+        "k6": "Regole editoriali e CTA di default"
+      },
+      "autopilotTitle": "Refinea Autopilot",
+      "autopilotBody": "Non sei obbligato a compilare la Brand Memory a mano. Autopilot legge il tuo sito, il blog, le citazioni stampa e le analytics, e ti propone kit e asset pronti. Lancialo una volta per partire, poi rifinisci."
+    },
+    "api": {
+      "overline": "Developer",
+      "title": "Estrai i tuoi dati",
+      "body": "Usa l'API pubblica per portare i dati Refinea nelle tue dashboard, nel tuo data warehouse o in un bot Slack. Otto endpoint in lettura — domini, menzioni, sentiment, fonti, search queries, prompts metrics e una overview di sintesi.",
+      "authTitle": "Autenticazione",
+      "authBody": "Ogni richiesta richiede un header X-API-Key. Per ottenere una chiave, chiedi all'amministratore del tuo account — le chiavi vengono emesse dal pannello admin e sono legate al tuo utente.",
+      "referenceTitle": "Reference",
+      "linkSwagger": "Swagger UI",
+      "linkRedoc": "ReDoc",
+      "linkOpenapi": "Schema OpenAPI",
+      "note": "Le chiavi vengono mostrate solo al momento della creazione. Conservale al sicuro — se ne perdi una, revocala e creane una nuova."
+    },
+    "cta": {
+      "title": "Pronto a vedere come l'AI vede il tuo brand?",
+      "body": "Parti con la prova gratuita o prenota una demo di 30 minuti. La tua prima analisi di visibilità AI arriva entro 30 minuti, poi si aggiorna ogni 48 ore.",
+      "ctaPrimary": "Inizia gratis",
+      "ctaSecondary": "Prenota una demo"
+    }
+  }
+}
