@@ -1,0 +1,93 @@
+---
+title: "Refinea Analysis: lo standard italiano per misurare la AI Visibility"
+description: "Refinea Analysis è l'osservatorio pubblico che misura quanto i brand italiani vengono citati dagli AI engine. Metodologia, dati, ranking aggiornati ogni giorno."
+date: "2026-05-19"
+section: "news"
+topics:
+  - "ai-brand-visibility"
+  - "marketing-measurement"
+author: "vito"
+reviewCycle: "quarterly"
+locale: "it"
+cover: "/blog/refinea-analysis-cover.jpg"
+translationKey: "refinea-analysis-launch"
+---
+
+Il mercato italiano non aveva uno standard pubblico per misurare la visibilità dei brand all'interno delle risposte AI. Oggi esiste, si chiama [Refinea Analysis](/refinea-analysis) e funziona come un osservatorio indipendente aggiornato ogni notte alle 03:00 UTC.
+
+Negli ultimi diciotto mesi le risposte sintetizzate da ChatGPT, Gemini, Perplexity e Google AI Overviews hanno catturato quote significative del traffico di scoperta. Secondo le rilevazioni di [Similarweb](https://www.similarweb.com/blog/marketing/geo/gen-ai-stats/), ChatGPT da solo concentra circa il 79% del traffico Gen AI globale. In Europa il quadro si è completato a marzo 2025, quando Google ha esteso AI Overviews anche a Italia, Germania, Francia, Spagna e altri sette Paesi ([Search Engine Land, 2025](https://searchengineland.com/google-rolls-out-ai-overviews-in-eu-regions-453595)).
+
+In questo scenario non basta più chiedersi se un brand sia visibile su Google. La domanda corretta è quanto spesso una determinata azienda venga citata dagli AI engine quando un utente formula una domanda commerciale. Refinea Analysis risponde a questa domanda con un metodo replicabile e pubblicamente verificabile.
+
+## Che cosa è Refinea Analysis
+
+Refinea Analysis è un ranking pubblico che misura, industry per industry, la frequenza con cui un brand viene citato all'interno delle risposte generate da modelli AI di grande consumo. La metrica principale si chiama **AI Visibility Index (AVI)** e rappresenta la quota di risposte AI in cui un brand è effettivamente menzionato sul totale dei prompt valutati per quell'industry.
+
+L'osservatorio nasce dentro Refinea, la piattaforma che le aziende usano per ottimizzare la propria presenza nei motori conversazionali. La logica di pubblicare il ranking gratuitamente nasce da una scelta di posizionamento: un mercato senza standard misurabili produce solo opinioni. Mettere a disposizione un benchmark indipendente costringe il settore a parlare la stessa lingua.
+
+Al momento sono attive due industry italiane:
+
+- **SaaS gestionali italiani** (TeamSystem, Zucchetti, Aruba e altri vendor del comparto)
+- **Fintech e neobank italiane**
+
+Altre verticali sono in roadmap e vengono aggiunte in base a richieste qualificate dalle aziende del settore.
+
+## La metodologia, in quattro passaggi
+
+Il rigore metodologico è il punto su cui Refinea Analysis si distingue dai tentativi precedenti di misurazione. Tutti i passaggi sono documentati e applicati in modo identico a ogni industry tracciata.
+
+### 01. Prompt intelligence
+
+Il panel di prompt non viene inventato a tavolino. Refinea aggrega continuamente la domanda di ricerca reale da provider di dati premium, ovvero le query che gli utenti digitano davvero quando cercano prodotti in una determinata industry. Su questo segnale grezzo intervengono tre layer di raffinamento: machine learning, semantic embedding e clustering. Il risultato finale è un panel curato di prompt ad alta intenzione commerciale, validato su un database di oltre un milione di query reali.
+
+Questa scelta è il primo presidio anti-bias. Misurare la visibilità AI su prompt costruiti a tavolino produce rumore travestito da segnale, perché premia gli scenari ipotetici in cui un brand vorrebbe essere citato anziché quelli in cui la sua categoria viene davvero interrogata dal mercato.
+
+### 02. Multi-run sampling
+
+Ogni prompt del panel viene sottoposto al modello target dieci volte al giorno, in run indipendenti. La logica è puramente statistica. I modelli generativi producono risposte non deterministiche, quindi una singola interrogazione non rappresenta il comportamento del sistema. Migliaia di risposte settimanali permettono di stimare la frequenza di citazione con una precisione comparabile a quella di un campionamento di ricerca peer-reviewed.
+
+### 03. Brand extraction
+
+Estrarre i brand dalle risposte AI è meno banale di quanto sembri. Refinea combina due strati di riconoscimento: matching deterministico e machine learning. Un grafo di alias collassa i sotto-brand sotto un'unica entità canonical, mentre una blocklist curata elimina i falsi positivi sul nascere (istituzioni, nomi comuni, riferimenti infrastrutturali che condividono il nome con un vendor).
+
+Il principio sottostante è coerente con il filone di ricerca accademica sulla GEO. Il paper fondativo [GEO: Generative Engine Optimization](https://arxiv.org/abs/2311.09735) presentato a SIGKDD 2024 ha dimostrato che la sola presenza di una keyword non basta per attribuire una citazione: serve un sistema che riconosca le entità nel loro contesto narrativo.
+
+### 04. Aggregation
+
+L'AVI di un brand è la quota di risposte AI in cui viene citato. Si tratta di uno stimatore binomiale standard, comparabile nel tempo e indipendente dalla composizione del panel. Significa che un AVI di 0,34 misurato a marzo è confrontabile con un AVI di 0,41 misurato a maggio per la stessa industry, anche quando il numero di prompt cambia.
+
+La scelta di uno stimatore statistico classico, anziché di una metrica proprietaria di nuovo conio, garantisce trasparenza. Chiunque conosca il calcolo delle proporzioni può replicare la verifica.
+
+## Perché serve uno standard italiano
+
+I ranking SEO tradizionali misurano un mondo che sta scomparendo. Le ricerche zero-click hanno superato il 58% negli Stati Uniti e il 59% in Europa secondo [l'analisi di SparkToro su dati Datos](https://sparktoro.com/blog/2024-zero-click-search-study-for-every-1000-us-google-searches-only-374-clicks-go-to-the-open-web-in-the-eu-its-360/). Per un brand che vende prodotti complessi, una quota crescente di evaluation accade dentro la finestra di chat di un LLM e non si riflette mai nelle metriche di Google Search Console.
+
+L'Italia ha bisogno di un benchmark proprio per due ragioni concrete. La prima è linguistica: i prompt in italiano attivano risposte parzialmente diverse da quelle in inglese, sia per via dei training data sia per la composizione del retrieval. La seconda è di mercato: vendor come TeamSystem o Satispay sono entità rilevanti per l'AI in Italia ma trascurate dai benchmark in lingua inglese.
+
+Il mercato del software gestionale italiano vale da solo decine di miliardi e cresce a doppia cifra ([Osservatorio Software Polimi](https://www.osservatori.net/comunicato/software-digital-native-innovation/mercato-software-gestionale-italia/)). Le neobank operative in Italia sono oggi quaranta tra entità con sede italiana e operatori passportati ([Osservatorio Fintech Polimi](https://www.osservatori.net/blog/fintech-insurtech/challenger-bank-cosa-sono-diffusione-in-italia-ue/)). Comparti di questa portata meritano una misurazione dedicata.
+
+## Come leggere il ranking
+
+Sulla pagina pubblica di Refinea Analysis ogni industry mostra quattro elementi.
+
+Il **grafico AVI** ricostruisce l'andamento storico del brand su ogni modello tracciato. Permette di leggere la traiettoria, non solo lo snapshot. Una salita di AVI seguita da un plateau racconta una storia diversa da una crescita continua. Entrambe richiedono interpretazioni operative differenti.
+
+La **leaderboard** ordina i brand per AVI corrente. I vendor con il badge "Tracked" sono parte del panel di riferimento dell'industry, gli altri emergono organicamente dalle risposte AI. Il delta rispetto al periodo precedente segnala chi sta guadagnando o perdendo terreno.
+
+Gli **esempi di prompt** mostrano alcuni dei quesiti realmente sottoposti ai modelli. Servono a chiarire il tipo di intent che l'osservatorio sta misurando.
+
+Il **timestamp di ultimo aggiornamento** è esplicito su ogni grafico. Indica il momento esatto della snapshot e rende le rilevazioni verificabili nel tempo.
+
+## Cosa fare se il tuo brand non appare
+
+Esistono due possibilità. La prima è che il brand non venga citato dai modelli per nessuno dei prompt del panel attivo. In questo caso la lacuna è informativa: indica che la categoria conversazionale di quel brand è presidiata da concorrenti. La seconda è che il brand venga filtrato dalla blocklist progettata per eliminare falsi positivi su entità ambigue.
+
+In entrambi i casi vale la pena scrivere a hello@refinea.io. Il panel di riferimento viene esteso periodicamente sulla base delle richieste qualificate dai vendor del settore.
+
+## Il posizionamento più ampio
+
+Refinea Analysis è una manifestazione pubblica del lavoro che Refinea fa privatamente per i propri clienti. La differenza tra l'osservatorio e la piattaforma è di scopo: l'osservatorio mostra l'AVI per industry intere, la piattaforma mostra l'AVI di un singolo brand su prompt costruiti partendo dai suoi clienti reali, non da campioni di settore.
+
+Per chi vuole approfondire la cornice teorica, abbiamo pubblicato la [guida operativa alla Generative Engine Optimization](/blog/what-is-generative-engine-optimization-geo-complete-guide) e una sintesi delle [differenze tra GEO e SEO tradizionale](/blog/geo-vs-seo-key-differences).
+
+Nei prossimi mesi pubblicheremo report mensili dedicati alle industry più mature, con analisi qualitativa dei movimenti più significativi. L'obiettivo dichiarato è uno solo: dare al mercato italiano un riferimento misurabile per parlare di AI Visibility con dati invece che con opinioni.

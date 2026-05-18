@@ -1,0 +1,120 @@
+---
+title: "Measuring AI Visibility: the metrics that actually matter"
+description: "Which metrics actually predict commercial outcome in AI Visibility and which are vanity numbers. An honest map grounded in 2025-2026 evidence."
+date: "2026-05-15"
+section: "guides"
+topics:
+  - "marketing-measurement"
+  - "ai-brand-visibility"
+author: "vito"
+reviewCycle: "quarterly"
+locale: "en"
+cover: "/blog/measuring-ai-visibility-cover.jpg"
+translationKey: "measuring-ai-visibility-metrics-that-matter"
+---
+
+Most AI Visibility dashboards on the market show precise numbers on intrinsically noisy measurements. It is the most efficient way to produce the sensation of managerial control without producing informed decisions. This article separates the metrics that actually predict commercial outcome from those that are simply vanity, grounded in the public evidence available in 2026.
+
+The underlying thesis is simple. AI engine answers are stochastic, fragmented by engine, and contextual to the individual prompt. Any metric that ignores one of these three properties ends up describing phenomena that do not exist. Metrics that work accept the nature of the phenomenon and make it legible through classical statistical tools.
+
+## The stochasticity problem
+
+The first data point anyone planning an AI Visibility strategy needs to internalize comes from [Rand Fishkin at SparkToro](https://www.searchenginejournal.com/ai-recommendations-change-with-nearly-every-query-sparktoro/566242/). The study on 2,961 prompts submitted to ChatGPT, Claude, and Google AI Overviews found less than 1% consistency in the list of brands returned across successive queries of the same prompt. Exact order overlap drops below 0.1%.
+
+This data point closes the discussion on an entire category of metrics. Any tool that shows "your position in AI" as a single number is describing a snapshot that changes on the next query. It is not a measurement, it is an anecdote treated as data.
+
+The operational consequence is precise. An AI Visibility metric only makes sense if it is an estimator aggregated across many runs, not the result of a single query. How a single prompt behaves at a single moment is irrelevant. How a panel of prompts behaves across dozens of runs reveals the signal beneath the noise.
+
+## The metric that works: AI Visibility Index
+
+The AI Visibility Index (AVI) is the share of AI answers in which a brand gets cited across all prompts evaluated for a category. Technically it is a binomial estimator: percentage of successes over attempts, calculated on a statistically significant sample.
+
+Three properties make AVI superior to alternative metrics.
+
+**The first is replicability.** Anyone who knows [binomial proportion confidence interval calculation](https://en.wikipedia.org/wiki/Binomial_proportion_confidence_interval) can reconstruct the margin of error of the measurement. Wilson score and Clopper-Pearson are the two standard methods. An AVI measurement without a declared confidence interval is not scientific, it is marketing.
+
+**The second is comparability over time.** An AVI of 0.34 calculated in March is comparable to an AVI of 0.41 calculated in May for the same category, even when the number of prompts changes. The binomial estimator has this property natively, while proprietary metrics often do not.
+
+**The third is comparability between brands.** On the same industry, the same prompt panel, and the same period, two brands can be ranked by AVI in a defensible way. This is exactly the basis on which Refinea Analysis builds its public leaderboards.
+
+The absolute citation rates observed in the market are consistent with this reading. [The Semrush AI Mentions study on one million non-branded queries](https://www.semrush.com/blog/ai-mentions/) found that the share of AI answers containing at least one brand mention varies significantly across engines: ChatGPT 26.07%, Perplexity 30.55%, Gemini 31.14%, Google AI Overviews 36.93%, ChatGPT Search 39.36%. A single brand's AVI lives within these ranges, and comparison between brands is meaningful only at parity of engine and panel.
+
+## The three supporting metrics
+
+AVI alone is not enough. Three additional metrics complete the operational picture and each answers a different question.
+
+### Citation source distribution
+
+Knowing which domains AI engines cite when talking about your category is worth more than knowing how many times you are cited. The distribution of sources the model pulls from to build the answer is the actual editorial plan for the next quarter. If 40% of citations come from four industry publications, you know where to invest PR resources. If 25% comes from specific subreddits, you know where to build community presence.
+
+The distribution is also the most honest way to estimate growth opportunity. Brands absent from the top five sources cited by their category have an AVI ceiling that no on-site optimization can raise.
+
+### Mention sentiment
+
+When the brand gets cited, it gets cited positively, neutrally, or negatively. On this point a warning is needed: the GEO industry has sold "sentiment" as a key metric without a single peer-reviewed study linking AI mention sentiment to commercial conversion rate. Sentiment should be measured because a brand cited negatively is a brand in trouble, but it should not be overweighted. It is a qualitative diagnostic signal, not a primary KPI to chase.
+
+### Frequency in top citation slots
+
+Public data on the distribution of citations in Google AI Overviews shows extreme concentration. [An analysis of one thousand AI Overviews](https://www.digitalapplied.com/blog/we-analyzed-1000-ai-overviews-citation-pattern-study) found an average of 4.2 citations per answer and that the top 1% of domains captures 47% of total citations. Being one of the cited brands is not enough. Being one of the few brands cited consistently is the real objective.
+
+## The metrics that do not matter
+
+Three categories of metrics circulate in the market and produce more noise than signal.
+
+### "Ranking in AI"
+
+It does not exist. Fishkin's data on inter-run variability proves it. Any dashboard showing "you are at position 3 in AI for query X" is presenting a noisy snapshot as if it were stable. The defensible equivalent metric is AVI aggregated across a panel, not the position on a single prompt.
+
+### "Share of mentions" across heterogeneous prompts
+
+Aggregating mention share across prompts of different intent produces numbers that look actionable and describe nothing. A brand with AVI 0.8 on high commercial intent prompts and 0.1 on informational prompts has a precise strategic situation. The same brand presented as "average AVI 0.45" loses the one piece of information that would have mattered.
+
+### "AI traffic" as the only outcome metric
+
+Referral traffic from AI to a website exists but is a tiny fraction of the actual exposure surface. [July 2025 Cloudflare data](https://blog.cloudflare.com/crawlers-click-ai-bots-training/) shows highly skewed crawl-to-referral ratios: Anthropic crawls 38,065 times for every referral generated, OpenAI 1,091, Perplexity 195, Google 5.4. Referral is the exception, exposure is the rule. Measuring only the clicks that arrive means measuring the visible tail of a phenomenon whose body never passes through a click.
+
+## The data that resizes AI traffic obsession
+
+A recurring belief in 2026 marketing is that AI traffic converts significantly better than traditional organic traffic. The narrative grew on weakly rigorous vendor blogs reporting multipliers of 4×, 10×, or even 23×.
+
+[Amsive published the most rigorous study on the topic](https://www.amsive.com/insights/seo/does-llm-traffic-convert-better-than-organic-a-new-data-backed-study/). Across 54 sites analyzed for six months via GA4, with paired t-tests, organic conversion rate was 4.60% versus LLM 4.87%, with a p-value of 0.794. Statistically indistinguishable. LLM traffic represents less than 1% of total sessions.
+
+The operational conclusion is sharp. Chasing AI Visibility to convert the little AI traffic that arrives directly is sub-optimal. AI Visibility should be measured and optimized because it governs brand exposure inside AI-mediated discovery, not because it produces a high-value referral pipeline. They are two different things, and conflating them leads to metrics that prioritize the wrong thing.
+
+## Traditional SEO impact as context metric
+
+What does need serious measurement is the impact of AI Overviews on existing organic CTR. [Ahrefs updated its study in February 2026](https://ahrefs.com/blog/ai-overviews-reduce-clicks-update/) measuring 300,000 keywords in Google Search Console data. The CTR of position 1 in the presence of AI Overview dropped from 0.073 to 0.016 comparing December 2023 with December 2025. It is a 78% reduction, and on commercial keywords it can translate into traffic losses measurable in hundreds of thousands of dollars for larger brands.
+
+[The Seer Interactive study on 53 brands and 5.47 million queries](https://searchengineland.com/google-ai-overviews-ctr-recovery-study-475566) has shown a more complex dynamic. The CTR of the AI Overviews themselves grew from 1.3% in December 2025 to 2.4% in February 2026, suggesting that users are learning to navigate citations instead of just reading the summary. For a brand visible in AI Overviews the dynamic is ambiguous: it loses traditional organic clicks but can recover them through AIO citations. For a brand not visible, it just loses.
+
+The broader context data point remains zero-click. [SparkToro's 2024 Zero-Click Study on Datos data](https://sparktoro.com/blog/2024-zero-click-search-study-for-every-1000-us-google-searches-only-374-clicks-go-to-the-open-web-in-the-eu-its-360/) found that out of one thousand Google searches only 374 generate a click to the open web in the EU, and only 360 in the United States. The absolute majority of searches end without traffic to sites.
+
+## The methodology that makes metrics trustworthy
+
+Four technical requirements separate a defensible AVI measurement from one that only looks like a measurement.
+
+**Panel size.** A ten-prompt panel is not statistically significant to estimate the AVI of a category. Below fifty prompts the confidence interval is too wide to be actionable. Refinea Analysis works on panels of hundreds of prompts per industry for this exact reason.
+
+**Multiple runs per prompt.** AI response stochasticity requires that each prompt be submitted to the model multiple times. Three runs is the defensible minimum, ten is the peer-reviewed research standard. One run produces data that looks clean and instead measures model randomness, not systematic behaviour.
+
+**Disaggregation by engine.** Aggregating AVI across ChatGPT, Perplexity, Gemini, Claude, and Google AI Overviews produces an average number that describes none of them. Mention rate varies by engine as shown in the Semrush study. The metric should always be presented disaggregated.
+
+**Disaggregation by intent cluster.** Prompts with different intent produce different citation dynamics. An AVI aggregated across commercial, informational, and comparative prompts is an average that obscures diagnosis. Refinea splits prompts into intent clusters before calculating AVI specifically to avoid this collapse.
+
+## What to measure starting Monday
+
+For someone managing a B2B brand in 2026, the minimum defensible dashboard contains five numbers.
+
+**Cross-engine AVI, disaggregated for ChatGPT, Perplexity, Gemini, Claude, and Google AI Overviews.** Calculated on a panel of at least one hundred prompts representative of the category, with three runs minimum, with declared confidence interval.
+
+**Cross-engine AVI of the three main competitors.** Same panel, same period, same runs. It is the only way to give context to your own number.
+
+**Citation source distribution.** The list of the ten publications, subreddits, Wikipedia pages, and LinkedIn profiles most cited by engines when answering category prompts. Updated monthly.
+
+**Mention sentiment.** Distribution positive/neutral/negative on brand mentions. Not as primary KPI, as qualitative diagnosis.
+
+**Organic CTR trend in the presence of AI Overviews.** From Google Search Console, segmented by commercial keywords. To measure potential erosion on existing SEO traffic, which is a necessary context metric.
+
+Everything else is optional. Refinea automates these five metrics with the methodology described in the [operational guide to Generative Engine Optimization](/blog/generative-engine-optimization-operational-guide-2026) and on the [public Refinea Analysis page](/refinea-analysis). The framework also works manually, provided you accept the boredom of submitting one hundred prompts to five engines three times per month.
+
+The metrics that matter are few. The ones being sold are many. The difference is also a quality test for the vendor you choose to work with.

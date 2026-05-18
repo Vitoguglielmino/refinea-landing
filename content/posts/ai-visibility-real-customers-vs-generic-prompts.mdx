@@ -1,0 +1,88 @@
+---
+title: "AI Visibility for your real customers: why generic prompts fail"
+description: "Most AI visibility tools test your brand on prompts nobody actually searches. Here is why measurement has to start from your real customers' queries."
+date: "2026-05-17"
+section: "news"
+topics:
+  - "ai-search-strategy"
+  - "ai-brand-visibility"
+author: "vito"
+reviewCycle: "quarterly"
+locale: "en"
+cover: "/blog/real-customers-vs-generic-prompts-cover.jpg"
+translationKey: "real-customers-vs-generic-prompts"
+---
+
+The way most AI visibility tools measure a brand's presence in AI answers is methodologically broken. They test the brand against prompts written at a desk, present the results as rankings, sell dashboards displaying convincing numbers, and produce data that does not describe market reality.
+
+The difference between invented prompts and real queries is not an academic subtlety. When Anthropic published [Clio, the privacy-preserving clustering study of one million Claude conversations](https://www.anthropic.com/research/clio), it found thousands of intent micro-clusters spanning dream interpretation, Git configurations, hairstyles, and Dungeons & Dragons. The distribution of AI conversations follows a power law far wider than any category taxonomy can represent. Optimizing for ten prompts built at a desk means optimizing for an infinitesimal fraction of the actual interrogation surface.
+
+This article explains why the problem is structural, what published data says about it, and what changes operationally when you work on prompts that reflect the brand's real customers instead of hypothetical scenarios.
+
+## The truth few tools admit
+
+Rand Fishkin of SparkToro ran a late-2025 study on [2,961 prompts submitted to ChatGPT, Claude, and Google AI Overviews](https://www.searchenginejournal.com/ai-recommendations-change-with-nearly-every-query-sparktoro/566242/). The result was blunt: less than 1% chance that the same prompt returns the same list of brands across successive queries. His public summary was direct: any tool that sells you an AI ranking is baloney.
+
+Fishkin's quote touches an exposed nerve in the sector. A significant part of the GEO market rests on a methodological illusion: handing marketers precise numbers on intrinsically noisy measurements. The problem becomes even worse when the prompts used to generate those numbers have never been searched by a real user.
+
+Lily Ray, one of the most authoritative voices in the SEO sector, [publicly documented](https://lilyray.nyc/which-ai-search-tools-llms-are-the-most-gullible/) how AI Overviews and Gemini ingest fabricated facts and treat them as sources. The consequence is that measuring AI visibility with tools that use artificial prompts on engines already vulnerable to artificial content produces a double error. You measure badly on an already noisy surface.
+
+## What people actually search for
+
+To understand why invented prompts fail you first need to understand how real queries are distributed. Backlinko analyzed [four million real Google queries](https://backlinko.com/google-ctr-stats) and found that 90.3% of them get ten impressions or fewer. The distribution is dominated by the long tail, not by the generic keywords that feed most SEO tools.
+
+Ahrefs found that [46.77% of organic traffic comes from queries Google Search Console hides](https://ahrefs.com/blog/gsc-anonymized-queries/) in its reports for privacy reasons. The hidden queries are often the more specific long-tail ones, exactly those that most AI visibility tools cannot even imagine.
+
+Google has repeated publicly for years that [15% of daily queries are completely new](https://blog.google/products/search/our-latest-quality-improvements-search/), never seen before. Extend this logic to the AI world, where average queries are longer and more specific, and you get an inflation of unique questions that no static panel can capture.
+
+OpenAI and NBER published in September 2025 [an analysis of 1.5 million ChatGPT conversations](https://cdn.openai.com/pdf/a253471f-8260-40c6-a2cc-aa93fe9f142e/economic-research-chatgpt-usage-paper.pdf) estimating 18 billion messages per week on the platform. 49% of exchanges fall into the "asking" category and 40% into "doing". Prompts are conceptually different from a Google query: more conversational, more specific, more grounded in the individual user's context.
+
+Semrush quantified the difference in length. Queries in Google AI Mode average [7.22 words versus 4 words for traditional search](https://www.semrush.com/blog/google-ai-mode-seo-impact/). Every extra word multiplies possible combinations. The actual interrogation surface explodes.
+
+## The academic case against synthetic data
+
+The most rigorous academic evidence comes from an EMNLP 2024 study. The paper [In Search of the Long-Tail](https://arxiv.org/abs/2311.07237) by Li et al. quantified two phenomena that close the discussion. First: prompts generated directly by GPT-4 and ChatGPT do not fall in the real long tail. They cluster in the high-probability distribution, which means generic and predictable patterns. Second: GPT-4 loses 21% accuracy when moving from head to long-tail data, while humans lose less than 1% in the same transition.
+
+Translated operationally: if you measure your brand's visibility on prompts invented by an LLM or by a tool, you are using a ruler that tells you you perform better than you actually do. Those prompts cluster in generic patterns and do not reflect the long tail where real commercial value lives. When the real customer prompt arrives, performance collapses.
+
+[ALM Corp's 2026 analysis](https://almcorp.com/blog/google-ai-overview-citations-drop-top-ranking-pages-2026/) added a data point that should give pause to anyone measuring AI visibility using traditional SEO keywords: the overlap between Google's top ten and the sources cited by Google AI Overviews dropped sharply through 2025-2026. The keywords that get you ranked on Google are no longer predictive of those that get you cited by AI engines. Optimizing for the first while claiming to optimize for the second is a promise you cannot keep.
+
+## What "real customer prompts" actually means
+
+The answer is simple to state and complex to implement. Your real customers' prompts are the questions real people, with genuine commercial intent toward your category, formulate to AI engines when looking for a solution to their problem.
+
+They are not the prompts your marketing team thinks are relevant. They are not the prompts a competitor tool suggests. They are not even the keywords classical SEO has always considered strategic.
+
+They are the specific combinations of language, context, and intent that emerge from three combined sources. Real aggregated search demand from premium providers, which gives the statistical baseline of queries actually formulated by the market. Google Search Console data from the individual brand, which weighs that baseline against the traffic composition the company already attracts. The historical database of real prompts against which to validate hypotheses before considering them actionable.
+
+[Refinea](https://platform.refinea.io) combines these three sources natively. Market demand passes through semantic clustering and intent simulation. Clusters get crossed with the customer's Google Search Console data to weigh relative importance. Every final prompt gets validated against a database of more than one million real queries. The result is a panel that reflects how your company's real customers talk to AI engines.
+
+## Three immediate operational consequences
+
+Changing measurement methodology produces consequences visible in the first ninety days of work.
+
+### The first is discovery
+
+Real prompts reveal commercial niches that traditional SEO planning had ignored. Companies that thought they competed on two or three main queries discover latent visibility across eight or nine different intent clusters, some with higher conversion rates than their historical queries. The optimization pipeline changes because the map of the territory changes.
+
+### The second is efficiency
+
+Stopping to optimize for prompts nobody searches frees resources. Content produced to cover invented prompts was a lost investment. Those editorial budgets return available to cover the clusters real users actually interrogate.
+
+### The third is internal credibility
+
+Presenting numbers to the board is different when numbers are anchored to real queries. The question "why are we monitoring this metric?" finds a verifiable answer instead of a roundabout. GEO stops being perceived as esoteric activity and becomes measurable like any other marketing channel.
+
+## The question you should ask your current tool
+
+If you are evaluating an AI visibility tool, one question separates the serious ones from vendors selling fluff.
+
+**Where do the prompts you measure me on come from?**
+
+If the answer is "we built them based on your industry" or "we generate them dynamically from ChatGPT," you are paying to measure an invented scenario. If the answer includes references to real search data, to your domain's Google Search Console, and to validation databases of actually formulated prompts, you are paying for something that describes your market.
+
+The difference between the two answers is the difference between real analysis and plausible illustration. For those selling GEO it is a fundamental distinction. For those buying GEO it is the difference between investing a budget informedly and burning it elegantly.
+
+For the complete framework we apply, we have published [the operational guide to Generative Engine Optimization](/blog/generative-engine-optimization-operational-guide-2026). To see the same methodological principle applied publicly, [Refinea Analysis](/blog/refinea-analysis-italian-ai-visibility-standard) measures entire Italian industries using exactly the same prompt intelligence protocol the platform applies to individual brands.
+
+Correct measurement is the foundation of everything else. Without it, every GEO tactic builds on sand.

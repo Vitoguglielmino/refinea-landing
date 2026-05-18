@@ -1,0 +1,114 @@
+---
+title: "Come gli LLM scelgono cosa citare: i sette segnali che decidono"
+description: "I sette segnali che determinano davvero se un LLM cita una fonte. Evidenze da paper accademici, docs ufficiali Anthropic e studi industriali con metodologia."
+date: "2026-05-16"
+section: "guides"
+topics:
+  - "llm-citations"
+  - "generative-engine-optimization"
+author: "giorgio"
+reviewCycle: "quarterly"
+locale: "it"
+cover: "/blog/llm-citation-signals-cover.jpg"
+translationKey: "llm-citation-seven-signals"
+---
+
+Gli LLM non citano le fonti perché sono autorevoli. Le citano perché passano una pipeline tecnica fatta di retrieval, ranking, estrazione passage-level e filtri di sicurezza. Capire i sette segnali che governano questa pipeline è la differenza tra investire budget di ottimizzazione su leve reali e bruciarlo su superstizioni industriali.
+
+Il 2026 ha portato evidenza pubblica sufficiente per separare i segnali misurabili dal rumore. Il paper [Evaluating Verifiability in Generative Search Engines](https://aclanthology.org/2023.findings-emnlp.467/) di Liu, Zhang e Liang (Stanford, EMNLP 2023) ha aperto la stagione mostrando un dato che riassume tutto il resto: solo il 51,5% delle frasi generate dai motori AI è completamente supportato dalle citazioni che riportano, e solo il 74,5% delle citazioni effettivamente supporta la frase a cui è associata. Tre anni dopo, [una replica recente su quattordici modelli moderni](https://arxiv.org/abs/2605.06635) ha confermato l'asimmetria: validità del link superiore al 94%, ma accuratezza fattuale tra il 39% e il 77%. I link ci sono, spesso non confermano quello che dicono.
+
+Questo articolo lavora dentro questa cornice. I sette segnali che seguono sono ordinati per evidenza disponibile, dal più ancorato in letteratura accademica al più empirico, fino a un anti-segnale finale che merita di essere chiamato per nome.
+
+## Segnale 1: passare il retrieval e il fan-out
+
+Prima di parlare di autorevolezza serve passare il primo cancello tecnico. Un LLM non cita una fonte che non recupera, e il retrieval non è una black box. Anthropic ha pubblicato a settembre 2024 il post [Contextual Retrieval](https://www.anthropic.com/news/contextual-retrieval) in cui descrive l'architettura standard del 2026: embedding contestuali combinati con BM25 contestuale e un reranker. Lo stack riduce del 67% il fallimento di retrieval nei top venti chunk, passando dal 5,7% all'1,9%.
+
+C'è però un passaggio intermedio che molte analisi GEO ignorano e che cambia tutto: il **query fan-out**. Quando un utente sottopone una domanda a ChatGPT, il modello non esegue una singola ricerca. Espande la query in più sub-query per coprire il search space prima di generare la risposta. Lo studio [The Fan-Out Effect](https://www.airops.com/report/the-fan-out-effect-what-happens-between-a-query-and-a-citation) di AirOps, pubblicato ad aprile 2026, ha quantificato il fenomeno: l'88,6% delle query genera esattamente due sub-query di fan-out, solo l'8,8% non ne genera (tipicamente query semplici su prodotti o entità), il 2,5% ne genera quattro o più (query comparative complesse).
+
+Il dato che chiude il discorso sulla rilevanza del retrieval arriva dallo stesso studio: una pagina in posizione 1 del retrieval ha il 58% di citation rate, una pagina in posizione 10 si ferma al 14%. La mediana del rank delle pagine citate in tutti e tre i test run è 2,5, mentre per le pagine mai citate sale a 13. Tradotto, il retrieval rank domina tutti gli altri fattori e la qualità del contenuto da sola non chiude quel gap.
+
+Due dettagli tecnici contano per chi ottimizza contenuti. Il primo è che gli embedding catturano relazioni semantiche ma falliscono sul matching esatto. Significa che chiamare un prodotto con il nome corretto in ogni paragrafo è più importante che farlo solo nel titolo. Il secondo è che il reranker riordina i chunk già recuperati. Significa che entrare nei top venti è il vero salto di qualità, mentre passare dalla posizione cinque alla posizione tre dipende da fattori che il reranker considera, non l'embedder.
+
+Il fan-out spiega anche perché un singolo brand può essere citato per una query e sparire per una sua variante apparentemente sinonimica: le sub-query generate sono diverse, i retrieval sono diversi, e la citazione finale dipende dall'aggregato. Refinea monitora il fan-out di ChatGPT, Perplexity, Gemini, Claude e Google AI Overviews per ogni prompt del panel cliente, esponendo quali sub-query effettive il modello esegue dietro le quinte. Senza questa visibilità, una strategia GEO ottimizza un terzo del problema.
+
+L'implicazione operativa è banale ma raramente rispettata. La densità di entità chiave e la ripetizione coerente del nome del brand nel corpo del contenuto, non solo nei titoli, restano le ottimizzazioni a costo zero con il ROI più alto. A queste si aggiunge un'azione meno scontata: ottimizzare i contenuti per le varianti reali che il fan-out genera, non solo per la query principale.
+
+## Segnale 2: la granularità è il paragrafo, non la pagina
+
+[La documentazione ufficiale dell'API Citations di Anthropic](https://platform.claude.com/docs/en/build-with-claude/citations) lo dice esplicitamente: i documenti vengono divisi in chunk per definire la granularità minima della citazione, e per testo plain e PDF il chunking di default è a livello di frase. Claude cita la singola frase, oppure concatena più frasi consecutive per citare un paragrafo. Mai una pagina intera, mai un titolo isolato.
+
+Questo cambia il modo in cui va scritto il contenuto. Un articolo da tremila parole strutturato come monolite, con argomentazioni che si sviluppano per più paragrafi, produce meno citazioni di un articolo da millecinquecento parole organizzato in dieci unità da centocinquanta parole, ciascuna autosufficiente nel rispondere a una domanda.
+
+Il pattern BLUF (Bottom Line Up Front) è la sua espressione operativa. Il primo paragrafo di ogni sezione deve contenere la risposta. Il resto è espansione. Le citazioni atomiche premiano questa struttura perché il chunker non legge la sezione, legge la frase.
+
+## Segnale 3: citazioni, statistiche e fonti esterne
+
+Il paper fondativo della GEO ([Aggarwal et al., SIGKDD 2024](https://arxiv.org/abs/2311.09735)) ha testato sistematicamente nove tattiche di ottimizzazione su diecimila query e ha mostrato che la GEO può aumentare la visibilità fino al 40% nelle risposte dei motori generativi. La Tabella 1 del paper scompone questa cifra per tattica e produce la gerarchia più importante che la letteratura accademica abbia pubblicato sull'argomento.
+
+Le tre tattiche con il lift maggiore sulla metrica position-adjusted word count sono, secondo i dati riportati dagli autori:
+
+- **Aggiunta di citazioni dirette**: +27,8%
+- **Aggiunta di statistiche**: +25,9%
+- **Citazione delle fonti**: +24,9%
+
+In coda alla classifica si trova il keyword stuffing, che produce un lift minimo del 17,8%. Gli autori descrivono esplicitamente molte tattiche SEO tradizionali come "scarso o nessun miglioramento" nel contesto generativo. La gerarchia è chiara: il contenuto che include numeri specifici, virgolette attribuite e link a fonti viene citato significativamente più spesso del contenuto che si affida al solo testo argomentativo.
+
+Per Refinea questo è il segnale che giustifica l'esistenza del modulo [Brand Memory](/blog/generative-engine-optimization-guida-operativa-2026), che cataloga Proof Points, Expert Voices e Facts proprio per rendere ogni contenuto generato denso di citazioni, statistiche e fonti verificabili.
+
+## Segnale 4: i cluster di co-citazione, non i backlink tradizionali
+
+L'autorevolezza che gli LLM riconoscono non è la domain authority che la SEO classica ha misurato per vent'anni. Le analisi più solide pubblicate nel 2025 e 2026 convergono su un punto: i domini più citati dagli AI engine formano un cluster ristretto e ricorrente. Reddit, Wikipedia, LinkedIn, Forbes e Medium dominano in modo trasversale rispetto agli engine analizzati.
+
+[L'analisi di Profound su 680 milioni di citazioni](https://www.tryprofound.com/blog/ai-platform-citation-patterns) quantifica la concentrazione. Wikipedia copre il 7,8% del totale delle citazioni ChatGPT, e il 47,9% delle top citazioni quando si guarda solo alle fonti più ricorrenti. Reddit copre il 6,6% delle citazioni Perplexity, il 2,2% di quelle di Google AI Overviews, e arriva al 46,7% delle top dieci fonti citate da Perplexity.
+
+Il punto critico arriva da Anthropic stessa. Nel post [Multi-Agent Research System](https://www.anthropic.com/engineering/multi-agent-research-system) gli ingegneri descrivono che i loro agenti iniziali sceglievano consistentemente content farm SEO-optimized rispetto a fonti autorevoli ma meno ranked, come PDF accademici o blog personali. La rubrica di valutazione successiva ha introdotto esplicitamente la preferenza per fonti primarie rispetto a fonti secondarie di qualità inferiore.
+
+La conclusione è netta. La domain authority tradizionale non si traduce automaticamente in citation rate AI. Essere citati o menzionati dentro il cluster Wikipedia-Reddit-LinkedIn-Forbes vale più di centinaia di backlink da domini medio-bassi.
+
+## Segnale 5: recency come campo first-class
+
+[La documentazione ufficiale del Web Search Tool di Anthropic](https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-search-tool) mostra esattamente cosa vede il modello quando riceve un risultato di ricerca. Ogni risultato include URL, titolo, testo citato fino a centocinquanta caratteri, e un campo `page_age` che indica quando il sito è stato aggiornato l'ultima volta. La recency non è un fattore implicito, è un input strutturato che il modello legge insieme al contenuto.
+
+I dati lato crawler confermano la preferenza. [Seer Interactive ha analizzato i log di crawl di tre bot ChatGPT su più di cinquemila URL](https://www.seerinteractive.com/insights/study-ai-brand-visibility-and-content-recency) e ha trovato che il 65% degli hit cade su contenuti pubblicati nell'ultimo anno, il 79% sui contenuti degli ultimi due anni. Va sottolineato che lo studio misura il comportamento di crawl, non la citation rate finale. Ma il pattern è coerente: gli engine investono risorse di crawl sulle fonti recenti, e le fonti recenti sono quelle che vengono poi proposte al modello.
+
+L'implicazione operativa è precisa. Aggiornare un articolo evergreen sostanzialmente ogni sei mesi, modificando i numeri e arricchendo i passaggi datati, produce più valore GEO che pubblicare due articoli nuovi nello stesso tempo. La modifica deve essere sostanziale: cosmetic bump sulla data non funziona perché il modello vede il `page_age` ma anche il contenuto effettivo.
+
+## Segnale 6: l'asimmetria del rischio di hallucination
+
+Il dato Stanford del 2023 sul 51,5% di frasi non pienamente supportate dalle citazioni non descrive un bug temporaneo. Descrive un comportamento difensivo permanente del modello. Quando un LLM deve generare una risposta verificabile, preferisce citare fonti che minimizzano il rischio di fabbricare un fatto.
+
+Questo spiega la dominanza di Wikipedia in tutti gli studi pubblicati. Wikipedia copre il 47,9% delle top citazioni ChatGPT secondo l'analisi Profound. La ragione tecnica non è che Wikipedia abbia la qualità giornalistica più alta del web. È che Wikipedia ha la combinazione più rara: fatti densi, citazioni interne verificabili, struttura prevedibile, formattazione consistente. Un modello che genera con citazioni preferisce fonti dove può ancorare facilmente le sue affermazioni a frasi attribuite.
+
+L'operativizzazione per i brand è meno scontata di quanto sembri. Non significa scrivere "come Wikipedia". Significa che ogni claim importante deve essere accompagnato da una citazione verificabile a una fonte primaria, da una statistica con riferimento, da una virgoletta attribuita a una persona reale. Contenuti senza ancoraggi fattuali sono percepiti come rischio di hallucination dal modello, e vengono evitati nella citazione anche quando sono retrieval-positive.
+
+## Segnale 7: schema markup non sposta le citazioni AI
+
+Ahrefs ha pubblicato a maggio 2026 lo [studio più rigoroso disponibile sull'effetto dello schema markup sulle citazioni AI](https://ahrefs.com/blog/schema-ai-citations/). Hanno aggiunto JSON-LD a 1.885 pagine tra agosto 2025 e marzo 2026, confrontandole con un gruppo di controllo di 4.000 pagine, misurando le citazioni prima e dopo. I delta sono stati: +2,4% su Google AI Mode, +2,2% su ChatGPT, −4,6% su Google AI Overviews. Le prime due variazioni sono statisticamente indistinguibili da zero.
+
+Lo studio ha un caveat importante che va riportato onestamente: l'analisi era limitata a pagine già citate dagli engine AI (baseline di 100+ citazioni). Per pagine senza visibilità AI consolidata, schema markup potrebbe ancora aiutare nella prima ondata di retrieval. Ma per chi è già visibile, JSON-LD non produce il lift che l'industria della GEO ha venduto per due anni.
+
+Questo non significa rimuovere schema dal sito. Schema continua ad essere rilevante per i rich result tradizionali di Google. Significa che presentarlo come leva GEO primaria è disonesto verso chi paga per quella consulenza.
+
+## L'asimmetria che pochi nominano
+
+Una nota tecnica conclusiva merita di essere fatta esplicitamente. Dei tre principali fornitori di AI search, solo Anthropic pubblica documentazione tecnica significativa sui propri meccanismi di retrieval e citazione. La pagina Contextual Retrieval, il post sul sistema multi-agente, le docs dell'API Citations e del Web Search Tool sono tutte fonti primarie verificabili.
+
+OpenAI e Perplexity non hanno equivalenti pubblici. Le loro architetture di retrieval per ChatGPT Search e Sonar sono deliberatamente opache. Tutto quello che leggi online sul loro funzionamento interno arriva da reverse engineering, leak o speculazioni di terze parti. Per chi pianifica strategie GEO basate su evidenze, questa asimmetria conta: gran parte di quello che sappiamo davvero sul comportamento degli LLM in citation deriva dai paper Anthropic e dalla ricerca accademica.
+
+## Cosa fare lunedì mattina
+
+I sette segnali si traducono in una lista di azioni concreta che chiunque può applicare nei prossimi sette giorni.
+
+**Densità di entità nel corpo.** Verificare che il nome del brand e dei prodotti principali compaia per esteso almeno una volta ogni duecento parole nei contenuti chiave. Non nei titoli, nel corpo.
+
+**Atomizzazione del contenuto.** Identificare i tre articoli più importanti del blog e riscriverli in blocchi da centocinquanta parole ciascuno, ognuno autosufficiente nel rispondere a una sotto-domanda.
+
+**Densità di citazioni e statistiche.** Aggiungere a ogni articolo strategico almeno cinque virgolette attribuite, tre statistiche con fonte e cinque link a fonti esterne autorevoli.
+
+**Mappa delle citation source.** Sottoporre dieci prompt rappresentativi della propria categoria a ChatGPT, Perplexity, Gemini, Claude e Google AI Overviews. Annotare le fonti citate. Costruire il piano editoriale del trimestre a partire da lì.
+
+**Audit recency.** Identificare i dieci articoli evergreen con più traffico storico. Aggiornarli sostanzialmente nei prossimi novanta giorni, modificando numeri, riscrivendo sezioni datate, aggiungendo dati nuovi.
+
+Refinea automatizza ognuno di questi passaggi a scala. Ma il framework funziona anche manualmente per chi ha pazienza. Per la cornice strategica completa, abbiamo pubblicato [la guida operativa alla Generative Engine Optimization](/blog/generative-engine-optimization-guida-operativa-2026). Per vedere applicata in pubblico la stessa logica di misurazione, [Refinea Analysis](/blog/refinea-analysis-standard-italiano-ai-visibility) misura industry italiane intere usando lo stesso protocollo che la piattaforma applica ai singoli brand.
+
+I sette segnali sono il livello tecnico. Sopra di essi, la strategia. Sotto di essi, niente.
