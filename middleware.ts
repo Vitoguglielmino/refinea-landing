@@ -1,4 +1,6 @@
-import { after, NextRequest, NextResponse } from "next/server";
+import { after, NextRequest } from "next/server";
+import createMiddleware from "next-intl/middleware";
+import { routing } from "./i18n/routing";
 
 // ─── Bot categories ────────────────────────────────────────────────────────────
 // answer_engine  = AI fetching your page to answer a user query (you get cited)
@@ -121,49 +123,59 @@ async function hashIp(ip: string): Promise<string> {
     .slice(0, 16); // 64-bit prefix - enough for dedup, not enough to re-identify
 }
 
-// ─── Middleware ────────────────────────────────────────────────────────────────
+// ─── Bot logging (side-effect only, does not return a response) ────────────────
 
-export async function middleware(req: NextRequest) {
+function trackBotVisit(req: NextRequest) {
   const ua = req.headers.get("user-agent") ?? "";
   const { isBot, botName, category } = detectBot(ua);
-
-  if (!isBot) return NextResponse.next();
+  if (!isBot) return;
 
   const secret = process.env.LOG_SHARED_SECRET;
-  if (secret) {
-    const rawIp =
-      req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
-      req.headers.get("x-real-ip") ??
-      "unknown";
+  if (!secret) return;
 
-    after(async () => {
-      const ipHash = await hashIp(rawIp);
-      await fetch(new URL("/api/log", req.nextUrl.origin).toString(), {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-log-secret": secret,
-        },
-        body: JSON.stringify({
-          event: "bot_visit",
-          botName,
-          category,
-          path: req.nextUrl.pathname,
-          ua,
-          referer: req.headers.get("referer"),
-          host: req.headers.get("host"),
-          ipHash,
-        }),
-      }).catch(() => {
-        // Silently swallow - never let a log failure affect real traffic
-      });
+  const rawIp =
+    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
+    req.headers.get("x-real-ip") ??
+    "unknown";
+
+  after(async () => {
+    const ipHash = await hashIp(rawIp);
+    await fetch(new URL("/api/log", req.nextUrl.origin).toString(), {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-log-secret": secret,
+      },
+      body: JSON.stringify({
+        event: "bot_visit",
+        botName,
+        category,
+        path: req.nextUrl.pathname,
+        ua,
+        referer: req.headers.get("referer"),
+        host: req.headers.get("host"),
+        ipHash,
+      }),
+    }).catch(() => {
+      // Silently swallow - never let a log failure affect real traffic
     });
-  }
-
-  return NextResponse.next();
+  });
 }
 
-// Run on all routes except static assets and API routes (avoids recursion)
+// ─── Composed middleware: bot tracking (side-effect) + i18n routing ────────────
+// 1. Track bot visit (fire-and-forget via `after`) — no impact on response
+// 2. Delegate to next-intl middleware for locale resolution + redirect handling
+
+const intlMiddleware = createMiddleware(routing);
+
+export default function middleware(req: NextRequest) {
+  trackBotVisit(req);
+  return intlMiddleware(req);
+}
+
+// Match all routes except static assets, API routes, and the admin CMS.
+// The `next-intl` middleware would otherwise try to apply locale routing
+// to /admin/* and 404 those pages (they live outside the [locale] tree).
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon\\.ico|api/).*)"],
+  matcher: ["/((?!admin|api|_next/static|_next/image|favicon\\.ico|.*\\..*).*)"],
 };
