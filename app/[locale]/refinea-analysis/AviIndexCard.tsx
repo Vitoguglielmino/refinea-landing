@@ -493,74 +493,134 @@ export function AviIndexCard({
               gap: 0,
             }}
           >
-            {entries.slice(0, 3).map((e, i) => (
-              <div
-                key={e.name}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: isMobile ? 8 : 14,
-                  paddingLeft: i === 0 ? 0 : (isMobile ? 10 : 24),
-                  paddingRight: i === 2 ? 0 : (isMobile ? 10 : 24),
-                  borderLeft:
-                    i === 0 ? "none" : "1px solid rgba(0,0,0,0.08)",
-                  minHeight: 64,
-                }}
-              >
-                <span
+            {entries.slice(0, 3).map((e, i) => {
+              // Mobile: stack the row into two lines per slot — favicon +
+              // name on top, AVI big below. Three columns × two lines
+              // fits 360px viewports without truncation. Desktop keeps
+              // the single-row layout (rank + favicon + name + AVI).
+              if (isMobile) {
+                return (
+                  <div
+                    key={e.name}
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: 6,
+                      paddingLeft: i === 0 ? 0 : 10,
+                      paddingRight: i === 2 ? 0 : 10,
+                      borderLeft:
+                        i === 0 ? "none" : "1px solid rgba(0,0,0,0.08)",
+                      minHeight: 64,
+                      minWidth: 0,
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 6,
+                        minWidth: 0,
+                      }}
+                    >
+                      <Favicon
+                        domain={e.domain}
+                        initials={e.initials}
+                        color={e.color}
+                        size={18}
+                      />
+                      <span
+                        style={{
+                          flex: 1,
+                          fontSize: 12,
+                          fontWeight: 600,
+                          color: brand.text,
+                          letterSpacing: "-0.01em",
+                          whiteSpace: "nowrap",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          lineHeight: 1.2,
+                          minWidth: 0,
+                        }}
+                      >
+                        {e.name}
+                      </span>
+                    </div>
+                    <span
+                      style={{
+                        fontFamily: MONO,
+                        fontSize: 20,
+                        fontWeight: 700,
+                        color: brand.text,
+                        letterSpacing: "-0.03em",
+                      }}
+                    >
+                      {e.avi.toFixed(1)}%
+                    </span>
+                  </div>
+                );
+              }
+              return (
+                <div
+                  key={e.name}
                   style={{
-                    fontFamily: MONO,
-                    fontSize: isMobile ? 12 : 14,
-                    fontWeight: 600,
-                    color: "rgba(0,0,0,0.4)",
-                    letterSpacing: "-0.01em",
-                    flexShrink: 0,
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 14,
+                    paddingLeft: i === 0 ? 0 : 24,
+                    paddingRight: i === 2 ? 0 : 24,
+                    borderLeft:
+                      i === 0 ? "none" : "1px solid rgba(0,0,0,0.08)",
+                    minHeight: 64,
                   }}
                 >
-                  {i + 1}°
-                </span>
-                <Favicon
-                  domain={e.domain}
-                  initials={e.initials}
-                  color={e.color}
-                  size={isMobile ? 22 : 28}
-                />
-                <span
-                  style={{
-                    flex: 1,
-                    fontSize: isMobile ? 12 : 16,
-                    fontWeight: 600,
-                    color: brand.text,
-                    letterSpacing: "-0.01em",
-                    // On desktop allow up to 2 lines so "Fatture in
-                    // Cloud" stays readable; on mobile clamp to 1 line
-                    // with ellipsis so the row never explodes vertically
-                    // when the AVI digits push the available width below
-                    // the brand-name minimum.
-                    whiteSpace: isMobile ? "nowrap" : "normal",
-                    overflow: isMobile ? "hidden" : undefined,
-                    textOverflow: isMobile ? "ellipsis" : undefined,
-                    overflowWrap: isMobile ? undefined : "anywhere",
-                    lineHeight: 1.2,
-                    minWidth: 0,
-                  }}
-                >
-                  {e.name}
-                </span>
-                <span
-                  style={{
-                    fontFamily: MONO,
-                    fontSize: isMobile ? 16 : 26,
-                    fontWeight: 700,
-                    color: brand.text,
-                    letterSpacing: "-0.03em",
-                    flexShrink: 0,
-                  }}
-                >
-                  {e.avi.toFixed(1)}%
-                </span>
-              </div>
-            ))}
+                  <span
+                    style={{
+                      fontFamily: MONO,
+                      fontSize: 14,
+                      fontWeight: 600,
+                      color: "rgba(0,0,0,0.4)",
+                      letterSpacing: "-0.01em",
+                      flexShrink: 0,
+                    }}
+                  >
+                    {i + 1}°
+                  </span>
+                  <Favicon
+                    domain={e.domain}
+                    initials={e.initials}
+                    color={e.color}
+                    size={28}
+                  />
+                  <span
+                    style={{
+                      flex: 1,
+                      fontSize: 16,
+                      fontWeight: 600,
+                      color: brand.text,
+                      letterSpacing: "-0.01em",
+                      whiteSpace: "normal",
+                      overflowWrap: "anywhere",
+                      lineHeight: 1.2,
+                      minWidth: 0,
+                    }}
+                  >
+                    {e.name}
+                  </span>
+                  <span
+                    style={{
+                      fontFamily: MONO,
+                      fontSize: 26,
+                      fontWeight: 700,
+                      color: brand.text,
+                      letterSpacing: "-0.03em",
+                      flexShrink: 0,
+                    }}
+                  >
+                    {e.avi.toFixed(1)}%
+                  </span>
+                </div>
+              );
+            })}
           </div>
         </div>
 
