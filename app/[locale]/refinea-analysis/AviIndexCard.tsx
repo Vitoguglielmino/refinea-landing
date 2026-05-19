@@ -38,7 +38,7 @@
  * tracking. The rendered subtree is small (one SVG + two lists) so the
  * JS cost is negligible.
  */
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { AviResponse, LeaderboardRow } from "@/lib/marketing-api";
 import { formatDelta, deltaTone } from "@/lib/marketing-api";
 import { Favicon } from "../../components/mockups/Favicon";
@@ -69,11 +69,24 @@ const MONO =
   "var(--font-jetbrains-mono), 'JetBrains Mono', 'SF Mono', 'Roboto Mono', 'Fira Code', monospace";
 
 /* ─── Chart geometry (full-width now, wider than the old 3:1 split) ─── */
-const W = 920;
-const H = 260;
-const PAD = { l: 56, r: 20, t: 20, b: 36 };
-const plotW = W - PAD.l - PAD.r;
-const plotH = H - PAD.t - PAD.b;
+// Chart dimensions are chosen per breakpoint. On mobile the viewBox is
+// squarer (smaller W/H ratio), the left padding shrinks so the Y axis
+// labels don't eat the plotting area, and font sizes go UP because SVG
+// text is scaled with the viewBox — bigger viewBox font => smaller on
+// screen, so smaller viewBox => need bigger font to stay readable.
+const DESKTOP = {
+  W: 920,
+  H: 260,
+  PAD: { l: 56, r: 20, t: 20, b: 36 },
+  font: { axis: 11, tooltip: 11, tooltipBig: 12 },
+} as const;
+const MOBILE = {
+  W: 480,
+  H: 280,
+  PAD: { l: 36, r: 12, t: 16, b: 44 },
+  font: { axis: 13, tooltip: 13, tooltipBig: 14 },
+} as const;
+const MOBILE_BREAKPOINT_PX = 640;
 /** Synthetic-series fallback length, used only when the API hasn't
  *  returned a real `series[]` (e.g. early-stage industries with <2 days
  *  of history). When real data is present, the chart uses
@@ -161,6 +174,7 @@ function brandDomain(name: string): string {
     .replace(/[^a-z0-9]+/g, "");
   const overrides: Record<string, string> = {
     // ── saas-gestionali-italia ──────────────────────────────────────
+    // Tracked panel
     teamsystem: "teamsystem.com",
     zucchetti: "zucchetti.it",
     aruba: "aruba.it",
@@ -168,6 +182,16 @@ function brandDomain(name: string): string {
     fattureincloud: "fattureincloud.it",
     fiscozen: "fiscozen.it",
     danea: "danea.it",
+    // Brands surfacing organically from the LLMs that Google s2 either
+    // can't resolve from the generic ${slug}.com fallback or returns a
+    // wrong-brand favicon for. Domains chosen because Google s2 returns
+    // a real, high-resolution icon (>1.5KB payload).
+    fluida: "fluida.io",
+    flextax: "flextax.it",
+    zoho: "zoho.com",
+    librosifattura: "libero.it",
+    liberosifattura: "libero.it",
+    cameradicommercio: "unioncamere.it",
     // ── fintech-italia ──────────────────────────────────────────────
     // Italian fintech brands use mostly .it TLDs; the generic .com
     // fallback either points to the wrong company (Hype Energy Drinks)
@@ -234,6 +258,26 @@ export function AviIndexCard({
 }) {
   const svgRef = useRef<SVGSVGElement | null>(null);
   const [tooltip, setTooltip] = useState<TooltipState | null>(null);
+
+  // Viewport-aware chart dimensions. Defaults to desktop on first paint
+  // (SSR + pre-hydration) and switches to the compact mobile profile
+  // when the viewport drops below MOBILE_BREAKPOINT_PX. Re-evaluated on
+  // resize to follow orientation changes and split-screen.
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT_PX - 1}px)`);
+    const update = () => setIsMobile(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+  const profile = isMobile ? MOBILE : DESKTOP;
+  const W = profile.W;
+  const H = profile.H;
+  const PAD = profile.PAD;
+  const FONT = profile.font;
+  const plotW = W - PAD.l - PAD.r;
+  const plotH = H - PAD.t - PAD.b;
 
   const entries = toRankEntries(data.leaderboard);
   const top = entries[0];
@@ -544,7 +588,7 @@ export function AviIndexCard({
                 x={PAD.l - 10}
                 y={sy(t) + 4}
                 textAnchor="end"
-                fontSize={11}
+                fontSize={FONT.axis}
                 fontWeight="400"
                 fill="rgba(0,0,0,0.3)"
                 fontFamily={MONO}
@@ -558,7 +602,7 @@ export function AviIndexCard({
                 x={sx(tk.i)}
                 y={H - 8}
                 textAnchor="middle"
-                fontSize={11}
+                fontSize={FONT.axis}
                 fontWeight="400"
                 fill="rgba(0,0,0,0.3)"
                 fontFamily={MONO}
@@ -724,9 +768,11 @@ export function AviIndexCard({
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "48px 1fr 100px 110px",
+            gridTemplateColumns: isMobile
+              ? "32px 1fr 64px 76px"
+              : "48px 1fr 100px 110px",
             alignItems: "center",
-            padding: "12px 24px",
+            padding: isMobile ? "10px 14px" : "12px 24px",
             background: "rgba(0,0,0,0.015)",
             borderBottom: `1px solid ${brand.border}`,
             fontSize: 11,
@@ -760,9 +806,11 @@ export function AviIndexCard({
               key={e.name}
               style={{
                 display: "grid",
-                gridTemplateColumns: "48px 1fr 100px 110px",
+                gridTemplateColumns: isMobile
+                  ? "32px 1fr 64px 76px"
+                  : "48px 1fr 100px 110px",
                 alignItems: "center",
-                padding: "12px 24px",
+                padding: isMobile ? "10px 14px" : "12px 24px",
                 borderBottom: isLast ? "none" : "1px solid rgba(0,0,0,0.04)",
               }}
             >
