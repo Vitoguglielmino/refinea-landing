@@ -135,6 +135,40 @@ function SourceBadge() {
   );
 }
 
+/* ─── Header toggle (matches HeroAVITimeSeries TriggerButton) ─── */
+function HeaderToggle({ label, active = false }: { label: string; active?: boolean }) {
+  return (
+    <button
+      type="button"
+      style={{
+        display: "inline-flex",
+        alignItems: "center",
+        gap: 8,
+        padding: "7px 14px",
+        fontSize: 14,
+        fontWeight: 500,
+        fontFamily: "inherit",
+        color: brand.text,
+        background: brand.bg,
+        borderWidth: 1,
+        borderStyle: "solid",
+        borderColor: active ? brand.color : brand.border,
+        borderRadius: 6,
+        cursor: "default",
+        whiteSpace: "nowrap",
+        lineHeight: 1.2,
+        outline: "none",
+        boxShadow: active ? `0 0 0 1.5px ${brand.accentSoft}` : "none",
+      }}
+    >
+      <span>{label}</span>
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" style={{ opacity: 0.5 }}>
+        <path d="M4 6L8 10L12 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    </button>
+  );
+}
+
 /* ─── Status Badge (StatusBadge.tsx replica) ─── */
 function StatusBadge({ status }: { status: "active" | "draft" }) {
   const isActive = status === "active";
@@ -289,7 +323,7 @@ export default function PlatformPersonas() {
       }}
     >
       <div style={{ padding: "0 32px 24px", background: brand.subtle }}>
-        {/* Liquid Glass nav */}
+        {/* Liquid Glass nav — matches HeroAVITimeSeries: logo + toggles right */}
         <div
           style={{
             display: "flex",
@@ -311,6 +345,11 @@ export default function PlatformPersonas() {
               Gucci
             </span>
           </div>
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <HeaderToggle label="All Sources" />
+            <HeaderToggle label="Active" active />
+            <HeaderToggle label="Sorted by Activity" />
+          </div>
         </div>
 
         {/* Section header */}
@@ -323,11 +362,11 @@ export default function PlatformPersonas() {
           </p>
         </div>
 
-        {/* Card grid */}
+        {/* Card grid — 3×2 on desktop to match widescreen mockups */}
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
+            gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
             gap: 14,
             padding: "0 4px",
           }}

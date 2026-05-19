@@ -26,4 +26,9 @@ posthog.init(process.env.NEXT_PUBLIC_POSTHOG_PROJECT_TOKEN!, {
   cookieless_mode: 'always',
   ip: false,
   person_profiles: 'identified_only',
+  // `defaults: '2026-01-30'` sets capture_pageview to 'history_change',
+  // which only fires on SPA navigations (pushState/replaceState/popstate).
+  // The marketing site has multiple full-page routes, so we need a real
+  // pageview on every load too — force it back to `true`.
+  capture_pageview: true,
 })

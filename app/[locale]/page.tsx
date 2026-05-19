@@ -238,7 +238,7 @@ export default async function Home({
             title={t("section1.title")}
             body={t("section1.body")}
           />
-          <MockupShell minWidth={760}>
+          <MockupShell minWidth={980}>
             <PlatformPersonas />
           </MockupShell>
           <p className="text-xs font-semibold text-black/60 mt-4 text-center">
