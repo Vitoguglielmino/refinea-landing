@@ -452,7 +452,7 @@ export function AviIndexCard({
       }}
     >
       {/* ═════════════════════ CHART SECTION ═════════════════════ */}
-      <div style={{ padding: 24 }}>
+      <div style={{ padding: isMobile ? 14 : 24 }}>
         {/* Hero metric — small uppercase "AI VISIBILITY INDEX" label
             with an ⓘ tooltip glyph, then a horizontal row showing the
             top 3 brands with their rank, favicon, and AVI%. */}
@@ -461,7 +461,7 @@ export function AviIndexCard({
             display: "flex",
             flexDirection: "column",
             gap: 12,
-            paddingLeft: "5%",
+            paddingLeft: isMobile ? 0 : "5%",
             marginBottom: 16,
           }}
         >
@@ -499,9 +499,9 @@ export function AviIndexCard({
                 style={{
                   display: "flex",
                   alignItems: "center",
-                  gap: 14,
-                  paddingLeft: i === 0 ? 0 : 24,
-                  paddingRight: i === 2 ? 0 : 24,
+                  gap: isMobile ? 8 : 14,
+                  paddingLeft: i === 0 ? 0 : (isMobile ? 10 : 24),
+                  paddingRight: i === 2 ? 0 : (isMobile ? 10 : 24),
                   borderLeft:
                     i === 0 ? "none" : "1px solid rgba(0,0,0,0.08)",
                   minHeight: 64,
@@ -510,7 +510,7 @@ export function AviIndexCard({
                 <span
                   style={{
                     fontFamily: MONO,
-                    fontSize: 14,
+                    fontSize: isMobile ? 12 : 14,
                     fontWeight: 600,
                     color: "rgba(0,0,0,0.4)",
                     letterSpacing: "-0.01em",
@@ -523,19 +523,24 @@ export function AviIndexCard({
                   domain={e.domain}
                   initials={e.initials}
                   color={e.color}
-                  size={28}
+                  size={isMobile ? 22 : 28}
                 />
                 <span
                   style={{
                     flex: 1,
-                    fontSize: 16,
+                    fontSize: isMobile ? 12 : 16,
                     fontWeight: 600,
                     color: brand.text,
                     letterSpacing: "-0.01em",
-                    // Wrap onto a second line when the name is long
-                    // (e.g. "Fatture in Cloud") instead of truncating.
-                    whiteSpace: "normal",
-                    overflowWrap: "anywhere",
+                    // On desktop allow up to 2 lines so "Fatture in
+                    // Cloud" stays readable; on mobile clamp to 1 line
+                    // with ellipsis so the row never explodes vertically
+                    // when the AVI digits push the available width below
+                    // the brand-name minimum.
+                    whiteSpace: isMobile ? "nowrap" : "normal",
+                    overflow: isMobile ? "hidden" : undefined,
+                    textOverflow: isMobile ? "ellipsis" : undefined,
+                    overflowWrap: isMobile ? undefined : "anywhere",
                     lineHeight: 1.2,
                     minWidth: 0,
                   }}
@@ -545,7 +550,7 @@ export function AviIndexCard({
                 <span
                   style={{
                     fontFamily: MONO,
-                    fontSize: 26,
+                    fontSize: isMobile ? 16 : 26,
                     fontWeight: 700,
                     color: brand.text,
                     letterSpacing: "-0.03em",
