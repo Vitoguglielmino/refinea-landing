@@ -31,14 +31,21 @@ export async function POST(req: NextRequest) {
     if (body?.urls && Array.isArray(body.urls) && body.urls.length > 0) {
       urls = body.urls;
     } else {
-      // Default: submit all known pages
+      // Default: submit all known pages. Posts carry a real `locale`, so
+      // an IT post must be notified at /it/blog/<slug>, not /blog/<slug> —
+      // submitting the wrong URL just wastes a crawl on a 404.
       const posts = getAllPostMetas();
+      const postUrl = (p: { slug: string; locale: string }) =>
+        p.locale === "it"
+          ? `https://${HOST}/it/blog/${p.slug}`
+          : `https://${HOST}/blog/${p.slug}`;
       urls = [
         `https://${HOST}/`,
         `https://${HOST}/blog`,
+        `https://${HOST}/it/blog`,
         `https://${HOST}/pricing`,
         `https://${HOST}/team`,
-        ...posts.map((p) => `https://${HOST}/blog/${p.slug}`),
+        ...posts.map(postUrl),
       ];
     }
   } catch {

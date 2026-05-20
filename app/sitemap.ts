@@ -12,10 +12,10 @@ import { getAllAuthors } from "@/lib/authors";
  * is the shape Next.js converts into `<xhtml:link rel="alternate" />` tags
  * inside the generated XML.
  *
- * Blog posts are single-locale (no parallel translations). IT posts are
- * detected by the `servizi-` slug prefix and emitted only under /it/blog;
- * all other posts go under /blog. Neither side gets `alternates` because no
- * translated counterpart exists.
+ * Blog posts live in content/posts/<locale>/, so each post carries a real
+ * `locale`: EN posts go under /blog, IT posts under /it/blog. A post with a
+ * `translationKey` matching a sibling in the other locale emits a reciprocal
+ * hreflang group; single-locale posts get no `alternates`.
  */
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = "https://refinea.io";
