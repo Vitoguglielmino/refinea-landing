@@ -77,16 +77,19 @@ export async function getFile(path: string): Promise<GitFile | null> {
   }
 }
 
-/**
- * Lists all MDX post filenames in content/posts/. Returns slugs without
- * the `.mdx` extension.
- */
-export async function listPostSlugs(): Promise<string[]> {
+/** A post is identified by its locale folder + slug. Posts live in
+ *  content/posts/<locale>/<slug>.mdx, so the same slug can exist in
+ *  both locales (a translated pair sharing one clean slug). */
+export type PostLocale = "en" | "it";
+export type PostRef = { slug: string; locale: PostLocale };
+
+/** Lists all MDX posts in one locale folder. */
+async function listSlugsInLocale(locale: PostLocale): Promise<string[]> {
   try {
     const res = await octokit().repos.getContent({
       owner: OWNER!,
       repo: REPO!,
-      path: POSTS_DIR,
+      path: `${POSTS_DIR}/${locale}`,
       ref: BRANCH,
     });
     if (!Array.isArray(res.data)) return [];
@@ -99,8 +102,27 @@ export async function listPostSlugs(): Promise<string[]> {
   }
 }
 
-export async function readPostFile(slug: string): Promise<GitFile | null> {
-  return getFile(`${POSTS_DIR}/${slug}.mdx`);
+/** Lists every post across both locale folders as {slug, locale} refs. */
+export async function listPosts(): Promise<PostRef[]> {
+  const [en, it] = await Promise.all([
+    listSlugsInLocale("en"),
+    listSlugsInLocale("it"),
+  ]);
+  return [
+    ...en.map((slug) => ({ slug, locale: "en" as const })),
+    ...it.map((slug) => ({ slug, locale: "it" as const })),
+  ];
+}
+
+function postPath(slug: string, locale: PostLocale): string {
+  return `${POSTS_DIR}/${locale}/${slug}.mdx`;
+}
+
+export async function readPostFile(
+  slug: string,
+  locale: PostLocale,
+): Promise<GitFile | null> {
+  return getFile(postPath(slug, locale));
 }
 
 // ─── Write ────────────────────────────────────────────────────────────────────
@@ -175,13 +197,14 @@ export async function putImage(opts: {
 
 export async function writePost(opts: {
   slug: string;
+  locale: PostLocale;
   content: string;
   message: string;
   sha?: string;
   author?: CommitAuthor;
 }): Promise<{ sha: string; commitSha: string }> {
   return putFile({
-    path: `${POSTS_DIR}/${opts.slug}.mdx`,
+    path: postPath(opts.slug, opts.locale),
     content: opts.content,
     message: opts.message,
     sha: opts.sha,
@@ -191,6 +214,7 @@ export async function writePost(opts: {
 
 export async function deletePost(opts: {
   slug: string;
+  locale: PostLocale;
   sha: string;
   message: string;
   author?: CommitAuthor;
@@ -199,7 +223,7 @@ export async function deletePost(opts: {
   await octokit().repos.deleteFile({
     owner: OWNER!,
     repo: REPO!,
-    path: `${POSTS_DIR}/${opts.slug}.mdx`,
+    path: postPath(opts.slug, opts.locale),
     message: opts.message,
     sha: opts.sha,
     branch: BRANCH,

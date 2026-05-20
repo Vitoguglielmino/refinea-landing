@@ -1,7 +1,7 @@
 /**
  * Blog cover generator — auto-discovery.
  *
- * Scans content/posts/, reads each post's frontmatter, and renders an
+ * Scans content/posts/<locale>/, reads each post's frontmatter, and renders an
  * Open Graph cover image for every post that declares a `cover:` field
  * pointing at /blog/<name>.png. Title, section and author come straight
  * from the MDX frontmatter, so the cover always matches the published
@@ -99,41 +99,54 @@ async function loadFonts() {
 
 /* ─── Post discovery ─────────────────────────────────────────────────── */
 
+/** Posts live in per-locale subfolders. Translated pairs share a slug,
+ *  so each locale gets its own cover (en/<slug>.mdx -> EN cover). */
+const LOCALES = ["en", "it"];
+
 /**
- * Reads every .mdx in content/posts/ and returns the covers to render.
- * A post contributes a cover only when its frontmatter `cover:` points
- * at a local /blog/<name>.png path. Posts without a cover, or pointing
- * at an external/non-png path, are skipped (logged).
+ * Reads every .mdx under content/posts/<locale>/ and returns the covers
+ * to render. A post contributes a cover only when its frontmatter
+ * `cover:` points at a local /blog/<name>.png path. Posts without a
+ * cover, or pointing at an external/non-png path, are skipped (logged).
  */
 async function discoverCovers() {
-  const files = (await readdir(POSTS_DIR)).filter((f) => f.endsWith(".mdx"));
   const covers = [];
   const skipped = [];
 
-  for (const filename of files) {
-    const raw = await readFile(join(POSTS_DIR, filename), "utf-8");
-    const { data } = matter(raw);
-    const slug = filename.replace(/\.mdx$/, "");
-
-    const cover = typeof data.cover === "string" ? data.cover.trim() : "";
-    if (!cover.startsWith("/blog/") || !cover.endsWith(".png")) {
-      skipped.push({ slug, reason: cover ? `non-local cover (${cover})` : "no cover field" });
-      continue;
+  for (const locale of LOCALES) {
+    const dir = join(POSTS_DIR, locale);
+    let files;
+    try {
+      files = (await readdir(dir)).filter((f) => f.endsWith(".mdx"));
+    } catch {
+      continue; // locale folder may not exist
     }
 
-    const title = typeof data.title === "string" ? data.title.trim() : "";
-    if (!title) {
-      skipped.push({ slug, reason: "missing title" });
-      continue;
-    }
+    for (const filename of files) {
+      const raw = await readFile(join(dir, filename), "utf-8");
+      const { data } = matter(raw);
+      const slug = `${locale}/${filename.replace(/\.mdx$/, "")}`;
 
-    covers.push({
-      // Strip the /blog/ prefix — OUT_DIR already is public/blog.
-      file: cover.slice("/blog/".length),
-      title,
-      section: SECTION_LABEL[data.section] ?? "Article",
-      author: AUTHOR_NAME[data.author] ?? "Refinea",
-    });
+      const cover = typeof data.cover === "string" ? data.cover.trim() : "";
+      if (!cover.startsWith("/blog/") || !cover.endsWith(".png")) {
+        skipped.push({ slug, reason: cover ? `non-local cover (${cover})` : "no cover field" });
+        continue;
+      }
+
+      const title = typeof data.title === "string" ? data.title.trim() : "";
+      if (!title) {
+        skipped.push({ slug, reason: "missing title" });
+        continue;
+      }
+
+      covers.push({
+        // Strip the /blog/ prefix — OUT_DIR already is public/blog.
+        file: cover.slice("/blog/".length),
+        title,
+        section: SECTION_LABEL[data.section] ?? "Article",
+        author: AUTHOR_NAME[data.author] ?? "Refinea",
+      });
+    }
   }
 
   return { covers, skipped };

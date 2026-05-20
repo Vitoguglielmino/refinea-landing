@@ -16,7 +16,7 @@ import Footer from "../../../components/Footer";
 import Breadcrumb from "../../../components/Breadcrumb";
 import ArticleSidebar, { MobileTOC } from "../../../components/blog/ArticleSidebar";
 import { Link } from "@/i18n/routing";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://refinea.io";
@@ -24,10 +24,10 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://refinea.io";
 // ─── Static params (SSG) ───────────────────────────────────────────────────────
 
 export function generateStaticParams() {
-  // Each post lives in exactly one locale (frontmatter `locale: "en" | "it"`),
-  // so we emit a single `{locale, slug}` pair per post — never the cartesian
-  // product. Wrong-locale visits are caught at runtime by the page-body
-  // redirect below.
+  // Posts live in content/posts/<locale>/, so each {locale, slug} pair
+  // maps to exactly one file. A slug present only in one locale is
+  // emitted only for that locale; a slug existing in both (a translated
+  // pair sharing a clean slug) is emitted for both.
   return (["en", "it"] as const).flatMap((locale) =>
     getSlugsByLocale(locale).map((slug) => ({ locale, slug })),
   );
@@ -40,8 +40,8 @@ export async function generateMetadata({
 }: {
   params: Promise<{ locale: string; slug: string }>;
 }): Promise<Metadata> {
-  const { slug } = await params;
-  const post = getPostBySlug(slug);
+  const { locale, slug } = await params;
+  const post = getPostBySlug(slug, locale === "it" ? "it" : "en");
   if (!post) return { title: "Not found | Refinea" };
   // Frontmatter `title` is the clean H1 used on the page; the SERP meta
   // title appends the brand suffix. `description` is authored to fit Google's
@@ -123,20 +123,11 @@ export default async function ArticlePage({
   const tCta = await getTranslations("blogCta");
   const tNav = await getTranslations("nav");
 
-  const post = getPostBySlug(slug);
+  // Posts live in per-locale folders, so a slug is looked up directly
+  // in the requested locale. A slug that does not exist for this locale
+  // is a genuine 404 — no cross-locale redirect needed.
+  const post = getPostBySlug(slug, locale === "it" ? "it" : "en");
   if (!post) notFound();
-
-  // Redirect when the post's source language doesn't match the URL locale.
-  // E.g. /blog/servizi-... → /it/blog/servizi-..., and /it/blog/geo-vs-seo
-  // → /blog/geo-vs-seo. Next's `redirect()` throws a `NEXT_REDIRECT` error
-  // that's caught upstream and serves a 307 (308 in production builds).
-  if (post.locale !== locale) {
-    const target =
-      post.locale === "it"
-        ? `/it/blog/${post.slug}`
-        : `/blog/${post.slug}`;
-    redirect(target);
-  }
 
   const cover       = post.cover;
   const persona     = post.persona;

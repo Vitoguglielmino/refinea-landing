@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { getAdminUser } from "@/lib/admin-auth";
-import { listPostSlugs, readPostFile } from "@/lib/github-cms";
+import { listPosts, readPostFile } from "@/lib/github-cms";
 import { deserializePost } from "@/lib/post-serializer";
 import { getSection } from "@/lib/blog-taxonomy";
 import { getAuthor } from "@/lib/authors";
@@ -12,15 +12,15 @@ export default async function AdminBlogList() {
   const user = await getAdminUser();
   if (!user) redirect("/admin/login");
 
-  const slugs = await listPostSlugs();
+  const refs = await listPosts();
   const posts = (
     await Promise.all(
-      slugs.map(async (slug) => {
-        const file = await readPostFile(slug);
+      refs.map(async ({ slug, locale }) => {
+        const file = await readPostFile(slug, locale);
         if (!file) return null;
         try {
           const data = deserializePost(file.content);
-          return { ...data, slug };
+          return { ...data, slug, locale };
         } catch {
           return null;
         }
@@ -82,16 +82,14 @@ export default async function AdminBlogList() {
               {posts.map((post) => {
                 const section = getSection(post.section);
                 const author = getAuthor(post.author);
+                const editHref = `/admin/blog/${post.slug}/edit?locale=${post.locale}`;
                 return (
                   <tr
-                    key={post.slug}
+                    key={`${post.locale}/${post.slug}`}
                     className="border-b border-black/[0.04] last:border-b-0 hover:bg-black/[0.015] transition-colors"
                   >
                     <td className="px-5 py-3 max-w-[460px]">
-                      <Link
-                        href={`/admin/blog/${post.slug}/edit`}
-                        className="block"
-                      >
+                      <Link href={editHref} className="block">
                         <div className="font-semibold text-black truncate group-hover:text-accent">
                           {post.title}
                         </div>
@@ -137,7 +135,7 @@ export default async function AdminBlogList() {
                     </td>
                     <td className="px-5 py-3 text-right">
                       <Link
-                        href={`/admin/blog/${post.slug}/edit`}
+                        href={editHref}
                         className="text-[12px] font-medium text-accent hover:underline"
                       >
                         Edit →

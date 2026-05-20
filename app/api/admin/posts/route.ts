@@ -6,7 +6,7 @@
 import { NextResponse } from "next/server";
 import { getAdminUser } from "@/lib/admin-auth";
 import {
-  listPostSlugs,
+  listPosts,
   readPostFile,
   writePost,
   type CommitAuthor,
@@ -22,14 +22,14 @@ export async function GET() {
   const user = await getAdminUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  const slugs = await listPostSlugs();
+  const refs = await listPosts();
   const posts = await Promise.all(
-    slugs.map(async (slug) => {
-      const file = await readPostFile(slug);
+    refs.map(async ({ slug, locale }) => {
+      const file = await readPostFile(slug, locale);
       if (!file) return null;
       try {
         const data = deserializePost(file.content);
-        return { ...data, slug, sha: file.sha };
+        return { ...data, slug, locale, sha: file.sha };
       } catch {
         return null;
       }
@@ -60,13 +60,14 @@ export async function POST(req: Request) {
     );
   }
 
-  // Reject if a file with this slug already exists — slug collision would
-  // overwrite the existing post silently.
-  const existing = await readPostFile(body.slug);
+  // Reject if a file with this slug already exists in this locale —
+  // a collision would silently overwrite the existing post. The same
+  // slug in the OTHER locale is fine (a translated pair).
+  const existing = await readPostFile(body.slug, body.locale);
   if (existing) {
     return NextResponse.json(
       {
-        error: `A post with slug "${body.slug}" already exists. Pick a different slug or edit the existing post.`,
+        error: `A ${body.locale.toUpperCase()} post with slug "${body.slug}" already exists. Pick a different slug or edit the existing post.`,
       },
       { status: 409 },
     );
@@ -81,8 +82,9 @@ export async function POST(req: Request) {
   try {
     const result = await writePost({
       slug: body.slug,
+      locale: body.locale,
       content,
-      message: `blog: add ${body.slug}`,
+      message: `blog: add ${body.locale}/${body.slug}`,
       author,
     });
     return NextResponse.json({

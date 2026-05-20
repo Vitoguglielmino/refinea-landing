@@ -11,7 +11,7 @@
 
 import { NextResponse } from "next/server";
 import { getAdminUser } from "@/lib/admin-auth";
-import { listPostSlugs, readPostFile } from "@/lib/github-cms";
+import { listPosts, readPostFile } from "@/lib/github-cms";
 import { deserializePost } from "@/lib/post-serializer";
 
 export async function GET(req: Request) {
@@ -26,9 +26,11 @@ export async function GET(req: Request) {
   }
   const otherLocale = locale === "it" ? "en" : "it";
 
-  const slugs = await listPostSlugs();
-  for (const slug of slugs) {
-    const file = await readPostFile(slug);
+  // Only scan the opposite-locale folder — a sibling is by definition
+  // in the other locale, so there's no reason to read the current one.
+  const refs = (await listPosts()).filter((r) => r.locale === otherLocale);
+  for (const ref of refs) {
+    const file = await readPostFile(ref.slug, ref.locale);
     if (!file) continue;
     let parsed;
     try {
@@ -36,11 +38,11 @@ export async function GET(req: Request) {
     } catch {
       continue;
     }
-    if (parsed.translationKey === key && parsed.locale === otherLocale) {
+    if (parsed.translationKey === key) {
       return NextResponse.json({
         sibling: {
-          slug,
-          locale: parsed.locale,
+          slug: ref.slug,
+          locale: ref.locale,
           title: parsed.title,
         },
       });

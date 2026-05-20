@@ -21,15 +21,28 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
-  // Collapse the www host into the apex domain. www.refinea.io otherwise
-  // resolves as a fully crawlable duplicate of every URL, splitting
-  // ranking signals and producing conflicting hreflang.
   async redirects() {
     return [
+      // Collapse the www host into the apex domain. www.refinea.io
+      // otherwise resolves as a fully crawlable duplicate of every URL,
+      // splitting ranking signals and producing conflicting hreflang.
       {
         source: "/:path*",
         has: [{ type: "host", value: "www.refinea.io" }],
         destination: "https://refinea.io/:path*",
+        permanent: true,
+      },
+      // EN posts used to carry a redundant `-en` slug suffix. They now
+      // live in a per-locale folder and share the clean IT slug, so the
+      // old published URLs 301 to their canonical form.
+      {
+        source: "/blog/introducing-agentic-workflows-en",
+        destination: "/blog/introducing-agentic-workflows",
+        permanent: true,
+      },
+      {
+        source: "/blog/introducing-brand-memory-en",
+        destination: "/blog/introducing-brand-memory",
         permanent: true,
       },
     ];

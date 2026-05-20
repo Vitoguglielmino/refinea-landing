@@ -826,7 +826,7 @@ const block = "di codice";
             </li>
             <li>
               Il file MDX viene costruito (frontmatter + body) e committato
-              in <Code>content/posts/&lt;slug&gt;.mdx</Code> sul branch{" "}
+              in <Code>content/posts/&lt;locale&gt;/&lt;slug&gt;.mdx</Code> sul branch{" "}
               <Code>main</Code> di GitHub. Commit author = la tua email.
             </li>
             <li>

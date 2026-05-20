@@ -10,7 +10,7 @@
 // the page.
 //
 // To create a new post:
-//   1. Create content/posts/<slug>.mdx
+//   1. Create content/posts/<locale>/<slug>.mdx
 //   2. Add frontmatter (see PostMeta below)
 //   3. Write Markdown / HTML / MDX below the ---
 //   4. git push → live in 30 seconds
@@ -147,20 +147,16 @@ function isValidTopic(s: unknown): s is TopicSlug {
   );
 }
 
-function readPost(slug: string): Post | null {
-  const filePath = path.join(POSTS_DIR, `${slug}.mdx`);
+function readPost(slug: string, locale: PostLocale): Post | null {
+  // Posts live in per-locale folders: content/posts/<locale>/<slug>.mdx.
+  // The folder is the source of truth for locale, so an EN and an IT
+  // post can share an identical (clean, no -en suffix) slug.
+  const filePath = path.join(POSTS_DIR, locale, `${slug}.mdx`);
   if (!fs.existsSync(filePath)) return null;
 
   const raw = fs.readFileSync(filePath, "utf-8");
   const { data, content } = matter(raw);
   const contentHtml = markdownToHtml(content);
-
-  const locale: PostLocale =
-    data.locale === "en" || data.locale === "it"
-      ? data.locale
-      : slug.startsWith("servizi-")
-      ? "it"
-      : "en";
 
   // Defensive defaults — frontmatter may be missing fields during the
   // migration. Sensible defaults so a half-migrated post still renders.
@@ -198,14 +194,22 @@ function readPost(slug: string): Post | null {
   };
 }
 
-export function getAllPosts(): Post[] {
-  if (!fs.existsSync(POSTS_DIR)) return [];
-
-  const files = fs.readdirSync(POSTS_DIR).filter((f) => f.endsWith(".mdx"));
-  const posts = files
-    .map((f) => readPost(f.replace(/\.mdx$/, "")))
+/** Reads every .mdx under content/posts/<locale>/ for one locale. */
+function readPostsForLocale(locale: PostLocale): Post[] {
+  const dir = path.join(POSTS_DIR, locale);
+  if (!fs.existsSync(dir)) return [];
+  return fs
+    .readdirSync(dir)
+    .filter((f) => f.endsWith(".mdx"))
+    .map((f) => readPost(f.replace(/\.mdx$/, ""), locale))
     .filter((p): p is Post => p !== null);
+}
 
+export function getAllPosts(): Post[] {
+  const posts = [
+    ...readPostsForLocale("en"),
+    ...readPostsForLocale("it"),
+  ];
   posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   return posts;
 }
@@ -214,22 +218,15 @@ export function getAllPostMetas(): PostMeta[] {
   return getAllPosts().map(({ contentHtml: _contentHtml, ...meta }) => meta);
 }
 
-export function getPostBySlug(slug: string): Post | null {
-  return readPost(slug);
-}
-
-export function getAllSlugs(): string[] {
-  if (!fs.existsSync(POSTS_DIR)) return [];
-  return fs
-    .readdirSync(POSTS_DIR)
-    .filter((f) => f.endsWith(".mdx"))
-    .map((f) => f.replace(/\.mdx$/, ""));
+/** Reads one post. Locale is required: the same slug can exist in both
+ *  locales (e.g. /blog/introducing-brand-memory and
+ *  /it/blog/introducing-brand-memory). */
+export function getPostBySlug(slug: string, locale: PostLocale): Post | null {
+  return readPost(slug, locale);
 }
 
 export function getSlugsByLocale(locale: PostLocale): string[] {
-  return getAllPostMetas()
-    .filter((p) => p.locale === locale)
-    .map((p) => p.slug);
+  return readPostsForLocale(locale).map((p) => p.slug);
 }
 
 /** Posts filtered by section, current-locale only. */
@@ -266,20 +263,26 @@ export function getPostsByAuthor(
  * Sibling translation lookup. Given a post, returns its counterpart in
  * the OTHER locale (if any). Single-locale posts return null.
  *
- * Two posts are siblings iff they share the same translationKey AND
- * differ in locale. We deliberately ignore matches in the same locale —
- * those would be a content duplication mistake.
+ * A sibling is matched two ways, in order:
+ *   1. Same `translationKey`, different locale — used by posts whose
+ *      slugs differ across locales (e.g. the launch articles, where the
+ *      EN and IT slugs are each native to their language).
+ *   2. Identical slug, different locale — the natural pairing now that
+ *      posts live in per-locale folders and a translated pair can share
+ *      one clean slug (e.g. introducing-brand-memory).
  */
 export function getTranslationSibling(post: PostMeta): PostMeta | null {
-  if (!post.translationKey) return null;
-  return (
-    getAllPostMetas().find(
-      (p) =>
-        p.slug !== post.slug &&
-        p.locale !== post.locale &&
-        p.translationKey === post.translationKey,
-    ) ?? null
-  );
+  const all = getAllPostMetas();
+  const other: PostLocale = post.locale === "it" ? "en" : "it";
+
+  if (post.translationKey) {
+    const byKey = all.find(
+      (p) => p.locale === other && p.translationKey === post.translationKey,
+    );
+    if (byKey) return byKey;
+  }
+
+  return all.find((p) => p.locale === other && p.slug === post.slug) ?? null;
 }
 
 /** Related posts: same topics, same locale, excluding self. Ranked by

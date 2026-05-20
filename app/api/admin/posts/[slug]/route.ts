@@ -1,11 +1,12 @@
 /**
- * GET    /api/admin/posts/[slug]   → read single post (frontmatter + body + sha)
- * PUT    /api/admin/posts/[slug]   → update post (commits to GitHub)
- * DELETE /api/admin/posts/[slug]   → delete post
+ * GET    /api/admin/posts/[slug]?locale=en|it  → read single post
+ * PUT    /api/admin/posts/[slug]?locale=en|it  → update post (commits)
+ * DELETE /api/admin/posts/[slug]?locale=en|it  → delete post
  *
- * PUT requires the `sha` of the parent blob in the body. If GitHub rejects
- * with 409, the post was edited concurrently — UI should re-fetch and let
- * the editor decide.
+ * Posts live in content/posts/<locale>/, so a slug alone is ambiguous —
+ * every request carries a `locale` query param. PUT additionally
+ * requires the parent blob `sha` in the body; a 409 from GitHub means
+ * the post was edited concurrently.
  */
 
 import { NextResponse } from "next/server";
@@ -15,6 +16,7 @@ import {
   writePost,
   deletePost,
   type CommitAuthor,
+  type PostLocale,
 } from "@/lib/github-cms";
 import { deserializePost, serializePost } from "@/lib/post-serializer";
 import {
@@ -25,12 +27,27 @@ import {
 
 type RouteCtx = { params: Promise<{ slug: string }> };
 
-export async function GET(_req: Request, { params }: RouteCtx) {
+/** Reads and validates the `locale` query param. Returns null if absent
+ *  or invalid — callers turn that into a 400. */
+function parseLocale(req: Request): PostLocale | null {
+  const v = new URL(req.url).searchParams.get("locale");
+  return v === "en" || v === "it" ? v : null;
+}
+
+export async function GET(req: Request, { params }: RouteCtx) {
   const user = await getAdminUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
+  const locale = parseLocale(req);
+  if (!locale) {
+    return NextResponse.json(
+      { error: "Missing or invalid 'locale' query param (en|it)" },
+      { status: 400 },
+    );
+  }
+
   const { slug } = await params;
-  const file = await readPostFile(slug);
+  const file = await readPostFile(slug, locale);
   if (!file) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
   let data;
@@ -40,7 +57,7 @@ export async function GET(_req: Request, { params }: RouteCtx) {
     const msg = err instanceof Error ? err.message : "Parse failed";
     return NextResponse.json({ error: msg, raw: file.content }, { status: 500 });
   }
-  return NextResponse.json({ ...data, slug, sha: file.sha });
+  return NextResponse.json({ ...data, slug, locale, sha: file.sha });
 }
 
 export async function PUT(req: Request, { params }: RouteCtx) {
@@ -62,8 +79,8 @@ export async function PUT(req: Request, { params }: RouteCtx) {
     );
   }
 
-  // Editor cannot change the slug via PUT — slug is the file identity.
-  // Renaming = delete + create (a future feature, not now).
+  // Slug and locale together are the file identity — neither can change
+  // via PUT. Renaming or moving locale = delete + create.
   if (body.slug !== slug) {
     return NextResponse.json(
       { error: "Slug change not allowed via PUT. Use delete + create to rename." },
@@ -88,14 +105,16 @@ export async function PUT(req: Request, { params }: RouteCtx) {
   try {
     const result = await writePost({
       slug,
+      locale: body.locale,
       content,
-      message: `blog: update ${slug}`,
+      message: `blog: update ${body.locale}/${slug}`,
       sha: body.sha,
       author,
     });
     return NextResponse.json({
       ok: true,
       slug,
+      locale: body.locale,
       sha: result.sha,
       commitSha: result.commitSha,
       issues,
@@ -123,8 +142,16 @@ export async function DELETE(req: Request, { params }: RouteCtx) {
   const user = await getAdminUser();
   if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
+  const locale = parseLocale(req);
+  if (!locale) {
+    return NextResponse.json(
+      { error: "Missing or invalid 'locale' query param (en|it)" },
+      { status: 400 },
+    );
+  }
+
   const { slug } = await params;
-  const file = await readPostFile(slug);
+  const file = await readPostFile(slug, locale);
   if (!file) return NextResponse.json({ error: "Not found" }, { status: 404 });
 
   const author: CommitAuthor = {
@@ -135,8 +162,9 @@ export async function DELETE(req: Request, { params }: RouteCtx) {
   try {
     await deletePost({
       slug,
+      locale,
       sha: file.sha,
-      message: `blog: delete ${slug}`,
+      message: `blog: delete ${locale}/${slug}`,
       author,
     });
     return NextResponse.json({ ok: true });

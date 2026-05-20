@@ -114,10 +114,12 @@ export default function PostForm({
     setSubmitting(true);
     setServerError(null);
     try {
+      // Posts live in per-locale folders, so PUT needs ?locale= to
+      // identify the file. POST carries the locale in the body.
       const url =
         mode === "create"
           ? "/api/admin/posts"
-          : `/api/admin/posts/${initial?.slug}`;
+          : `/api/admin/posts/${initial?.slug}?locale=${data.locale}`;
       const res = await fetch(url, {
         method: mode === "create" ? "POST" : "PUT",
         headers: { "Content-Type": "application/json" },
@@ -139,7 +141,7 @@ export default function PostForm({
       }
       if (json.sha) setSha(json.sha);
       if (mode === "create") {
-        router.push(`/admin/blog/${data.slug}/edit`);
+        router.push(`/admin/blog/${data.slug}/edit?locale=${data.locale}`);
       } else {
         router.refresh();
       }
@@ -155,9 +157,10 @@ export default function PostForm({
     if (!confirm(`Delete "${data.title}"? This commits to GitHub.`)) return;
     setSubmitting(true);
     try {
-      const res = await fetch(`/api/admin/posts/${initial?.slug}`, {
-        method: "DELETE",
-      });
+      const res = await fetch(
+        `/api/admin/posts/${initial?.slug}?locale=${data.locale}`,
+        { method: "DELETE" },
+      );
       if (!res.ok) {
         const json = await res.json().catch(() => ({}));
         setServerError(json.error ?? `Delete failed (${res.status})`);
