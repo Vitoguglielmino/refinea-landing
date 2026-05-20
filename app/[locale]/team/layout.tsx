@@ -31,7 +31,7 @@ export async function generateMetadata({
   const canonical = isIt ? `${SITE_URL}/it${PATH}` : `${SITE_URL}${PATH}`;
 
   return {
-    title: meta.title,
+    title: { absolute: meta.title },
     description: meta.description,
     openGraph: {
       title: meta.title,

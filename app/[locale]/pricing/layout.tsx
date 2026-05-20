@@ -32,7 +32,7 @@ export async function generateMetadata({
   const canonical = isIt ? `${SITE_URL}/it${PATH}` : `${SITE_URL}${PATH}`;
 
   return {
-    title: meta.title,
+    title: { absolute: meta.title },
     description: meta.description,
     openGraph: {
       title: meta.title,
@@ -61,6 +61,47 @@ const breadcrumbJsonLd = {
   ],
 };
 
+/**
+ * Per-tier Offer schema. Refinea is a single SoftwareApplication sold in
+ * tiers, so the page exposes an AggregateOffer with one Offer node per
+ * paid tier. The Agencies tier is custom-priced and intentionally has
+ * no numeric Offer. Prices kept in sync with the pricing UI
+ * (HomePricing.tsx / PricingContent.tsx): Lite €129/mo, Pro €299/mo.
+ */
+const pricingOfferJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "@id": "https://refinea.io/#product",
+  name: "Refinea",
+  applicationCategory: "BusinessApplication",
+  operatingSystem: "Web",
+  offers: {
+    "@type": "AggregateOffer",
+    priceCurrency: "EUR",
+    lowPrice: "129",
+    highPrice: "299",
+    offerCount: 2,
+    offers: [
+      {
+        "@type": "Offer",
+        name: "Lite",
+        price: "129",
+        priceCurrency: "EUR",
+        url: "https://refinea.io/pricing",
+        availability: "https://schema.org/InStock",
+      },
+      {
+        "@type": "Offer",
+        name: "Pro",
+        price: "299",
+        priceCurrency: "EUR",
+        url: "https://refinea.io/pricing",
+        availability: "https://schema.org/InStock",
+      },
+    ],
+  },
+};
+
 export default async function PricingLayout({
   children,
   params,
@@ -77,10 +118,10 @@ export default async function PricingLayout({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
-      {/* Nav lives OUTSIDE the Suspense boundary in page.tsx so the
-          language toggle (which needs SSR to be crawlable) renders even
-          while PricingClient — which uses useSearchParams — is being
-          hydrated. Same reason Footer is here too. */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(pricingOfferJsonLd) }}
+      />
       <Nav />
       {children}
       <Footer />

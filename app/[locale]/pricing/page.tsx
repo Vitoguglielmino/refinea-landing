@@ -1,12 +1,12 @@
-import { Suspense } from "react";
 import { setRequestLocale } from "next-intl/server";
-import PricingClient from "./PricingClient";
+import PricingContent from "./PricingContent";
 
 /**
- * Server entry for /pricing. Calls `setRequestLocale` so server components
- * inside Nav/Footer/PricingClient get the correct locale, then renders the
- * client tree wrapped in Suspense (required because PricingClient reads
- * `useSearchParams` to keep the active tab in sync with the URL).
+ * Server entry for /pricing. Calls `setRequestLocale` so server
+ * components inside Nav/Footer/PricingContent get the correct locale.
+ * PricingContent is itself a server component — the only client island
+ * is the PricingTabs switcher, which carries its own Suspense boundary
+ * for useSearchParams.
  */
 export default async function PricingPage({
   params,
@@ -16,9 +16,5 @@ export default async function PricingPage({
   const { locale } = await params;
   setRequestLocale(locale);
 
-  return (
-    <Suspense fallback={null}>
-      <PricingClient />
-    </Suspense>
-  );
+  return <PricingContent />;
 }

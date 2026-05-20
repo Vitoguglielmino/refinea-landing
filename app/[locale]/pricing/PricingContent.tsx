@@ -1,16 +1,18 @@
-"use client";
-
 /**
- * Pricing page — two tabs: For Brands (Lite + Pro cards) / For Agencies
- * (custom plan with feature grid). Tab state is synced with the URL
- * query string (?tier=agencies) so the page is deep-linkable and the
- * Agencies view is shareable.
+ * Pricing page — server component.
+ *
+ * Two tabs: For Brands (Lite + Pro cards) / For Agencies (custom plan
+ * with feature grid). The whole pricing content is server-rendered so
+ * every price, plan name and feature is in the static HTML for Google
+ * and AI crawlers. Only the tab interaction is a client island
+ * (PricingTabs), which receives both panels as props and toggles
+ * visibility while keeping the URL in sync.
  */
 
-import { useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useTranslations } from "next-intl";
+import { Suspense } from "react";
+import { getTranslations } from "next-intl/server";
 import { Favicon } from "../../components/mockups/Favicon";
+import PricingTabs from "./PricingTabs";
 
 const SALES_URL = "https://calendly.com/vito-guglielmino-refinea/30min";
 
@@ -88,9 +90,9 @@ function ModelIcons({
 }
 
 /* ─── For Brands tab content ─── */
-function ForBrands() {
-  const t = useTranslations("pricingPage.brands");
-  const tPage = useTranslations("pricingPage");
+async function ForBrands() {
+  const t = await getTranslations("pricingPage.brands");
+  const tPage = await getTranslations("pricingPage");
   return (
     <>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5 max-w-[920px] mx-auto">
@@ -282,8 +284,10 @@ const AGENCY_ROWS: { key: AgencyRowKey; value: AgencyValue }[] = [
   { key: "partnerCommunity",  value: "custom" },
 ];
 
-function CustomBadge() {
-  const t = useTranslations("pricingPage.agencies");
+// Pure presentational helpers — `t` is passed in so they work inside a
+// server component (no hook call). `customBadge` is a single label;
+// `models` receives the modelsLabel sub-namespace translator.
+function CustomBadge({ customBadge }: { customBadge: string }) {
   return (
     <span
       className="inline-flex items-center"
@@ -300,17 +304,16 @@ function CustomBadge() {
         lineHeight: 1.2,
       }}
     >
-      {t("customBadge")}
+      {customBadge}
     </span>
   );
 }
 
-function ModelsCell() {
-  const t = useTranslations("pricingPage.agencies.modelsLabel");
+function ModelsCell({ tModels }: { tModels: (key: string) => string }) {
   return (
     <div className="flex items-center gap-1.5 flex-wrap">
       {AGENCY_MODELS.map((m) => {
-        const label = t(m.key);
+        const label = tModels(m.key);
         return (
           <span
             key={m.domain}
@@ -337,8 +340,9 @@ function ModelsCell() {
   );
 }
 
-function ForAgencies() {
-  const t = useTranslations("pricingPage.agencies");
+async function ForAgencies() {
+  const t = await getTranslations("pricingPage.agencies");
+  const tModels = await getTranslations("pricingPage.agencies.modelsLabel");
   return (
     <div className="max-w-[1000px] mx-auto">
       {/* Sub-header */}
@@ -409,7 +413,11 @@ function ForAgencies() {
 
             {/* Col 2: value */}
             <div>
-              {row.value === "models" ? <ModelsCell /> : <CustomBadge />}
+              {row.value === "models" ? (
+                <ModelsCell tModels={tModels} />
+              ) : (
+                <CustomBadge customBadge={t("customBadge")} />
+              )}
             </div>
 
             {/* Col 3: description */}
@@ -426,8 +434,8 @@ function ForAgencies() {
 
 /* ─── Agency CTA block ─── rendered as a separate white section below
    the agency feature grid (only when the Agencies tab is active). */
-function AgencyCTA() {
-  const t = useTranslations("pricingPage.agencies");
+async function AgencyCTA() {
+  const t = await getTranslations("pricingPage.agencies");
   return (
     <div className="max-w-[920px] mx-auto">
       <div className="text-center py-12 px-6">
@@ -471,10 +479,32 @@ function AgencyCTA() {
 type FaqKey = "switchPlans" | "afterTrial" | "annualBilling" | "agencyPlan";
 const FAQ_KEYS: FaqKey[] = ["switchPlans", "afterTrial", "annualBilling", "agencyPlan"];
 
-function Faqs() {
-  const t = useTranslations("pricingPage.faq");
+async function Faqs() {
+  const t = await getTranslations("pricingPage.faq");
+
+  // FAQPage schema. Google retired FAQ rich results for non-gov/health
+  // sites in 2023, but FAQPage is still parsed by Google AI Overviews
+  // and Bing Copilot as a citable Q&A structure — worthwhile on a
+  // commercial page whose content is already written as questions.
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: FAQ_KEYS.map((key) => ({
+      "@type": "Question",
+      name: t(`items.${key}.q`),
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: t(`items.${key}.a`),
+      },
+    })),
+  };
+
   return (
     <div className="max-w-[760px] mx-auto">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
       <h2 className="text-black text-center mb-10">{t("title")}</h2>
       <div className="flex flex-col gap-4">
         {FAQ_KEYS.map((key) => (
@@ -513,111 +543,55 @@ function Faqs() {
   );
 }
 
-/* ─── Page ─── */
-type Tab = "brands" | "agencies";
+/* ─── Page ─── server component */
 
-export default function PricingClient() {
-  const t = useTranslations("pricingPage");
-  const router = useRouter();
-  const searchParams = useSearchParams();
+export default async function PricingContent() {
+  const t = await getTranslations("pricingPage");
 
-  // Read initial tab from URL on mount; default to "brands"
-  const initialTab: Tab =
-    searchParams.get("tier") === "agencies" ? "agencies" : "brands";
-  const [tab, setTab] = useState<Tab>(initialTab);
-
-  // Keep state in sync if the URL changes externally (e.g. browser back/forward)
-  useEffect(() => {
-    const t = searchParams.get("tier") === "agencies" ? "agencies" : "brands";
-    setTab(t);
-  }, [searchParams]);
-
-  // Update tab + URL together (no scroll, no full reload)
-  const selectTab = (next: Tab) => {
-    setTab(next);
-    const url = next === "agencies" ? "/pricing?tier=agencies" : "/pricing";
-    router.replace(url, { scroll: false });
-  };
+  // Both panels are server-rendered here and handed to the PricingTabs
+  // client island, which toggles their visibility. Every price, plan
+  // and feature is therefore in the static HTML for crawlers and AI
+  // bots; only the tab switch is client-side.
+  const brandsPanel = <ForBrands />;
+  const agenciesPanel = <ForAgencies />;
+  const agencyCta = (
+    <section className="bg-white py-16 md:py-20 border-y border-black/[0.06]">
+      <div className="mx-auto max-w-[1100px] px-4 sm:px-6">
+        <AgencyCTA />
+      </div>
+    </section>
+  );
 
   return (
     <div className="landing bg-background text-foreground min-h-screen">
-      {/* Nav is rendered by pricing/layout.tsx so it stays outside the
-          Suspense boundary required by useSearchParams below. */}
+      {/* Nav is rendered by pricing/layout.tsx. */}
       <main className="pt-28 md:pt-36">
         {/* ─── Top: header + tabs + plans (with grid) ─── */}
         <section className="section-lines pb-10 md:pb-14">
           <div className="mx-auto max-w-[1100px] px-4 sm:px-6">
             {/* Header */}
             <div className="text-center max-w-[760px] mx-auto mb-12">
-              <h1 className="text-black mb-5">
-                {t("title")}
-              </h1>
-              <p className="text-black/60 text-lg leading-relaxed mb-10">
+              <h1 className="text-black mb-5">{t("title")}</h1>
+              <p className="text-black/60 text-lg leading-relaxed">
                 {t("subtitle")}
               </p>
-
-              {/* Tabs */}
-              <div
-                role="tablist"
-                aria-label={t("tabsLabel")}
-                className="inline-flex items-center bg-white"
-                style={{
-                  padding: 4,
-                  border: "1px solid rgba(0,0,0,0.06)",
-                  borderRadius: 8,
-                  gap: 2,
-                }}
-              >
-                {(
-                  [
-                    { id: "brands" as const,   label: t("tabBrands") },
-                    { id: "agencies" as const, label: t("tabAgencies") },
-                  ]
-                ).map((tabItem) => {
-                  const active = tab === tabItem.id;
-                  return (
-                    <button
-                      key={tabItem.id}
-                      type="button"
-                      role="tab"
-                      aria-selected={active}
-                      onClick={() => selectTab(tabItem.id)}
-                      className="transition-colors"
-                      style={{
-                        padding: "8px 18px",
-                        fontSize: 14,
-                        fontWeight: 500,
-                        borderRadius: 6,
-                        color: active ? "#fff" : "rgba(0,0,0,0.55)",
-                        background: active ? "var(--accent)" : "transparent",
-                        border: "none",
-                        cursor: "pointer",
-                        lineHeight: 1.2,
-                        whiteSpace: "nowrap",
-                      }}
-                    >
-                      {tabItem.label}
-                    </button>
-                  );
-                })}
-              </div>
             </div>
 
-            {/* Tab content */}
-            <div role="tabpanel">
-              {tab === "brands" ? <ForBrands /> : <ForAgencies />}
-            </div>
+            {/* PricingTabs reads useSearchParams, which requires a
+                Suspense boundary. The server-rendered panels are passed
+                through as props and render regardless. */}
+            <Suspense fallback={null}>
+              <PricingTabs
+                tabsLabel={t("tabsLabel")}
+                brandsLabel={t("tabBrands")}
+                agenciesLabel={t("tabAgencies")}
+                brandsPanel={brandsPanel}
+                agenciesPanel={agenciesPanel}
+                agencyCta={agencyCta}
+              />
+            </Suspense>
           </div>
         </section>
-
-        {/* ─── Middle: Agency CTA (white) — only shown on Agencies tab ─── */}
-        {tab === "agencies" && (
-          <section className="bg-white py-16 md:py-20 border-y border-black/[0.06]">
-            <div className="mx-auto max-w-[1100px] px-4 sm:px-6">
-              <AgencyCTA />
-            </div>
-          </section>
-        )}
 
         {/* ─── Bottom: FAQ (no grid, neutral grey) ─── */}
         <section className="py-16 md:py-24">

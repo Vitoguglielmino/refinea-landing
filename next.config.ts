@@ -3,10 +3,12 @@ import createNextIntlPlugin from "next-intl/plugin";
 
 const withNextIntl = createNextIntlPlugin("./i18n/request.ts");
 
+// X-XSS-Protection is intentionally omitted — the header is deprecated
+// and modern browsers ignore it (some legacy implementations were
+// themselves a vulnerability). CSP is the correct replacement.
 const securityHeaders = [
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "X-Frame-Options", value: "SAMEORIGIN" },
-  { key: "X-XSS-Protection", value: "1; mode=block" },
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
   {
     key: "Permissions-Policy",
@@ -19,6 +21,19 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  // Collapse the www host into the apex domain. www.refinea.io otherwise
+  // resolves as a fully crawlable duplicate of every URL, splitting
+  // ranking signals and producing conflicting hreflang.
+  async redirects() {
+    return [
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "www.refinea.io" }],
+        destination: "https://refinea.io/:path*",
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [
       {

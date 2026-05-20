@@ -1,22 +1,36 @@
+/**
+ * Site-wide Open Graph image, served at the fixed URL /opengraph-image.
+ *
+ * Why a route handler and not the `opengraph-image.tsx` metadata file:
+ * the metadata-file convention makes Next serve the image at a hashed
+ * path (/opengraph-image-<hash>), so a hardcoded reference to
+ * "/opengraph-image" in layout.tsx and structured-data.ts 404s. A route
+ * handler binds the image to the exact, stable URL those references use.
+ *
+ * Rendered with the Node runtime so the Inter TTFs (resolved from the
+ * Google Fonts CSS API) parse reliably.
+ */
+
 import { ImageResponse } from "next/og";
 
-export const runtime = "edge";
-export const alt = "Refinea — AI Visibility Platform for GEO";
-export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-export default async function Image() {
-  const inter = await fetch(
-    new URL(
-      "https://fonts.gstatic.com/s/inter/v18/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7.woff",
-    ),
-  ).then((r) => r.arrayBuffer());
+const SIZE = { width: 1200, height: 630 };
 
-  const interBold = await fetch(
-    new URL(
-      "https://fonts.gstatic.com/s/inter/v18/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIa2JL7SUc.woff",
-    ),
-  ).then((r) => r.arrayBuffer());
+/** Inter TTF URLs from the Google Fonts CSS API — same pinned set the
+ *  blog cover generator uses. Re-resolve from
+ *  fonts.googleapis.com/css2?family=Inter:wght@400;700 if Google rotates
+ *  the v20 hashes. */
+const FONT_400 =
+  "https://fonts.gstatic.com/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfMZg.ttf";
+const FONT_700 =
+  "https://fonts.gstatic.com/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuFuYMZg.ttf";
+
+export async function GET() {
+  const [regular, bold] = await Promise.all([
+    fetch(FONT_400).then((r) => r.arrayBuffer()),
+    fetch(FONT_700).then((r) => r.arrayBuffer()),
+  ]);
 
   return new ImageResponse(
     (
@@ -83,6 +97,7 @@ export default async function Image() {
         {/* Headline */}
         <div
           style={{
+            display: "flex",
             fontSize: 76,
             fontWeight: 700,
             color: "#000",
@@ -98,6 +113,7 @@ export default async function Image() {
         {/* Subhead */}
         <div
           style={{
+            display: "flex",
             fontSize: 30,
             color: "rgba(0,0,0,0.6)",
             lineHeight: 1.35,
@@ -105,7 +121,7 @@ export default async function Image() {
             letterSpacing: "-0.01em",
           }}
         >
-          Discover what your customers ask AI — and where AI chooses your
+          Discover what your customers ask AI, and where AI chooses your
           competitors.
         </div>
 
@@ -155,11 +171,14 @@ export default async function Image() {
       </div>
     ),
     {
-      ...size,
+      ...SIZE,
       fonts: [
-        { name: "Inter", data: inter, weight: 400, style: "normal" },
-        { name: "Inter", data: interBold, weight: 700, style: "normal" },
+        { name: "Inter", data: regular, weight: 400, style: "normal" },
+        { name: "Inter", data: bold, weight: 700, style: "normal" },
       ],
+      headers: {
+        "Cache-Control": "public, immutable, no-transform, max-age=86400",
+      },
     },
   );
 }
