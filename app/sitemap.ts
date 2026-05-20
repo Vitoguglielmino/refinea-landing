@@ -84,11 +84,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
       ? [post.cover.startsWith("http") ? post.cover : `${baseUrl}${post.cover}`]
       : undefined;
 
-    // If this post has a sibling translation, emit hreflang group.
+    // If this post has a sibling translation, emit hreflang group. The
+    // pair is identified by opposite locale + identical translationKey;
+    // the slug is NOT a discriminator — translated pairs share one clean
+    // slug since the per-locale folder refactor.
     const sibling = post.translationKey
       ? posts.find(
           (p) =>
-            p.slug !== post.slug &&
             p.locale !== post.locale &&
             p.translationKey === post.translationKey,
         )
