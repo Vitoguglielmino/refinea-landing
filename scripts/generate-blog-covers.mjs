@@ -46,35 +46,66 @@ async function loadLogoDataUrl() {
  *  `author` drive the chip and byline. Keep this list in sync with
  *  content/posts/. */
 const COVERS = [
-  // ── Launch batch (May 2026) ──────────────────────────────────────
+  // ── Launch batch (May 2026) — IT ─────────────────────────────────
   {
-    file: "refinea-analysis-cover.png",
+    file: "refinea-analysis-cover-it.png",
     section: "News",
     title: "Refinea Analysis: lo standard italiano per misurare la AI Visibility",
     author: "Vito Guglielmino",
   },
   {
-    file: "geo-operational-guide-2026-cover.png",
+    file: "geo-operational-guide-2026-cover-it.png",
     section: "Guides",
     title: "Generative Engine Optimization: la guida operativa per il 2026",
     author: "Vito Guglielmino",
   },
   {
-    file: "real-customers-vs-generic-prompts-cover.png",
+    file: "real-customers-vs-generic-prompts-cover-it.png",
     section: "News",
     title: "AI Visibility per i tuoi clienti reali: perché i prompt generici falliscono",
     author: "Vito Guglielmino",
   },
   {
-    file: "llm-citation-signals-cover.png",
+    file: "llm-citation-signals-cover-it.png",
     section: "Guides",
     title: "Come gli LLM scelgono cosa citare: i sette segnali che decidono",
     author: "Giorgio Monaco",
   },
   {
-    file: "measuring-ai-visibility-cover.png",
+    file: "measuring-ai-visibility-cover-it.png",
     section: "Guides",
     title: "Misurare la AI Visibility: le metriche che contano davvero",
+    author: "Vito Guglielmino",
+  },
+  // ── Launch batch (May 2026) — EN ─────────────────────────────────
+  {
+    file: "refinea-analysis-cover-en.png",
+    section: "News",
+    title: "Introducing Refinea Analysis: the Italian standard for AI visibility",
+    author: "Vito Guglielmino",
+  },
+  {
+    file: "geo-operational-guide-2026-cover-en.png",
+    section: "Guides",
+    title: "Generative Engine Optimization: the 2026 operational guide",
+    author: "Vito Guglielmino",
+  },
+  {
+    file: "real-customers-vs-generic-prompts-cover-en.png",
+    section: "News",
+    title: "AI Visibility for your real customers: why generic prompts fail",
+    author: "Vito Guglielmino",
+  },
+  {
+    file: "llm-citation-signals-cover-en.png",
+    section: "Guides",
+    title: "How LLMs choose what to cite: the seven signals that decide",
+    author: "Giorgio Monaco",
+  },
+  {
+    file: "measuring-ai-visibility-cover-en.png",
+    section: "Guides",
+    title: "Measuring AI Visibility: the metrics that actually matter",
     author: "Vito Guglielmino",
   },
   // ── Earlier articles — re-covered for visual consistency ─────────
