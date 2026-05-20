@@ -700,6 +700,120 @@ const block = "di codice";
           />
         </Section>
 
+        {/* ──────────────── 6.5 Cover images ────────── */}
+        <Section
+          id="covers"
+          title="6.5 Le immagini di copertina (OG image)"
+          eyebrow="Cover"
+        >
+          <p>
+            Ogni articolo ha bisogno di una cover: è l&apos;immagine che
+            appare sulla card del blog, nell&apos;header dell&apos;articolo,
+            e soprattutto nella preview quando il link viene condiviso su
+            LinkedIn, WhatsApp o X. Senza cover l&apos;articolo perde i
+            rich result Article di Google e la preview social è vuota.
+          </p>
+          <p>
+            Le cover non si disegnano a mano. Un generatore le produce in
+            automatico, tutte nello stesso stile brand, leggendo il titolo
+            direttamente dal post.
+          </p>
+
+          <h3>6.5.1 Il flusso in tre passi</h3>
+          <ol>
+            <li>
+              Nel frontmatter del post, imposta il campo{" "}
+              <Code>cover</Code> con un path del tipo{" "}
+              <Code>/blog/&lt;nome&gt;.png</Code>. Convenzione: usa lo slug
+              del post più <Code>-cover</Code>, e per gli articoli che
+              esistono in due lingue aggiungi <Code>-it</Code> o{" "}
+              <Code>-en</Code>. Esempio:{" "}
+              <Code>/blog/come-llm-citano-cover-it.png</Code> e{" "}
+              <Code>/blog/how-llms-cite-cover-en.png</Code>.
+            </li>
+            <li>
+              Da terminale, nella cartella del progetto, lancia{" "}
+              <Code>npm run covers</Code>.
+            </li>
+            <li>
+              Fai commit dei PNG generati in <Code>public/blog/</Code>{" "}
+              insieme al post.
+            </li>
+          </ol>
+
+          <h3>6.5.2 Cosa fa il generatore</h3>
+          <p>
+            Il comando <Code>npm run covers</Code> esegue{" "}
+            <Code>scripts/generate-blog-covers.mjs</Code>. Lo script:
+          </p>
+          <ul>
+            <li>
+              Scansiona <Strong>tutti</Strong> i file in{" "}
+              <Code>content/posts/</Code>
+            </li>
+            <li>
+              Legge da ciascuno <Code>title</Code>, <Code>section</Code>,{" "}
+              <Code>author</Code>, <Code>cover</Code> dal frontmatter
+            </li>
+            <li>
+              Genera una cover 1600×900 PNG per ogni post che ha un campo{" "}
+              <Code>cover</Code> puntato a un path locale{" "}
+              <Code>/blog/....png</Code>
+            </li>
+            <li>
+              Salta i post senza <Code>cover</Code> e lo segnala a schermo
+            </li>
+          </ul>
+          <p>
+            Il punto chiave: <Strong>il titolo della cover viene preso
+            dal post stesso</Strong>. Un post italiano produce una cover
+            con titolo italiano, un post inglese una con titolo inglese.
+            Non devi fare nulla per la lingua, è automatico. Se hai una
+            coppia tradotta, hai due post MDX distinti con due campi{" "}
+            <Code>cover</Code> distinti, e lo script genera le due
+            immagini nelle due lingue da solo.
+          </p>
+
+          <h3>6.5.3 Quando rilanciare il comando</h3>
+          <ul>
+            <li>
+              <Strong>Nuovo articolo</Strong>: dopo aver scritto il post
+              con il suo campo <Code>cover</Code>
+            </li>
+            <li>
+              <Strong>Titolo modificato</Strong>: la cover mostra il
+              titolo, quindi va rigenerata se cambi il titolo del post
+            </li>
+            <li>
+              <Strong>Sezione o autore cambiati</Strong>: il chip e la
+              byline derivano da quei campi
+            </li>
+          </ul>
+          <p>
+            Il generatore è deterministico: se rilanci senza aver
+            cambiato nulla, riproduce file identici. Rilanciarlo non fa
+            mai danni.
+          </p>
+
+          <Callout tone="info">
+            <Strong>Stile delle cover.</Strong> Tutte le cover usano lo
+            stesso template &ldquo;editorial minimal&rdquo;: sfondo grigio
+            con la griglia Refinea, logo del brand, chip della sezione,
+            titolo grande, byline autore. È voluto — la coerenza visiva
+            tra tutte le cover è un segnale di brand solido. Non servono
+            foto stock.
+          </Callout>
+
+          <Callout tone="warn">
+            <Strong>Il generatore gira in locale, non in produzione.</Strong>{" "}
+            Le cover sono asset versionati: vanno committati in Git come
+            qualsiasi altro file. Non vengono rigenerate al deploy. Questo
+            è voluto — un URL immagine stabile significa cache pulita su
+            CDN e social, e un deploy che non dipende da servizi esterni
+            (font, logo) per andare a buon fine.
+          </Callout>
+        </Section>
+
         {/* ──────────────── 7. Publish flow ────────── */}
         <Section id="publish" title="7. Pubblicazione — cosa succede" eyebrow="Click su publish">
           <p>
@@ -966,6 +1080,7 @@ function Toc() {
     ["body", "Scrivere il body"],
     ["translation", "Workflow di traduzione"],
     ["recipes", "Ricette per tipo di articolo"],
+    ["covers", "Immagini di copertina (OG)"],
     ["publish", "Cosa succede al publish"],
     ["edit-delete", "Modificare ed eliminare"],
     ["seo-checks", "Checklist SEO"],

@@ -1,37 +1,63 @@
 /**
- * Blog cover generator — one-shot script.
+ * Blog cover generator — auto-discovery.
  *
- * Renders the 5 launch-article cover images as static 1600x900 PNGs into
- * public/blog/. "Editorial minimal" style: light grey background with the
- * Refinea square grid, brand mark, section chip, large title, author byline.
+ * Scans content/posts/, reads each post's frontmatter, and renders an
+ * Open Graph cover image for every post that declares a `cover:` field
+ * pointing at /blog/<name>.png. Title, section and author come straight
+ * from the MDX frontmatter, so the cover always matches the published
+ * article — including its language (an Italian post gets an Italian
+ * cover, an English post an English one, automatically).
  *
- * Run with:  node scripts/generate-blog-covers.mjs
+ * Style: "editorial minimal" — light grey background with the Refinea
+ * square grid, the brand logo, a section chip, a large title, and the
+ * author byline. 1600x900 PNG.
  *
- * Re-run any time the title/section/author of an article changes. The
- * output is deterministic, so re-running produces byte-identical files
- * unless inputs change.
+ * Run:  npm run covers
+ *
+ * The output is deterministic: re-running produces byte-identical files
+ * unless a post's title/section/author changes. Commit the regenerated
+ * PNGs alongside the post — covers are versioned assets, not build
+ * artifacts (stable URLs => clean social/CDN caching).
  */
 
-// ESM needs the explicit file path — "next/og" alone resolves only
-// under the Next bundler, not plain Node.
 import { ImageResponse } from "next/og.js";
-import { readFile, writeFile, mkdir } from "node:fs/promises";
+import { readFile, readdir, writeFile, mkdir } from "node:fs/promises";
 import { join } from "node:path";
+import matter from "gray-matter";
 import sharp from "sharp";
 
-const OUT_DIR = join(process.cwd(), "public", "blog");
-const LOGO_SVG = join(process.cwd(), "public", "logos", "refinea viola.svg");
+const ROOT = process.cwd();
+const POSTS_DIR = join(ROOT, "content", "posts");
+const OUT_DIR = join(ROOT, "public", "blog");
+const LOGO_SVG = join(ROOT, "public", "logos", "refinea viola.svg");
+
 const W = 1600;
 const H = 900;
 const ACCENT = "#6c47ff";
 const BG = "#f5f6f7";
-/** On-screen logo height inside the cover, in cover px. */
 const LOGO_H = 52;
 
+/** Maps a frontmatter `section` slug to the label shown on the chip. */
+const SECTION_LABEL = {
+  product: "Product",
+  news: "News",
+  guides: "Guides",
+  glossary: "Glossary",
+};
+
+/** Maps a frontmatter `author` slug to the display name on the byline.
+ *  Keep in sync with lib/authors.ts. */
+const AUTHOR_NAME = {
+  vito: "Vito Guglielmino",
+  giorgio: "Giorgio Monaco",
+};
+
+/* ─── Logo ───────────────────────────────────────────────────────────── */
+
 /** satori (the ImageResponse engine) cannot render the brand SVG — it
- *  uses <filter>/<mask>/feColorMatrix which satori does not support.
- *  So we rasterize the SVG to a PNG with sharp and embed it as a
- *  data URL. Rendered at 3x for crisp downscaling. */
+ *  uses <filter>/<mask>/feColorMatrix, none of which satori supports.
+ *  We rasterize the SVG to PNG with sharp (3x for crisp downscaling)
+ *  and embed it as a data URL. */
 async function loadLogoDataUrl() {
   const svg = await readFile(LOGO_SVG);
   const png = await sharp(svg)
@@ -41,97 +67,11 @@ async function loadLogoDataUrl() {
   return `data:image/png;base64,${png.toString("base64")}`;
 }
 
-/** Every article that needs a generated cover. `file` is the exact name
- *  referenced by each MDX frontmatter `cover:` field. `section` and
- *  `author` drive the chip and byline. Keep this list in sync with
- *  content/posts/. */
-const COVERS = [
-  // ── Launch batch (May 2026) — IT ─────────────────────────────────
-  {
-    file: "refinea-analysis-cover-it.png",
-    section: "News",
-    title: "Refinea Analysis: lo standard italiano per misurare la AI Visibility",
-    author: "Vito Guglielmino",
-  },
-  {
-    file: "geo-operational-guide-2026-cover-it.png",
-    section: "Guides",
-    title: "Generative Engine Optimization: la guida operativa per il 2026",
-    author: "Vito Guglielmino",
-  },
-  {
-    file: "real-customers-vs-generic-prompts-cover-it.png",
-    section: "News",
-    title: "AI Visibility per i tuoi clienti reali: perché i prompt generici falliscono",
-    author: "Vito Guglielmino",
-  },
-  {
-    file: "llm-citation-signals-cover-it.png",
-    section: "Guides",
-    title: "Come gli LLM scelgono cosa citare: i sette segnali che decidono",
-    author: "Giorgio Monaco",
-  },
-  {
-    file: "measuring-ai-visibility-cover-it.png",
-    section: "Guides",
-    title: "Misurare la AI Visibility: le metriche che contano davvero",
-    author: "Vito Guglielmino",
-  },
-  // ── Launch batch (May 2026) — EN ─────────────────────────────────
-  {
-    file: "refinea-analysis-cover-en.png",
-    section: "News",
-    title: "Introducing Refinea Analysis: the Italian standard for AI visibility",
-    author: "Vito Guglielmino",
-  },
-  {
-    file: "geo-operational-guide-2026-cover-en.png",
-    section: "Guides",
-    title: "Generative Engine Optimization: the 2026 operational guide",
-    author: "Vito Guglielmino",
-  },
-  {
-    file: "real-customers-vs-generic-prompts-cover-en.png",
-    section: "News",
-    title: "AI Visibility for your real customers: why generic prompts fail",
-    author: "Vito Guglielmino",
-  },
-  {
-    file: "llm-citation-signals-cover-en.png",
-    section: "Guides",
-    title: "How LLMs choose what to cite: the seven signals that decide",
-    author: "Giorgio Monaco",
-  },
-  {
-    file: "measuring-ai-visibility-cover-en.png",
-    section: "Guides",
-    title: "Measuring AI Visibility: the metrics that actually matter",
-    author: "Vito Guglielmino",
-  },
-  // ── Earlier articles — re-covered for visual consistency ─────────
-  {
-    file: "what-is-geo-cover.png",
-    section: "Guides",
-    title: "What Is Generative Engine Optimization (GEO)?",
-    author: "Vito Guglielmino",
-  },
-  {
-    file: "geo-vs-seo-cover.png",
-    section: "News",
-    title: "GEO vs SEO: Key Differences Explained",
-    author: "Vito Guglielmino",
-  },
-  {
-    file: "servizi-geo-italia-cover.png",
-    section: "Guides",
-    title: "Servizi GEO in Italia: Guida Completa 2026",
-    author: "Vito Guglielmino",
-  },
-];
+/* ─── Fonts ──────────────────────────────────────────────────────────── */
 
 /** Inter TTF URLs resolved from the Google Fonts CSS API (the default
- *  UA returns truetype, which @vercel/og parses). Pinned here so the
- *  build is reproducible — re-resolve from
+ *  UA returns truetype, which @vercel/og parses). Pinned for a
+ *  reproducible build — re-resolve from
  *  fonts.googleapis.com/css2?family=Inter:wght@400;600;700 if Google
  *  ever rotates the v20 hashes. */
 const FONT_URLS = {
@@ -141,7 +81,7 @@ const FONT_URLS = {
 };
 
 async function loadFonts() {
-  const entries = await Promise.all(
+  return Promise.all(
     Object.entries(FONT_URLS).map(async ([weight, url]) => {
       const res = await fetch(url);
       if (!res.ok) {
@@ -155,8 +95,51 @@ async function loadFonts() {
       };
     }),
   );
-  return entries;
 }
+
+/* ─── Post discovery ─────────────────────────────────────────────────── */
+
+/**
+ * Reads every .mdx in content/posts/ and returns the covers to render.
+ * A post contributes a cover only when its frontmatter `cover:` points
+ * at a local /blog/<name>.png path. Posts without a cover, or pointing
+ * at an external/non-png path, are skipped (logged).
+ */
+async function discoverCovers() {
+  const files = (await readdir(POSTS_DIR)).filter((f) => f.endsWith(".mdx"));
+  const covers = [];
+  const skipped = [];
+
+  for (const filename of files) {
+    const raw = await readFile(join(POSTS_DIR, filename), "utf-8");
+    const { data } = matter(raw);
+    const slug = filename.replace(/\.mdx$/, "");
+
+    const cover = typeof data.cover === "string" ? data.cover.trim() : "";
+    if (!cover.startsWith("/blog/") || !cover.endsWith(".png")) {
+      skipped.push({ slug, reason: cover ? `non-local cover (${cover})` : "no cover field" });
+      continue;
+    }
+
+    const title = typeof data.title === "string" ? data.title.trim() : "";
+    if (!title) {
+      skipped.push({ slug, reason: "missing title" });
+      continue;
+    }
+
+    covers.push({
+      // Strip the /blog/ prefix — OUT_DIR already is public/blog.
+      file: cover.slice("/blog/".length),
+      title,
+      section: SECTION_LABEL[data.section] ?? "Article",
+      author: AUTHOR_NAME[data.author] ?? "Refinea",
+    });
+  }
+
+  return { covers, skipped };
+}
+
+/* ─── Cover element ──────────────────────────────────────────────────── */
 
 function CoverElement({ section, title, author, logoDataUrl }) {
   return {
@@ -176,7 +159,7 @@ function CoverElement({ section, title, author, logoDataUrl }) {
         fontFamily: "Inter",
       },
       children: [
-        // Top row: brand mark + section chip
+        // Top row: logo + section chip
         {
           type: "div",
           props: {
@@ -291,25 +274,34 @@ function CoverElement({ section, title, author, logoDataUrl }) {
   };
 }
 
+/* ─── Main ───────────────────────────────────────────────────────────── */
+
 async function main() {
-  const [fonts, logoDataUrl] = await Promise.all([
+  const [fonts, logoDataUrl, discovery] = await Promise.all([
     loadFonts(),
     loadLogoDataUrl(),
+    discoverCovers(),
   ]);
   await mkdir(OUT_DIR, { recursive: true });
 
-  for (const cover of COVERS) {
+  const { covers, skipped } = discovery;
+
+  for (const cover of covers) {
     const img = new ImageResponse(CoverElement({ ...cover, logoDataUrl }), {
       width: W,
       height: H,
       fonts,
     });
     const buf = Buffer.from(await img.arrayBuffer());
-    const outPath = join(OUT_DIR, cover.file);
-    await writeFile(outPath, buf);
+    await writeFile(join(OUT_DIR, cover.file), buf);
     console.log(`✓ ${cover.file}  (${(buf.length / 1024).toFixed(0)} KB)`);
   }
-  console.log(`\nDone — ${COVERS.length} covers written to public/blog/`);
+
+  if (skipped.length > 0) {
+    console.log("\nSkipped:");
+    for (const s of skipped) console.log(`  · ${s.slug} — ${s.reason}`);
+  }
+  console.log(`\nDone — ${covers.length} covers written to public/blog/`);
 }
 
 main().catch((err) => {
