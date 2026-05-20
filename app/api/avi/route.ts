@@ -7,15 +7,18 @@
  * so the route handler injects the auth header and returns the JSON
  * verbatim.
  *
- * Caching matches the page-level ISR: 24h. Every `(slug, days)`
- * combination is its own cache key on Vercel's edge — first user pays
- * the latency, everyone else hits the cache.
+ * Caching: the heavy 24h cache lives on the upstream `fetch` inside
+ * `getAviForIndustry` (tagged `avi-data`, so POST /api/revalidate can
+ * flush it on demand). This handler itself only revalidates hourly —
+ * it is a thin proxy, cheap to re-run, and a short window here means a
+ * tag flush is reflected to clients quickly instead of being masked by
+ * a stale 24h route response.
  */
 import { NextRequest, NextResponse } from "next/server";
 import { getAviForIndustry } from "@/lib/marketing-api";
 import { getIndustry } from "@/lib/industries";
 
-export const revalidate = 86400;
+export const revalidate = 3600;
 
 export async function GET(req: NextRequest) {
   const slug = req.nextUrl.searchParams.get("slug");

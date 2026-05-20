@@ -146,7 +146,10 @@ export async function getAviForIndustry(
     const res = await fetch(url.toString(), {
       headers: { "X-API-Key": key },
       // Daily refresh cadence — matches the Cloud Run job at 03:00 UTC.
-      next: { revalidate: 86400 },
+      // The `avi-data` tag lets POST /api/revalidate flush this cache on
+      // demand (e.g. after a dictionary/leaderboard correction) without
+      // waiting out the 24h window or redeploying.
+      next: { revalidate: 86400, tags: ["avi-data"] },
     });
     if (!res.ok) {
       console.error(
