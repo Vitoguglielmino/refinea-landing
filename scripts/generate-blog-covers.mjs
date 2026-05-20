@@ -15,14 +15,31 @@
 // ESM needs the explicit file path — "next/og" alone resolves only
 // under the Next bundler, not plain Node.
 import { ImageResponse } from "next/og.js";
-import { writeFile, mkdir } from "node:fs/promises";
+import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { join } from "node:path";
+import sharp from "sharp";
 
 const OUT_DIR = join(process.cwd(), "public", "blog");
+const LOGO_SVG = join(process.cwd(), "public", "logos", "refinea viola.svg");
 const W = 1600;
 const H = 900;
 const ACCENT = "#6c47ff";
 const BG = "#f5f6f7";
+/** On-screen logo height inside the cover, in cover px. */
+const LOGO_H = 52;
+
+/** satori (the ImageResponse engine) cannot render the brand SVG — it
+ *  uses <filter>/<mask>/feColorMatrix which satori does not support.
+ *  So we rasterize the SVG to a PNG with sharp and embed it as a
+ *  data URL. Rendered at 3x for crisp downscaling. */
+async function loadLogoDataUrl() {
+  const svg = await readFile(LOGO_SVG);
+  const png = await sharp(svg)
+    .resize({ height: LOGO_H * 3 })
+    .png()
+    .toBuffer();
+  return `data:image/png;base64,${png.toString("base64")}`;
+}
 
 /** Every article that needs a generated cover. `file` is the exact name
  *  referenced by each MDX frontmatter `cover:` field. `section` and
@@ -110,7 +127,7 @@ async function loadFonts() {
   return entries;
 }
 
-function CoverElement({ section, title, author }) {
+function CoverElement({ section, title, author, logoDataUrl }) {
   return {
     type: "div",
     props: {
@@ -141,24 +158,14 @@ function CoverElement({ section, title, author }) {
               {
                 type: "div",
                 props: {
-                  style: { display: "flex", alignItems: "center", gap: 16 },
+                  style: { display: "flex", alignItems: "center", gap: 10 },
                   children: [
                     {
-                      type: "div",
+                      type: "img",
                       props: {
-                        style: {
-                          width: 52,
-                          height: 52,
-                          borderRadius: 13,
-                          background: ACCENT,
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          color: "#fff",
-                          fontSize: 30,
-                          fontWeight: 700,
-                        },
-                        children: "R",
+                        src: logoDataUrl,
+                        height: LOGO_H,
+                        style: { height: LOGO_H, objectFit: "contain" },
                       },
                     },
                     {
@@ -254,11 +261,14 @@ function CoverElement({ section, title, author }) {
 }
 
 async function main() {
-  const fonts = await loadFonts();
+  const [fonts, logoDataUrl] = await Promise.all([
+    loadFonts(),
+    loadLogoDataUrl(),
+  ]);
   await mkdir(OUT_DIR, { recursive: true });
 
   for (const cover of COVERS) {
-    const img = new ImageResponse(CoverElement(cover), {
+    const img = new ImageResponse(CoverElement({ ...cover, logoDataUrl }), {
       width: W,
       height: H,
       fonts,
