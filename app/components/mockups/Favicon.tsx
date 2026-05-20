@@ -82,6 +82,17 @@ export function Favicon({
       width={size}
       height={size}
       loading="lazy"
+      onLoad={(e) => {
+        // Google's s2 service returns HTTP 200 with a generic 16x16 grey
+        // globe when it has no favicon for a domain. That never triggers
+        // onError, so it would render as-is. We requested sz=128, so a
+        // real icon comes back >=64px; anything <=16px is the globe —
+        // treat it as a miss and fall through to the next source.
+        const img = e.currentTarget;
+        if (sourceIdx === 0 && img.naturalWidth > 0 && img.naturalWidth <= 16) {
+          setSourceIdx(1);
+        }
+      }}
       onError={() => {
         if (sourceIdx < SOURCES.length - 1) {
           setSourceIdx(sourceIdx + 1);
