@@ -836,9 +836,8 @@ const block = "di codice";
               Quando la rebuild finisce, il post è online al suo URL.
             </li>
             <li>
-              <Code>sitemap.xml</Code>, <Code>news-sitemap.xml</Code>,{" "}
-              <Code>/blog/feed.xml</Code>, hub page section/topic/author si
-              rigenerano in automatico.
+              <Code>sitemap.xml</Code>, <Code>/blog/feed.xml</Code>, hub page
+              section/topic/author si rigenerano in automatico.
             </li>
             <li>
               <Code>IndexNow</Code> pinga Bing e Yandex sul nuovo URL.
