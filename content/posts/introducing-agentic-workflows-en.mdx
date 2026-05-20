@@ -1,0 +1,72 @@
+---
+title: "Introducing Agentic Workflows: the AI visibility audits that work for you"
+description: "Refinea's Agentic Workflows analyze a page the way an AI engine reads it. Ready-made audits for crawlability, structured data and content quality, plus your own."
+date: "2026-05-20"
+section: "product"
+topics:
+  - "generative-engine-optimization"
+  - "ai-search-strategy"
+author: "giorgio"
+reviewCycle: "evergreen"
+locale: "en"
+cover: "/blog/introducing-agentic-workflows-cover-en.png"
+translationKey: "introducing-agentic-workflows"
+---
+
+Starting today, Refinea includes Agentic Workflows: analysis routines that examine a page on your site exactly the way an AI engine reads it, tell you what is keeping it out of AI answers, and hand you the fix list in priority order. They are the bridge between knowing you have a visibility problem and solving it.
+
+AI visibility diagnosis tells you where you are invisible. It does not tell you why, and it does not tell you what to do. Agentic Workflows close that gap. Each workflow takes a URL, analyzes it in depth along one precise dimension, and returns an actionable report instead of one more metric to interpret.
+
+## Why an "agentic" audit and not a check
+
+The word agentic is not decoration. A traditional check runs one test and returns a value. An Agentic Workflow is different: it is a chain of steps, some deterministic and some run by a language model, working in coordination to produce a judgment.
+
+Each workflow is structured as a graph of nodes. Every node is a step in the analysis: it measures one specific thing, or it reasons over what the previous nodes measured. Nodes that do not depend on each other run in parallel, so a full audit finishes quickly even when it contains many checks. The final node is almost always a synthesis node: a language model reads all the raw results and turns them into a score, a list of critical issues, and a list of quick wins.
+
+This is the point. A check tells you "your TTFB is 1.8 seconds." An Agentic Workflow tells you "three of the six crawlability factors are below threshold, the most urgent is JavaScript rendering hiding 40% of the content from crawlers that do not run the script, and here is how to fix it." The difference is between a data point and a decision.
+
+## The ready-made workflows
+
+Refinea includes four pre-built workflows, each dedicated to a dimension that decides whether an AI engine can see you, understand you, and cite you.
+
+### Crawlability and infrastructure
+
+The first gate is technical. An AI engine cannot cite a page its crawler cannot read. This workflow checks the layer between your site and the bots that power AI search.
+
+It checks robots.txt rules for AI crawlers like GPTBot, ClaudeBot, PerplexityBot, and Google-Extended. It measures server response speed by querying it the way those bots would. It checks how much content is lost when the page is read without running JavaScript, because some crawlers do not run it. It checks the consistency of canonical, sitemap, and hreflang. The synthesis node gathers everything into a 0-to-100 score, with critical issues and quick wins kept separate.
+
+### Structured data and knowledge graph
+
+AI engines use structured data to understand who you are. A page with no schema, or with the wrong schema, forces the model to guess. This workflow reads the page's JSON-LD, validates its syntax and required properties, classifies the page type, and identifies which schemas are missing. It also checks `sameAs` links to trust nodes like Wikipedia and LinkedIn, which help AI disambiguate your brand. The final node generates the correct schema, ready to paste.
+
+### Content quality for GEO
+
+A page can be technically perfect and still not get cited, because the way it is written does not make it citable. This workflow evaluates the page the way an AI engine evaluates it.
+
+It checks whether the direct answer is present in the opening lines, following the BLUF pattern. It measures block structure and heading hierarchy. It measures named-entity density. It checks for authority signals: quantitative data, expert citations, primary sources. It checks freshness and author attribution. The synthesis node returns a report indicating, section by section, where the content is weak and how to rewrite it.
+
+### Search Query Fan-Out
+
+When a user asks an AI engine a question, the model does not run a single search. It expands it into multiple sub-queries to cover the intent space before building the answer. This workflow reconstructs the sub-queries that form around your prompts, checks how well your domain covers them, and produces a priority-ranked list of the opportunities you are leaving uncovered.
+
+We described the theory behind this workflow in our guide on [how LLMs choose what to cite](/blog/how-llms-choose-citations-seven-signals).
+
+## The workflows you build yourself
+
+The four pre-built workflows cover the universal dimensions of AI visibility. But every company has its own process, and the real value of Agentic Workflows is that you can build your own.
+
+You compose a workflow by chaining the nodes you need in the order you need them. You connect it to your integrations, so the audit works on your real data and not on a generic sample. A connected Google Search Console brings your domain's actual search queries into the workflow. A WordPress connection lets the workflow read and act on your CMS. A workflow you build could, for example, take your twenty highest-volume queries from Search Console, check for each one how your page is structured, and return an editorial plan tailored to your real traffic.
+
+This turns Agentic Workflows from a diagnostic tool into operational infrastructure. You stop adapting your process to the tool. The tool adapts to your process.
+
+## How they fit into the rest of Refinea
+
+Agentic Workflows are the action layer. AI visibility diagnosis tells you a competitor is overtaking you on a cluster of prompts. A content quality workflow on the relevant pages tells you why, and what to rewrite. The full strategic frame, from how to measure to how to optimize, is in our [operational guide to Generative Engine Optimization](/blog/generative-engine-optimization-operational-guide-2026).
+
+A workflow never changes your site on its own. It tells you what to change, in priority order, with the precision of something that read the page the way an AI engine reads it. The decision stays yours, but you make it with the right data in front of you.
+
+## What changes today
+
+With Agentic Workflows active, the distance between "I know I have a problem" and "I have the fix list" is measured in the time of an audit. The four pre-built workflows cover crawlability, structured data, content quality, and query fan-out. The workflows you build yourself cover everything else, on your data, through your integrations.
+
+Agentic Workflows are available today on every Refinea plan. If you want to see the first audit run on your site, [start here](https://platform.refinea.io).

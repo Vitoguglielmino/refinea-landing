@@ -1,0 +1,72 @@
+---
+title: "Introducing Agentic Workflows: gli audit di AI visibility che lavorano per te"
+description: "Gli Agentic Workflows di Refinea analizzano una pagina come la legge un AI engine. Audit pronti su crawlability, dati strutturati e qualità, più i tuoi."
+date: "2026-05-20"
+section: "product"
+topics:
+  - "generative-engine-optimization"
+  - "ai-search-strategy"
+author: "giorgio"
+reviewCycle: "evergreen"
+locale: "it"
+cover: "/blog/introducing-agentic-workflows-cover-it.png"
+translationKey: "introducing-agentic-workflows"
+---
+
+Da oggi Refinea include gli Agentic Workflows: routine di analisi che esaminano una pagina del tuo sito esattamente come la legge un AI engine, ti dicono cosa la tiene fuori dalle risposte AI e ti danno la lista delle correzioni in ordine di priorità. Sono il ponte tra il sapere che hai un problema di visibilità e il risolverlo.
+
+La diagnosi della AI visibility ti dice dove sei invisibile. Non ti dice perché, e non ti dice cosa fare. Gli Agentic Workflows colmano quel divario. Ogni workflow prende una URL, la analizza in profondità su una dimensione precisa, e restituisce un report azionabile invece di un'altra metrica da interpretare.
+
+## Perché un audit "agentico" e non un check
+
+La parola agentico non è decorazione. Un check tradizionale esegue un controllo e restituisce un valore. Un Agentic Workflow è diverso: è una catena di passaggi, alcuni deterministici e altri condotti da un modello linguistico, che lavorano in coordinamento per produrre un giudizio.
+
+Ogni workflow è strutturato come un grafo di nodi. Ogni nodo è un passaggio dell'analisi: misura una cosa specifica, oppure ragiona su quello che i nodi precedenti hanno misurato. I nodi che non dipendono l'uno dall'altro vengono eseguiti in parallelo, così l'audit completo si chiude in fretta anche quando comprende molti controlli. L'ultimo nodo è quasi sempre un nodo di sintesi: un modello linguistico legge tutti i risultati grezzi e li trasforma in un punteggio, una lista di problemi critici e una lista di interventi rapidi.
+
+Questo è il punto. Un check ti dice "il tuo TTFB è 1,8 secondi". Un Agentic Workflow ti dice "tre dei sei fattori di crawlability sono sotto soglia, il più urgente è il rendering JavaScript che nasconde il 40% del contenuto ai crawler che non eseguono lo script, ed ecco come sistemarlo". La differenza è tra un dato e una decisione.
+
+## I workflow pronti all'uso
+
+Refinea include quattro workflow già costruiti, ognuno dedicato a una dimensione che decide se un AI engine può vederti, capirti e citarti.
+
+### Crawlability e infrastruttura
+
+Il primo cancello è tecnico. Un AI engine non può citare una pagina che il suo crawler non riesce a leggere. Questo workflow verifica lo strato tra il tuo sito e i bot che alimentano la AI search.
+
+Controlla le regole di robots.txt per i crawler AI come GPTBot, ClaudeBot, PerplexityBot e Google-Extended. Misura la velocità di risposta del server interrogandolo come farebbero quei bot. Verifica quanto contenuto si perde quando la pagina viene letta senza eseguire JavaScript, perché alcuni crawler non lo eseguono. Controlla la coerenza di canonical, sitemap e hreflang. Il nodo di sintesi raccoglie tutto in un punteggio da 0 a 100, con i problemi critici e i quick win separati.
+
+### Dati strutturati e knowledge graph
+
+Gli AI engine usano i dati strutturati per capire chi sei. Una pagina senza schema, o con schema sbagliato, costringe il modello a indovinare. Questo workflow legge il JSON-LD della pagina, ne valida la sintassi e le proprietà obbligatorie, classifica il tipo di pagina e identifica quali schema mancano. Verifica anche i link `sameAs` verso i nodi di fiducia come Wikipedia e LinkedIn, che aiutano l'AI a disambiguare il tuo brand. L'ultimo nodo genera lo schema corretto, pronto da incollare.
+
+### Qualità del contenuto per la GEO
+
+Una pagina può essere tecnicamente perfetta e comunque non venire citata, perché il modo in cui è scritta non la rende citabile. Questo workflow valuta la pagina come la valuta un AI engine.
+
+Verifica se la risposta diretta è presente nelle prime righe, secondo il pattern BLUF. Misura la struttura a blocchi e la gerarchia dei titoli. Misura la densità di entità nominate. Controlla la presenza di segnali di autorevolezza: dati quantitativi, citazioni di esperti, fonti primarie. Verifica freschezza e attribuzione dell'autore. Il nodo di sintesi restituisce un report che indica, sezione per sezione, dove il contenuto è debole e come riscriverlo.
+
+### Search Query Fan-Out
+
+Quando un utente fa una domanda a un AI engine, il modello non esegue una sola ricerca. La espande in più sotto-query per coprire lo spazio di intento prima di costruire la risposta. Questo workflow ricostruisce le sotto-query che si generano attorno ai tuoi prompt, verifica quanto il tuo dominio le copre, e produce una lista priorizzata delle opportunità che stai lasciando scoperte.
+
+Il quadro teorico dietro questo workflow lo abbiamo descritto nella nostra guida su [come gli LLM scelgono cosa citare](/blog/come-llm-scelgono-citazioni-sette-segnali).
+
+## I workflow che costruisci tu
+
+I quattro workflow pronti coprono le dimensioni universali della AI visibility. Ma ogni azienda ha un processo suo, e il vero valore degli Agentic Workflows è che puoi costruirne di tuoi.
+
+Componi un workflow concatenando i nodi che ti servono nell'ordine che ti serve. Lo colleghi alle tue integrazioni, così l'audit lavora sui tuoi dati reali e non su un campione generico. La Google Search Console connessa porta dentro il workflow le query di ricerca effettive del tuo dominio. La connessione a WordPress permette al workflow di leggere e agire sul tuo CMS. Un audit costruito da te può, ad esempio, prendere le tue venti query a più alto volume da Search Console, controllare per ognuna come la tua pagina è strutturata, e restituirti un piano editoriale su misura per il tuo traffico reale.
+
+Questo trasforma gli Agentic Workflows da strumento di diagnosi a infrastruttura operativa. Smetti di adattare il tuo processo al tool. È il tool che si adatta al tuo processo.
+
+## Come si inseriscono nel resto di Refinea
+
+Gli Agentic Workflows sono il livello dell'azione. La diagnosi di AI visibility ti dice che un competitor ti sta superando su un cluster di prompt. Un workflow di qualità del contenuto sulle pagine rilevanti ti dice perché, e cosa riscrivere. Il quadro strategico completo, da come misurare a come ottimizzare, è nella nostra [guida operativa alla Generative Engine Optimization](/blog/generative-engine-optimization-guida-operativa-2026).
+
+Un workflow non cambia mai il tuo sito da solo. Ti dice cosa cambiare, in ordine di priorità, con la precisione di chi ha letto la pagina come la legge un AI engine. La decisione resta tua, ma la prendi con i dati giusti davanti.
+
+## Cosa cambia da oggi
+
+Con gli Agentic Workflows attivi, la distanza tra "so di avere un problema" e "ho la lista delle correzioni" si misura nel tempo di un audit. I quattro workflow pronti coprono crawlability, dati strutturati, qualità del contenuto e fan-out delle query. I workflow che costruisci tu coprono tutto il resto, sui tuoi dati, attraverso le tue integrazioni.
+
+Gli Agentic Workflows sono disponibili da oggi su tutti i piani Refinea. Se vuoi vedere il primo audit girare sul tuo sito, [parti da qui](https://platform.refinea.io).
