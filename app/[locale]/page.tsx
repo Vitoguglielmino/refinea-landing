@@ -199,11 +199,11 @@ export default async function Home({
             {[...Array(2)].flatMap((_, copy) =>
               [
                 { name: "Seoleader",              src: "/logos/seoleader.png",     href: "https://seoleader.digital",       w: 2529, h: 353, scale: 1.0  },
-                { name: "Omnigraf",               src: "/logos/omnigraf.png",      href: "https://omnigraf.it",             w: 1039, h: 258, scale: 1.0  },
+                { name: "Omnigraf",               src: "/logos/omnigraf.png",      href: "https://www.omnigrafitalia.it/",  w: 1039, h: 258, scale: 1.0  },
                 { name: "StoryWalking",           src: "/logos/storywalking.png",  href: "https://storywalking.tours",      w: 800,  h: 150, scale: 1.0  },
                 { name: "Fabio Antichi",          src: "/logos/fabio-antichi.png", href: "https://www.fabioantichi.it/",    w: 676,  h: 94,  scale: 0.85 },
                 { name: "B4i",                    src: "/logos/b4i.svg",           href: "https://b4i.unibocconi.it",       w: 514,  h: 121, scale: 1.15 },
-                { name: "Tech Europe Foundation", src: "/logos/tech-europe.png",   href: "https://techeuropefoundation.eu", w: 168,  h: 56,  scale: 1.0  },
+                { name: "Tech Europe Foundation", src: "/logos/tech-europe.png",   href: "https://tef.tech/",               w: 168,  h: 56,  scale: 1.0  },
               ].map((c) => (
                 <a
                   key={`${copy}-${c.name}`}

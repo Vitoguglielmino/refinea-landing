@@ -20,7 +20,7 @@ const FOUNDERS: { id: FounderKey; photo: string; linkedin: string }[] = [
 type PartnerKey = "b4i" | "techEurope" | "startcup";
 const PARTNERS: { key: PartnerKey; href: string; logo: string }[] = [
   { key: "b4i",        href: "https://www.b4i.unibocconi.eu/", logo: "/logos/B4i-logo-CMYK-pos.svg" },
-  { key: "techEurope", href: "https://techeuropefoundation.org/", logo: "/logos/tech_europe_foundation_logo.jpeg" },
+  { key: "techEurope", href: "https://tef.tech/", logo: "/logos/tech_europe_foundation_logo.jpeg" },
   { key: "startcup",   href: "https://startcup.it/", logo: "/logos/startcup_logo_2017 (1).png" },
 ];
 
