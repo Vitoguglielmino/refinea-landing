@@ -204,6 +204,7 @@ export default async function Home({
                 { name: "Fabio Antichi",          src: "/logos/fabio-antichi.png", href: "https://www.fabioantichi.it/",    w: 676,  h: 94,  scale: 0.85 },
                 { name: "B4i",                    src: "/logos/b4i.svg",           href: "https://b4i.unibocconi.it",       w: 514,  h: 121, scale: 1.15 },
                 { name: "Tech Europe Foundation", src: "/logos/tech-europe.png",   href: "https://tef.tech/",               w: 168,  h: 56,  scale: 1.0  },
+                { name: "W Executive",            src: "/logos/wexecutive.svg",    href: "https://www.wexecutive.eu/",      w: 2031, h: 303, scale: 1.0  },
               ].map((c) => (
                 <a
                   key={`${copy}-${c.name}`}
