@@ -83,6 +83,53 @@ export type AviResponse = {
  *  readability. Adjust here if the design ever grows to 15 or 20. */
 const LEADERBOARD_TOP_N = 10;
 
+/* ─── TEMPORARY client-side blocklist ───────────────────────────────────
+ *
+ * The backend `blocked_brand_terms` config already lists Sistemi / SPID /
+ * CIE for `saas-gestionali-italia`, but the BrandDictionary stored in
+ * Firestore was provisioned before that change. Until `cli_admin
+ * sync-config` is rerun and the rolling window flushes the legacy
+ * iterations, the API keeps returning these entries.
+ *
+ * We filter them here purely for display. Important caveat: the AVI %
+ * of the *other* brands is NOT recomputed — the denominator the API
+ * used still includes mentions of the blocked names. The numbers are
+ * therefore slightly inflated until the backend is resynced.
+ *
+ * DELETE THIS BLOCK once `sync-config` has been run AND the longest
+ * window (90d) has fully rolled past the resync date.
+ *
+ * Tracked alongside LANDING_INTEGRATION.md §3.x — not a permanent
+ * schema concern. */
+const TEMP_DISPLAY_BLOCKLIST_BY_SLUG: Record<string, string[]> = {
+  "saas-gestionali-italia": ["Sistemi", "SPID", "CIE"],
+};
+
+function applyDisplayBlocklist(data: AviResponse): AviResponse {
+  const blocked = TEMP_DISPLAY_BLOCKLIST_BY_SLUG[data.slug];
+  if (!blocked || blocked.length === 0) return data;
+  // Normalize once, case-insensitive, for both name + alias matching.
+  const blockedLc = new Set(blocked.map((b) => b.trim().toLowerCase()));
+  const isBlocked = (name: string) => blockedLc.has(name.trim().toLowerCase());
+
+  const cleanedLeaderboard = data.leaderboard.filter(
+    (row) => !isBlocked(row.brand),
+  );
+  const cleanedSeries = data.series?.map((point) => {
+    const filteredBrands: Record<string, number> = {};
+    for (const [brand, value] of Object.entries(point.brands)) {
+      if (!isBlocked(brand)) filteredBrands[brand] = value;
+    }
+    return { ...point, brands: filteredBrands };
+  });
+
+  return {
+    ...data,
+    leaderboard: cleanedLeaderboard,
+    series: cleanedSeries,
+  };
+}
+
 /* ─── Offline stub (matches new schema shape) ────────────────────────── */
 
 const STUB: AviResponse = {
@@ -166,12 +213,15 @@ export async function getAviForIndustry(
 }
 
 function capLeaderboard(data: AviResponse): AviResponse {
-  if (data.leaderboard.length <= LEADERBOARD_TOP_N) return data;
-  // Series stays full — line chart still needs every brand on the
-  // window-level leaderboard. The cap only trims the visible bar/table.
+  // Apply the temporary display blocklist FIRST, so the top-N slice
+  // counts only brands that will actually be shown — otherwise an
+  // industry could end up with <10 visible entries on the leaderboard
+  // even when the API returned >10 brands.
+  const filtered = applyDisplayBlocklist(data);
+  if (filtered.leaderboard.length <= LEADERBOARD_TOP_N) return filtered;
   return {
-    ...data,
-    leaderboard: data.leaderboard.slice(0, LEADERBOARD_TOP_N),
+    ...filtered,
+    leaderboard: filtered.leaderboard.slice(0, LEADERBOARD_TOP_N),
   };
 }
 
