@@ -20,7 +20,7 @@ const FOUNDERS: { id: FounderKey; photo: string; linkedin: string }[] = [
 type PartnerKey = "b4i" | "techEurope" | "startcup";
 const PARTNERS: { key: PartnerKey; href: string; logo: string }[] = [
   { key: "b4i",        href: "https://www.b4i.unibocconi.eu/", logo: "/logos/B4i-logo-CMYK-pos.svg" },
-  { key: "techEurope", href: "https://tef.tech/", logo: "/logos/tech_europe_foundation_logo.jpeg" },
+  { key: "techEurope", href: "https://tef.tech/", logo: "/logos/tech-europe.png" },
   { key: "startcup",   href: "https://startcup.it/", logo: "/logos/startcup_logo_2017 (1).png" },
 ];
 
@@ -75,7 +75,7 @@ export default async function TeamPage({
           </div>
 
           {/* Founder cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-[860px] mx-auto mb-20 md:mb-24">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-[860px] mx-auto mb-12 md:mb-14">
             {FOUNDERS.map((f) => (
               <article
                 key={f.id}
@@ -111,6 +111,20 @@ export default async function TeamPage({
             ))}
           </div>
 
+          {/* Beta proof */}
+          <div className="max-w-[760px] mx-auto mb-12 md:mb-14 border-y border-black/[0.08] py-8 md:py-10">
+            <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-10 text-center md:text-left">
+              <div className="text-[64px] md:text-[80px] leading-none font-bold text-black tracking-tight">
+                50+
+              </div>
+              <p className="text-black/75 text-lg md:text-xl leading-snug max-w-[420px] font-medium">
+                {t("beta.headlineBefore")}
+                <span className="text-accent font-semibold">{t("beta.headlineHighlight")}</span>
+                {t("beta.headlineAfter")}
+              </p>
+            </div>
+          </div>
+
           {/* Validation */}
           <div className="max-w-[760px] mx-auto text-center">
             <div className="text-[11px] font-semibold uppercase tracking-[0.12em] text-black/40 mb-6">
@@ -119,7 +133,7 @@ export default async function TeamPage({
             <p className="text-black/80 text-base font-semibold mb-10">
               {t("validation.headline")}
             </p>
-            <div className="flex flex-wrap items-center justify-center gap-x-14 gap-y-8">
+            <div className="grid grid-cols-3 gap-x-6 gap-y-8 items-start">
               {PARTNERS.map((p) => {
                 const label = t(`validation.${p.key}`);
                 return (
@@ -131,18 +145,18 @@ export default async function TeamPage({
                     className="flex flex-col items-center gap-3 group"
                     title={label}
                   >
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={p.logo}
-                      alt={`${label} logo`}
-                      className="object-contain transition-opacity"
-                      style={{
-                        height: 48,
-                        maxWidth: 160,
-                        filter: "grayscale(100%)",
-                        opacity: 0.65,
-                      }}
-                    />
+                    <div className="h-[64px] w-full flex items-center justify-center">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={p.logo}
+                        alt={`${label} logo`}
+                        className="object-contain transition-opacity max-h-full max-w-[160px]"
+                        style={{
+                          filter: "grayscale(100%)",
+                          opacity: 0.65,
+                        }}
+                      />
+                    </div>
                     <span className="text-sm font-bold text-black/80 group-hover:text-black transition-colors">
                       {label}
                     </span>

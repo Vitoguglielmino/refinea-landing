@@ -232,6 +232,11 @@
       "role": "Co-Founder & CTO",
       "bio": "Co-fondatore di Refinea. Ha progettato e costruito l'intera piattaforma dal pipeline di analisi AI al sistema di generazione contenuti."
     },
+    "beta": {
+      "headlineBefore": "Oltre 50 aziende e ",
+      "headlineHighlight": "Refined Marketers",
+      "headlineAfter": " hanno testato Refinea nel programma beta."
+    },
     "validation": {
       "overline": "Validation",
       "headline": "Selezionati tra le principali startup AI early-stage in Europa.",
