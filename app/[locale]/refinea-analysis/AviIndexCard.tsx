@@ -97,6 +97,17 @@ const DAYS_FALLBACK = 90;
 const PALETTE = ["#4E79A7", "#F28E2B", "#E15759", "#76B7B2", "#59A14F",
                  "#EDC948", "#B07AA1", "#FF9DA7", "#9C755F"];
 
+/* ─── Chart annotations ────────────────────────────────────────────────
+ * Dated events worth flagging on the time series so a step-change in the
+ * data has visible context instead of looking like a glitch. Keyed by
+ * ISO date (YYYY-MM-DD). The renderer draws a vertical dashed line on
+ * the corresponding series index plus a short label at the top. Only
+ * shown when the date falls inside the visible window. */
+type ChartAnnotation = { label: string };
+const CHART_ANNOTATIONS: Record<string, ChartAnnotation> = {
+  "2026-05-28": { label: "Model upgrade: Gemini 3.5 Flash" },
+};
+
 /* ─── Deterministic synthetic time series ──────────────────────────────
    The marketing API returns today's snapshot only; we draw a smoothed
    curve ending at the live AVI so the card matches the platform's
@@ -281,6 +292,23 @@ export function AviIndexCard({
 
   const entries = toRankEntries(data.leaderboard);
   const top = entries[0];
+
+  // Top-3 podium: ranked by the MOST RECENT day's AVI, not the windowed
+  // aggregate. The headline number needs to feel "live" — what the leader
+  // looks like RIGHT NOW, not averaged across 7 days where a brand can
+  // hold a stale crown for days after losing it on yesterday's run. The
+  // table and chart below keep using the windowed ranking so the broader
+  // picture stays stable. Falls back to windowed if `series` is missing.
+  const lastDay = data.series?.[data.series.length - 1];
+  const podiumEntries = lastDay
+    ? [...entries]
+        .map((e) => ({
+          e,
+          dayAvi: lastDay.brands[e.name] ?? 0,
+        }))
+        .sort((a, b) => b.dayAvi - a.dayAvi)
+        .map(({ e, dayAvi }) => ({ ...e, avi: dayAvi }))
+    : entries;
 
   // Chart always shows the top 5 brands (leader + 4 competitors). The
   // ranking table below is unaffected and always shows the full top 10
@@ -493,7 +521,7 @@ export function AviIndexCard({
               gap: 0,
             }}
           >
-            {entries.slice(0, 3).map((e, i) => {
+            {podiumEntries.slice(0, 3).map((e, i) => {
               // Mobile: stack the row into two lines per slot — favicon +
               // name on top, AVI big below. Three columns × two lines
               // fits 360px viewports without truncation. Desktop keeps
@@ -675,6 +703,41 @@ export function AviIndexCard({
                 {tk.label}
               </text>
             ))}
+
+            {/* Chart annotations: dated events worth marking on the time
+                series (e.g. model upgrade). Looked up against the real
+                series dates — silently skipped if the date is not in the
+                visible window or we're on the synthetic-fallback path. */}
+            {hasRealSeries &&
+              realSeries!.map((p, i) => {
+                const ann = CHART_ANNOTATIONS[p.date];
+                if (!ann) return null;
+                const x = sx(i);
+                return (
+                  <g key={`ann-${p.date}`}>
+                    <line
+                      x1={x}
+                      x2={x}
+                      y1={PAD.t}
+                      y2={PAD.t + plotH}
+                      stroke="rgba(108, 71, 255, 0.45)"
+                      strokeWidth={1}
+                      strokeDasharray="4 3"
+                    />
+                    <text
+                      x={x}
+                      y={PAD.t - 6}
+                      textAnchor="middle"
+                      fontSize={FONT.axis}
+                      fontWeight="500"
+                      fill="rgba(108, 71, 255, 0.9)"
+                      fontFamily={MONO}
+                    >
+                      {ann.label}
+                    </text>
+                  </g>
+                );
+              })}
 
             {/* Non-leader lines first */}
             {series.slice(1).map((s) => (

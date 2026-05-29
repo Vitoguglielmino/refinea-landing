@@ -102,7 +102,7 @@ const LEADERBOARD_TOP_N = 10;
  * Tracked alongside LANDING_INTEGRATION.md §3.x — not a permanent
  * schema concern. */
 const TEMP_DISPLAY_BLOCKLIST_BY_SLUG: Record<string, string[]> = {
-  "saas-gestionali-italia": ["Sistemi", "SPID", "CIE"],
+  "saas-gestionali-italia": ["Sistemi", "SPID", "CIE", "CNS", "Android"],
 };
 
 function applyDisplayBlocklist(data: AviResponse): AviResponse {
