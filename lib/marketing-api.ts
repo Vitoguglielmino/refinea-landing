@@ -102,7 +102,14 @@ const LEADERBOARD_TOP_N = 10;
  * Tracked alongside LANDING_INTEGRATION.md §3.x — not a permanent
  * schema concern. */
 const TEMP_DISPLAY_BLOCKLIST_BY_SLUG: Record<string, string[]> = {
-  "saas-gestionali-italia": ["Sistemi", "SPID", "CIE", "CNS", "Android"],
+  "saas-gestionali-italia": [
+    // identity / public-sector noise residue from pre-fix runs
+    "Sistemi", "SPID", "CIE", "CNS",
+    // operating-system noise — Gemini 3.5 grounding occasionally lists
+    // OS / platform names as if they were SaaS vendors. None of these
+    // can be legitimate gestionali brands so block the whole family.
+    "Android", "iOS", "iPadOS", "macOS", "Mac OS", "Windows", "Linux",
+  ],
 };
 
 function applyDisplayBlocklist(data: AviResponse): AviResponse {
