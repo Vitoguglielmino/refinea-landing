@@ -282,6 +282,7 @@ export default function HomePricing() {
               <span className="text-4xl font-bold text-black tracking-tight">
                 <AnimatedPrice value={litePrice} />
               </span>
+              <span className="text-sm text-black/50 ml-1">{t("vatSuffix")}</span>
               <span className="text-sm text-black/50 ml-1">{t("perMonth")}</span>
             </div>
             <p className="text-xs text-black/40 h-4 mb-7">
@@ -358,6 +359,7 @@ export default function HomePricing() {
               <span className="text-4xl font-bold text-black tracking-tight">
                 <AnimatedPrice value={proPrice} />
               </span>
+              <span className="text-sm text-black/50 ml-1">{t("vatSuffix")}</span>
               <span className="text-sm text-black/50 ml-1">{t("perMonth")}</span>
             </div>
             <p className="text-xs text-black/40 h-4 mb-7">

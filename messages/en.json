@@ -101,6 +101,7 @@
     "yearlyBadge": "3 months free",
     "billedAnnually": "Billed €{total} annually",
     "perMonth": "/month",
+    "vatSuffix": "+VAT",
     "aiOverviewsLabel": "AI Overviews",
     "lite": {
       "name": "Lite",
@@ -256,6 +257,7 @@
     "tabsLabel": "Pricing audience",
     "tabBrands": "For Brands",
     "tabAgencies": "For Agencies",
+    "vatSuffix": "+VAT",
     "brands": {
       "lite": {
         "name": "Lite",

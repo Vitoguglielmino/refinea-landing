@@ -81,6 +81,7 @@ const pricingOfferJsonLd = {
     lowPrice: "129",
     highPrice: "299",
     offerCount: 2,
+    valueAddedTaxIncluded: false,
     offers: [
       {
         "@type": "Offer",
@@ -89,6 +90,7 @@ const pricingOfferJsonLd = {
         priceCurrency: "EUR",
         url: "https://refinea.io/pricing",
         availability: "https://schema.org/InStock",
+        valueAddedTaxIncluded: false,
       },
       {
         "@type": "Offer",
@@ -97,6 +99,7 @@ const pricingOfferJsonLd = {
         priceCurrency: "EUR",
         url: "https://refinea.io/pricing",
         availability: "https://schema.org/InStock",
+        valueAddedTaxIncluded: false,
       },
     ],
   },

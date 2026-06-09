@@ -36,8 +36,8 @@ export default function TermsEnContent() {
       <h2>3. Plans and Pricing</h2>
       <p>Refinea offers the following plans:</p>
       <ul>
-        <li><strong>Lite:</strong> €129/month (or discounted annual billing)</li>
-        <li><strong>Pro:</strong> €299/month (or discounted annual billing), with a 14-day free trial</li>
+        <li><strong>Lite:</strong> €129/month +VAT (or discounted annual billing)</li>
+        <li><strong>Pro:</strong> €299/month +VAT (or discounted annual billing), with a 14-day free trial</li>
         <li><strong>Agency:</strong> custom pricing</li>
       </ul>
       <p>

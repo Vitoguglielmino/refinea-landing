@@ -36,8 +36,8 @@ export default function TermsItContent() {
       <h2>3. Piani e prezzi</h2>
       <p>Refinea offre i seguenti piani:</p>
       <ul>
-        <li><strong>Lite:</strong> €129/mese (o con fatturazione annuale scontata)</li>
-        <li><strong>Pro:</strong> €299/mese (o con fatturazione annuale scontata), con prova gratuita di 14 giorni</li>
+        <li><strong>Lite:</strong> €129/mese +IVA (o con fatturazione annuale scontata)</li>
+        <li><strong>Pro:</strong> €299/mese +IVA (o con fatturazione annuale scontata), con prova gratuita di 14 giorni</li>
         <li><strong>Agency:</strong> prezzi personalizzati</li>
       </ul>
       <p>

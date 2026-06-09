@@ -26,8 +26,10 @@ GEO marks an evolution in how marketing reaches customers. Where traditional cha
 
 ## Pricing
 
-- **Lite Plan**: €129/month — 40 monitored prompts, monitoring every 2 days, 2 AI-optimized articles/month, 20 workflow credits, ChatGPT + Gemini + Perplexity coverage, email support, unlimited team members.
-- **Pro Plan**: €299/month (14 days free trial) — 110 monitored prompts, monitoring every 2 days, 6 AI-optimized articles/month, 100 workflow credits, full LLM engine coverage including Claude and Google AI Overviews, API + MCP access, dedicated Slack support, unlimited team members.
+All prices are net of applicable VAT (22% for Italian customers, B2B only).
+
+- **Lite Plan**: €129/month +VAT — 40 monitored prompts, monitoring every 2 days, 2 AI-optimized articles/month, 20 workflow credits, ChatGPT + Gemini + Perplexity coverage, email support, unlimited team members.
+- **Pro Plan**: €299/month +VAT (14 days free trial) — 110 monitored prompts, monitoring every 2 days, 6 AI-optimized articles/month, 100 workflow credits, full LLM engine coverage including Claude and Google AI Overviews, API + MCP access, dedicated Slack support, unlimited team members.
 - **Agencies**: Custom pricing — unlimited prompts, custom monitoring frequency, all AI models, full API + MCP, unified client management, dedicated support.
 
 Yearly billing available with 3 months free (pay for 9 months instead of 12).
