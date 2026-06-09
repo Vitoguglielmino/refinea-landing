@@ -113,7 +113,7 @@ async function ForBrands() {
 
           <div className="mb-1">
             <span className="text-4xl font-bold text-black tracking-tight">{t("lite.price")}</span>
-            <span className="text-sm text-black/50 ml-1">{t("vatSuffix")}</span>
+            <span className="text-sm text-black/50 ml-1">{tPage("vatSuffix")}</span>
             <span className="text-sm text-black/50 ml-1">{t("lite.perMonth")}</span>
           </div>
           <p className="text-xs text-black/40 h-4 mb-7" />
@@ -186,7 +186,7 @@ async function ForBrands() {
 
           <div className="mb-1">
             <span className="text-4xl font-bold text-black tracking-tight">{t("pro.price")}</span>
-            <span className="text-sm text-black/50 ml-1">{t("vatSuffix")}</span>
+            <span className="text-sm text-black/50 ml-1">{tPage("vatSuffix")}</span>
             <span className="text-sm text-black/50 ml-1">{t("pro.perMonth")}</span>
           </div>
           <p className="text-xs text-black/40 h-4 mb-7" />
