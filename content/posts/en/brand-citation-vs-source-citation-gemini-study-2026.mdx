@@ -1,0 +1,190 @@
+---
+title: "When an LLM cites a brand, where does it come from? An analysis of 21,170 grounded answers"
+description: "We measure the correlation between brands cited and sources consulted by Gemini across two Italian B2B markets. Spearman ρ = 0.53, replicated on SaaS gestionali and fintech. Methodology, limitations, GEO implications."
+date: "2026-06-11"
+section: "news"
+topics:
+  - "ai-brand-visibility"
+  - "llm-citations"
+  - "marketing-measurement"
+author: "vito"
+reviewCycle: "evergreen"
+locale: "en"
+cover: "/blog/brand-vs-source-cover-en.png"
+translationKey: "brand-vs-source-correlation"
+---
+
+When ChatGPT, Gemini, or another generative engine cites a brand inside an answer, where does that brand come from? Did the model already "know" it from training, or did it just read it in the sources it grounded against on Google? The question is not academic. The answer determines whether your Generative Engine Optimization strategy should invest primarily in classical SEO content, in off-domain brand awareness, or in both.
+
+Over fourteen days of analysis on two independent Italian markets — SaaS gestionali and fintech — we measured for the first time the correlation between brand-mention rank and source-citation rank inside `gemini-3.5-flash`. The result is positive, statistically significant, but more moderate than what many sector tools advertise. This article is the full working paper of the experiment, with numbers verified against the raw data, limitations declared openly, and operational implications for B2B marketers operating on grounded models.
+
+## Research question
+
+AI search systems compose every answer by combining two distinct mechanisms.
+
+The first is **retrieval**. The system queries a web index (Google Search, in Gemini's case), pulls relevant passages, and offers them to the model as context to reason over. Brands present in those passages are more likely to surface in the output.
+
+The second is **parametric memory**. The model already "knows" that HubSpot exists, that Salesforce is a CRM, that Klarna is a buy-now-pay-later. These associations live in the network weights, inherited from the pre-training corpus. Even when retrieval returns nothing about HubSpot, the model can still bring it up on its own.
+
+For a marketer, the difference is everything. If retrieval wins, the strategy is to write Italian content for Italian search engines — old-school SEO with a new audience. If parametric memory wins, the strategy is to appear inside Wikipedia, Crunchbase, podcasts, PR — the places where the model absorbs associations during training. They are two very different roadmaps with two very different budgets.
+
+Our operational question is: **among the brands an LLM cites in grounded answers, to what extent is the citation rank explained by the citation rank of the brand's owned domain in the retrieved sources?**
+
+## Methodology in five points
+
+### 01. Prompt selection
+
+For each market we built a buyer-intent prompt panel. SaaS gestionali italiani: 100 prompts. Fintech: 84. None of them are hand-picked. The pipeline starts from category seed keywords, expands with DataForSEO search-volume data (Italian market, last twelve months), and filters with a plausibility classifier. The result is a high-commercial-intent panel aligned with the queries the market actually issues.
+
+This choice is not only methodological, it is a precondition for significance. Measuring AI visibility on invented prompts produces noise disguised as signal. The pipeline we use is the same that feeds [Refinea Analysis](/refinea-analysis), our public observatory.
+
+### 02. Multi-run sampling
+
+Each prompt is queried ten times per day on `gemini-3.5-flash`, in independent runs, with `temperature = 0.3` and `tools = [GoogleSearch()]` to enable grounding. The logic is purely statistical. Generative models are not deterministic. A single query measures a realization, not a distribution.
+
+Over fourteen days, from May 28 to June 10, 2026, we collected **9,410 answers on SaaS gestionali and 11,760 on fintech**. A total of 21,170 AI answers analyzed. The window starts on May 28 because that is when we upgraded the engine from `gemini-3-flash-preview` (which grounded on 1% of cases) to `gemini-3.5-flash` (100% grounded). All earlier data are excluded for model-consistency reasons.
+
+### 03. Brand and domain extraction
+
+For each answer we compute two iteration-level counts:
+
+- **Brand mention frequency**: for each brand, the number of iterations citing it at least once in the answer text. Recognition uses a deterministic dictionary with alias folding plus a second NER pass.
+- **Domain citation frequency**: for each web domain, the number of iterations citing at least one URL belonging to that domain in the grounded sources extracted from `grounding_metadata`.
+
+From both distributions we derive two ordered rankings. The brand at rank 1 is the most cited; the domain at rank 1 is the most consulted as a source.
+
+All counts are filtered with a pre-registered noise blocklist (operating systems, browsers, generalist mega-tech, Italian public institutions). The blocklist is documented in the appendix and was not modified after observing the results.
+
+### 04. Brand-to-owned-domain matching
+
+For the top 60 brands of each industry we attempt to identify the owned domain via tiered string matching:
+
+- **High confidence**: the domain starts with the normalization of the brand name. Example: `teamsystem.com` matches "TeamSystem".
+- **Medium confidence**: the brand name appears as a substring of at least five characters within the domain. Example: `appresto.cloud` matches "PrestO".
+
+Primary analyses use high-confidence only. Sensitivity analyses add medium. This is a heuristic matching, not manually validated: we discuss its limitation in the dedicated section.
+
+### 05. Statistics
+
+The primary metric is the **Spearman rank correlation** between brand-rank and domain-rank, with 95% confidence interval constructed via Fisher z-transform — the statistically correct method for small N on ordinal data. We verify robustness with Kendall τ, Pearson r on log-rank, and a permutation test with ten thousand iterations.
+
+The canonical effect size is **ρ², the shared variance**, not raw ρ. A correlation of 0.53 does not mean "50% search-driven". It means that 28% of the variance is statistically associated. This distinction matters and we treat it honestly in the results.
+
+## Results
+
+### Primary analysis: Italian SaaS gestionali
+
+On 47 brands with high-confidence matching:
+
+| Statistic | Value | 95% CI | p-value |
+|---|---|---|---|
+| Spearman ρ | **+0.527** | [+0.282, +0.707] (Fisher z) | 0.0001 |
+| Spearman ρ (permutation) | — | — | 0.0000 (10,000 perms) |
+| Kendall τ | +0.375 | — | 0.0002 |
+| Pearson r (log-rank) | +0.509 | — | — |
+| **ρ² (shared variance)** | **0.277** | — | — |
+
+Adding the four medium-confidence brands (N = 51), the estimate slightly increases to ρ = +0.547 with CI [+0.320, +0.715]. The effect is robust to the matching threshold.
+
+The three pre-registered hypotheses were:
+- H1 (search-driven, ρ ≥ +0.7) → **rejected**, the CI upper bound is +0.707
+- H2 (parametric-only, |ρ| < +0.2) → **rejected**, the lower bound is +0.282
+- H3 (mixed, +0.2 ≤ ρ < +0.7) → **supported**, the estimate falls within the predicted range
+
+### Replication: Italian fintech
+
+Applying identical methodology to the fintech panel, on 48 high-confidence brands:
+
+| Statistic | Value | 95% CI | p-value |
+|---|---|---|---|
+| Spearman ρ | **+0.540** | [+0.303, +0.715] | 0.0001 |
+| Kendall τ | +0.369 | — | 0.0002 |
+| ρ² | 0.292 | — | — |
+
+The fintech estimate is essentially indistinguishable from the SaaS gestionali estimate. The Fisher z difference test does not reject equality between the two correlations (Δz ≈ 0.02, p ≈ 0.92). **Two independent markets, with different prompts, different brands, different source ecosystems, converge to the same value.** This is the strongest evidence that the correlation is not a sample-selection artifact.
+
+### What ρ² ≈ 28% means
+
+The estimated shared variance is approximately 28%. Translated into operational terms: about a quarter of the variability in how Gemini cites a brand is statistically associated with how it cites the brand's owned domain in the sources. The remaining 72% reflects other factors, including the model's parametric memory, brand mentions inside third-party sources (not the brand's own domain), and sampling variation.
+
+The confidence interval is wide. Even the lower bound (ρ = +0.28) corresponds to ρ² ≈ 8%, a small but non-trivial correlation. The upper bound (ρ = +0.71) corresponds to ρ² ≈ 50%. We can rule out both no relationship and full retrieval-dominance, but we cannot be precise about the exact magnitude. Narrowing the interval requires a larger sample, i.e. longer time windows or additional industries.
+
+### Descriptive quadrants
+
+To aid interpretation, we distribute brands across four quadrants defined by the 50th-percentile cutoff of each rank. **This is a descriptive aid, not an inferential result.** With forty-seven brands split into four bins, single-brand quadrant membership has high sampling variance.
+
+The patterns observed in Italian SaaS gestionali are:
+
+- **Q1, strong on both fronts**: Fatture in Cloud, TeamSystem, Fiscozen, Aruba. They win both with editorial presence and brand recognition.
+- **Q2, parametric memory only**: HubSpot, Zoho, Salesforce, monday.com. Cited in 7–17% of answers without showing up meaningfully in Italian sources. They are international SaaS the model knows from English-language training and generalizes to the Italian context.
+- **Q3, sources only**: SiFattura, QuickFisco, Pipedrive. Their domain is often cited by grounded sources but the model does not recognize them as brands at the Q1 competitors' level. These are the "quick wins" of a GEO strategy: stronger editorial brand attribution can move them toward Q1.
+- **Q4, weak on both**: the long tail of the market.
+
+### Source ecosystem
+
+For completeness, the fifteen most-cited sources by Gemini on Italian SaaS gestionali are:
+
+| Rank | Domain | % iterations |
+|---|---|---|
+| 1 | aranzulla.it | 41.1% |
+| 2 | youtube.com | 30.9% |
+| 3 | fattureincloud.it | 26.2% |
+| 4 | fidocommercialista.it | 22.7% |
+| 5 | fiscozen.it | 22.6% |
+| 6 | punto-informatico.it | 21.3% |
+| 7 | finom.co | 19.4% |
+| 8 | agendadigitale.eu | 17.3% |
+| 9 | softwaresemplice.it | 16.5% |
+| 10 | danea.it | 15.6% |
+| 11 | teamsystem.com | 14.9% |
+| 12 | accountable.eu | 14.9% |
+| 13 | startupgeeks.it | 14.4% |
+| 14 | reddit.com | 13.7% |
+| 15 | ultimatetools.eu | 13.0% |
+
+The top 15 is dominated by third-party aggregators — sector blogs, editorial hubs, communities. Vendor sites appear but occupy mid-table positions. The signal for GEO practitioners is clear: domain authority on your own site matters less than presence inside the ten-to-fifteen hubs the model consults most often.
+
+## Operational implications
+
+With all caveats — and especially with the wide confidence interval — the results support a mixed model of AI-answer composition in which retrieval and parametric memory contribute together, with neither mechanism dominating alone. Three practical consequences for GEO budget allocation.
+
+The first is that a pure classical-SEO strategy, even excellent, leaves a significant chunk of AI visibility on the table. Brands like HubSpot prove that the model's parametric memory is a real and independent channel, at least for known global players.
+
+The second is that a pure off-domain brand awareness strategy is not sufficient for new entrants. Without presence inside the Italian sources the model consults — sector blogs, communities like Reddit, editorial portals — a brand lacks the initial traction to build parametric memory in subsequent training windows.
+
+The third is that the sources that matter for AI visibility in Italian markets are not necessarily the websites of competitor vendors. They are **the category's editorial hubs**, owned by independent publishers, that function as de facto curators for AI. The operational strategy is to be cited by them, not only by yourself.
+
+## Limitations
+
+We list limitations in approximate order of importance.
+
+**Single LLM, single time window.** All claims are conditional on `gemini-3.5-flash` between May 28 and June 10, 2026. The model's behavior may change with future updates, and generalization to ChatGPT, Claude, Perplexity requires independent replications we have not yet conducted.
+
+**Non-probabilistic prompt sampling.** The 100 and 84 prompts are curated to reflect the Italian buyer journey, not randomly drawn from the universe of all possible buyer-intent queries. We make no claim about generalization to the full distribution of LLM queries an Italian buyer might issue.
+
+**Heuristic brand-domain matching.** We have not performed a manual validation of matches by an independent second reviewer. High-confidence matching reduces residual false positives but does not eliminate them. External validation would strengthen the result.
+
+**Causality not identified.** A positive correlation between brand-mention rank and domain-citation rank is consistent with at least three distinct causal mechanisms: (a) grounded sources cause mentions, (b) brand popularity causes both, (c) the model jointly samples brands and citations from a latent topic distribution. The cross-sectional design of this study does not discriminate among the three hypotheses.
+
+**Selection on observed brands.** Brands with zero mentions in the period are excluded by construction. The brand rank is conditional on having received at least one citation. This is a standard limitation but worth declaring.
+
+**Author position.** The author is founder and CEO of Refinea, the platform operating the data-collection pipeline. The analysis is conducted in-house and was not subjected to external peer review. Conflict of interest is disclosed.
+
+## Data and replication
+
+The aggregate dataset at (brand, domain, iteration count) level is available on request by writing to hello@refinea.io for academic replication purposes. Raw LLM responses cannot be redistributed under Gemini API terms of service, but we can share a per-iteration sample useful for analysis reproduction.
+
+For those who want to see AVI rankings refreshed nightly on the same markets, the public observatory [Refinea Analysis](/refinea-analysis) exposes data and methodology in browsable form.
+
+## References
+
+- Lewis, P. et al. (2020). *Retrieval-augmented generation for knowledge-intensive NLP tasks*. NeurIPS.
+- Borgeaud, S. et al. (2022). *Improving language models by retrieving from trillions of tokens (RETRO)*. ICML.
+- Spearman, C. (1904). *The proof and measurement of association between two things*. The American Journal of Psychology.
+- Fisher, R.A. (1915). *Frequency distribution of the values of the correlation coefficient in samples from an indefinitely large population*. Biometrika.
+
+For broader theoretical context on the discipline of Generative Engine Optimization, we have published the [GEO 2026 operational guide](/blog/generative-engine-optimization-operational-guide-2026) and a summary of [the metrics that matter for measuring AI visibility](/blog/measuring-ai-visibility-metrics-that-matter).
+
+---
+
+*Disclaimer: the author is founder and CEO of Refinea, the platform that collected the data for this study. The analysis is conducted in-house. Conflict of interest is openly declared. The numbers presented in this article were verified against the raw parquet data before publication.*
